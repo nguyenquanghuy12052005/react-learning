@@ -3,13 +3,13 @@ import React from "react";
 class UserInfo extends React.Component {
 
    state = {
-        name: 'huy nguyêmx ',
-        age: 20,
-        address: 'quang nam'
+        name: ' ',
+        age: '',
+        address: ''
     }
     
     handleOnchangeInput = (event)=>{    
-this.setState  ({
+this.setState({
     name: event.target.value
 })
 }
@@ -21,7 +21,11 @@ this.setState  ({
 }
 handleOnSubmit = (event) => {
 event.preventDefault(); //hàm ngăn load lại trang khi submit
-console.log(this.state);
+this.props.handleAddUser({
+    id: Math.floor((Math.random() * 100) + 1) + '-random',
+    name: this.state.name,
+    age: this.state.age
+});
 }
 
     render() {

@@ -18,36 +18,22 @@ state = {
 ]
 }
 
-
- 
-handleClick = (event) => {
-// console.log("click me" + Math.random());
-console.log(this.state.name);
-console.log(this.state.age);
-this.setState({
-    name: 'quang huy ne',
-    age: Math.floor((Math.random() * 100) +1) //random 1->100
-})
-
-
+handleAddUser = (newUser) => {
+    this.setState({
+       listUser : [newUser,...this.state.listUser]
+    })
 }
-
-onmoursoverClick(event) {
-// console.log("click me" + Math.random());
-console.log(event);
-}
-
-
-
-
 
     //  JSX
     render(){
         return (
             <div>
-             <UserInfo></UserInfo>
+             <UserInfo    handleAddUser = {this.handleAddUser}></UserInfo>
              <br></br>
-             <DisplayInfo listUser={this.state.listUser} ></DisplayInfo>
+             <DisplayInfo listUser={this.state.listUser}   
+                        >          
+             </DisplayInfo>
+           
             </div>
         );
    }
