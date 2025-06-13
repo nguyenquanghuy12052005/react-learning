@@ -23,13 +23,29 @@ onmoursoverClick(event) {
 console.log(event);
 }
 
+
+handerOnchangeInput = (event)=>{    
+this.setState  ({
+    name: event.target.value
+})
+}
+
+handerOnSubmit = (event) => {
+event.preventDefault(); //hàm ngăn load lại trang khi submit
+console.log(this.state);
+}
+
     //  JSX
     render(){
         return (
             <div>hellll-1 {this.state.name} and {this.state.age}
             <button onMouseOver={this.onmoursoverClick}>onMouseOver me</button>
-
              <button onClick={this.handerClick}>Click me</button> 
+
+             <form onSubmit={(event) => this.handerOnSubmit(event)}>
+                <input type="text" onChange={(event) => this.handerOnchangeInput(event)}></input>
+                <button>summit</button>
+             </form>
             </div>
         );
    }
