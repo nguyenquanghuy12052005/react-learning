@@ -24,14 +24,24 @@ handleAddUser = (newUser) => {
     })
 }
 
+handleDeleteUser = (userID) => {
+    let filterUser = this.state.listUser
+    filterUser = filterUser.filter(item => item.id !== userID)
+    this.setState({
+        listUser: filterUser
+    })
+}
+
     //  JSX
     render(){
         return (
             <div>
-             <UserInfo    handleAddUser = {this.handleAddUser}></UserInfo>
+             <UserInfo    handleAddUser = {this.handleAddUser}  
+           
+             ></UserInfo>
              <br></br>
              <DisplayInfo listUser={this.state.listUser}   
-                        >          
+                         handleDeleteUser = {this.handleDeleteUser} >          
              </DisplayInfo>
            
             </div>
