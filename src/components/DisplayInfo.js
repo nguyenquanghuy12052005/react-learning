@@ -2,36 +2,60 @@ import React from "react";
 import './DisplayInfo.scss'
 import logo from './../logo.svg'
 
-class DisplayInfo extends React.Component {
+// class DisplayInfo extends React.Component {
 
-    state = {
-        ShowListUser: true
-    }
+//     state = {
+//         ShowListUser: true
+//     }
 
-      handleShowHide = () => {
-          this.setState( {
-            ShowListUser : !this.state.ShowListUser
-          })
-            }
+     
+            
 
+//     render() {
+//           const {listUser} = this.props;
+  
+//         return (
+//             //props
+//             <div className="display-info-container">
+                      
+//                 {listUser.map((user) => {
+//                     return(
+//                <div>    
+//                     {true && <div key = {user.id} className={user.age < 20 ? "red" : "green"}>
+//                             <div>name: {user.name}</div>
+//                             <div>age: {user.age}</div>
+//                              <span onClick={() => {this.props.handleDeleteUser(user.id)}}><button>xoá</button></span>
+//                             <hr></hr>
+//                          </div>  
+//                          }
+                       
+//                             </div>  
+//                     )
 
-    render() {
-          const {listUser} = this.props;
+//                 } )} 
+//                 </div>
+            
+//         )
+//     }
+// }
+
+const DisplayInfo = (props) => { 
+   const {listUser} = props;
+
+     
+        
   
         return (
             //props
             <div className="display-info-container">
-                 <div>
-                     <span onClick={() => {this.handleShowHide()}}> {this.state.ShowListUser === true ? "show" : "hide"}</span>
-                     <img src={logo}></img>  
-                     </div>        
+                      
                 {listUser.map((user) => {
                     return(
                <div>    
-                    {this.state.ShowListUser && <div key = {user.id} className={user.age < 20 ? "red" : "green"}>
+                    {true && <div key = {user.id} className={user.age < 20 ? "red" : "green"}>
                             <div>name: {user.name}</div>
                             <div>age: {user.age}</div>
-                             <span onClick={() => {this.props.handleDeleteUser(user.id)}}><button>xoá</button></span>
+                             <span onClick={() => {props.handleDeleteUser(user.id)}}><button>xoá</button></span>
                             <hr></hr>
                          </div>  
                          }
@@ -44,6 +68,6 @@ class DisplayInfo extends React.Component {
             
         )
     }
-}
+
 
 export default DisplayInfo;
