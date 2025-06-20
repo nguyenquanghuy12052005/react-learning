@@ -1,4 +1,5 @@
 import 'react-pro-sidebar/dist/css/styles.css';
+import myIcon from '../../assets/logo-3.png';
 import {
     ProSidebar,
     Menu,
@@ -33,18 +34,24 @@ const SideBar = (props) => {
                 <SidebarHeader>
                     <div
                         style={{
-                            padding: '24px',
+                            padding: '24px 8px',
                             textTransform: 'uppercase',
                             fontWeight: 'bold',
-                            fontSize: 14,
+                            fontSize: 18,
                             letterSpacing: '1px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
+                           
                         }}
                     >
-                        <DiReact size={'3em'} color={"00bfff"} />
-                        <span >Nguyễn Quang Huy</span>
+                        {/* <DiReact size={'3em'} color={"00bfff"} /> */}
+                        <img
+              src={myIcon}
+              alt="Custom Icon"
+              style={{ width: '3.5em', height: '3.5em', verticalAlign: 'middle', marginRight: '8px' }}
+            />
+                        <span >Quang Huy</span>
                     </div>
                 </SidebarHeader>
 
