@@ -17,7 +17,7 @@ const App = () => {
           <Outlet></Outlet>
          </div>
       </div>
-
+    
     
     </div>
   
