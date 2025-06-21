@@ -1,14 +1,6 @@
 import 'react-pro-sidebar/dist/css/styles.css';
 import myIcon from '../../assets/logo-3.png';
-import {
-    ProSidebar,
-    Menu,
-    MenuItem,
-    SubMenu,
-    SidebarHeader,
-    SidebarFooter,
-    SidebarContent,
-} from 'react-pro-sidebar';
+import {ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, SidebarContent} from 'react-pro-sidebar';
 
 import { FaTachometerAlt, FaGem, FaList, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
 import sidebarBg from '../../assets/bg2.jpg';
@@ -18,7 +10,7 @@ import { DiReact } from "react-icons/di";
 import { MdDashboard } from "react-icons/md";
 
 import './SideBar.scss';
-
+import { Link } from 'react-router-dom';
 
 const SideBar = (props) => {
     const { image, collapsed, toggled, handleToggleSidebar } = props;
@@ -61,14 +53,16 @@ const SideBar = (props) => {
                             icon={<MdDashboard />}
                         >
                             Dashboard
+                            <Link to="/admin"/>
                         </MenuItem>
+                        
                     </Menu>
                     <Menu iconShape="circle">
                         <SubMenu
                             icon={<FaGem />}
                             title="Features"
                         >
-                            <MenuItem> Quản lý Users</MenuItem>
+                            <MenuItem > Quản lý Users   <Link to="manage-users"/></MenuItem>
                             <MenuItem > Quản lý Bài Quiz</MenuItem>
                             <MenuItem> Quản lý Câu Hỏi</MenuItem>
                         </SubMenu>
@@ -92,7 +86,7 @@ const SideBar = (props) => {
                             <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                                 &#169; Quang Huy
                             </span>
-                        </a>
+                        </a>    
                     </div>
                 </SidebarFooter>
             </ProSidebar>
