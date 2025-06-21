@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FaFolderPlus } from "react-icons/fa6";
 import axios from 'axios';
+ import {  toast } from 'react-toastify';
+
 const  ModelCreateUser = (props)  => {
 const {show, setShow} = props;
 
@@ -34,23 +36,47 @@ const {show, setShow} = props;
     } else {
         // setPreviewImage("")
     }
-      
    }
+
+   const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
+
+const validatePassword = (pw)  => {
+
+    return /[A-Z]/       .test(pw) &&
+           /[a-z]/       .test(pw) &&
+           /[0-9]/       .test(pw) &&
+         
+           pw.length > 4;
+
+}
 
 
    const handleCreateUser = async() => {
    //validate
+   const isValidateEmail = validateEmail(email)
+   if(!isValidateEmail ){
+    toast.error("sai email rồi cu")
+    return;
+   }
+
+
+
+   const isValidatePassword = validatePassword(password)
+   if(!isValidatePassword ){
+    toast.error("sai pass rồi cu")
+    return;
+   }
+
 
 
    //call api
-  //  let data = {
-  //       email: email,
-  //       password: password,
-  //       username: userName, 
-  //       role: role,
-  //       userImage: iamge
-  //  }
-   //console.log(data)
    const form = new FormData();
 form.append('email', email);
 form.append('password', password);
@@ -60,14 +86,21 @@ form.append('userImage', image);
 
 let res = await axios.post('http://localhost:8081/api/v1/participant', form);
 console.log(res);
+     if(res.data && res.data.EC === 0) {
+      toast.success(res.data.EM)
+      handleClose();
+     }
+     
+     
+     if(res.data && res.data.EC !== 0) {
+      toast.error(res.data.EM)
+     }
 
    }
 
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button> */}
+   
 
       <Modal show={show} onHide={handleClose} size='xl' backdrop='static' className='model-add-user'>
         <Modal.Header closeButton>
