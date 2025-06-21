@@ -1,20 +1,26 @@
 import ModelCreateUser from "./ModelCreateUser";
 import './ManageUser.scss'
+import { useState } from "react";
 
 
 
 
 const ManageUser  = (props) => {
+const [showCreateUser, setShowCreatUser] = useState(false)
+
     return (
         <div className="manage-user-container">
            <div className="title">Manage User</div>
 
            <div className="content">
-            <button> add user  </button>
-            <div className="table">
+            <div className="btn-add-new">
+                  <button type="button" class="btn btn-primary" onClick={() => setShowCreatUser(true)}> add user  </button>
+            </div>
+          
+            <div className="table-users-container">
                 table 
                 </div>
-                <ModelCreateUser/>
+                <ModelCreateUser  show = {showCreateUser} setShow = {setShowCreatUser}/>
            </div>
         </div>
     )
