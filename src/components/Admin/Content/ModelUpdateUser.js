@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FaFolderPlus } from "react-icons/fa6";
 
  import {  toast } from 'react-toastify';
 import { postCreateUser } from '../../../service/ApiService';
-const  ModelCreateUser = (props)  => {
-const {show, setShow} = props;
+import _ from 'lodash';
+const  ModelUpdateUser = (props)  => {
+const {show, setShow, dataUpdate} = props;
 
 
   
@@ -18,6 +19,20 @@ const {show, setShow} = props;
    const [role, setRole] = useState("USER");
    const [image, setImage] = useState("");
    const [previewIamge, setPreviewImage] = useState("");
+
+   useEffect(() => {
+    if(!_.isEmpty(dataUpdate)){
+    setEmail(dataUpdate.email);
+    setUserName(dataUpdate.username);
+    setRole(dataUpdate.role);
+    if(!_.isEmpty(dataUpdate.image)){
+          setPreviewImage(`data:image/jpeg;base64,${dataUpdate.image}`);
+    }
+  
+    }
+
+    
+   }, [dataUpdate])
 
   const handleClose = () => {
     setShow(false);
@@ -104,17 +119,17 @@ console.log(data);
 
       <Modal show={show} onHide={handleClose} size='xl' backdrop='static' className='model-add-user'>
         <Modal.Header closeButton>
-          <Modal.Title>Add new user</Modal.Title>
+          <Modal.Title>Update new user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <form className="row g-3">
   <div className="col-md-6">
     <label  className="form-label">Email</label>
-    <input type="email" className="form-control" value={email} onChange={(event) => setEmail(event.target.value)}/>
+    <input type="email" className="form-control" value={email} onChange={(event) => setEmail(event.target.value)} disabled/>
   </div>
   <div className="col-md-6">
     <label className="form-label">Password</label>
-    <input type="password" className="form-control" value={password}  onChange={(event) => setPassword(event.target.value)}/>
+    <input type="password" className="form-control" value={password}  onChange={(event) => setPassword(event.target.value)} disabled/>
   </div>
   
   <div className="col-md-6">
@@ -123,7 +138,7 @@ console.log(data);
   </div>
   <div className="col-md-4">
     <label  className="form-label">Role</label>
-    <select  className="form-select"  onChange={(event) => setRole(event.target.value)} >
+    <select  className="form-select" value={role} onChange={(event) => setRole(event.target.value)} >
       <option  value='USER'>USER</option>
       <option value='ADMIN'>ADMIN</option>
     </select>
@@ -157,4 +172,4 @@ console.log(data);
     </>
   );
 }
-export default ModelCreateUser;
+export default ModelUpdateUser;

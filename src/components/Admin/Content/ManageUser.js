@@ -3,12 +3,14 @@ import './ManageUser.scss'
 import { useEffect, useState } from "react";
 import TableUser from "./TableUser";
 import { getAllUser } from "../../../service/ApiService";
+import ModelUpdateUser from "./ModelUpdateUser";
 
 
 const ManageUser  = (props) => {
 const [showCreateUser, setShowCreatUser] = useState(false)
+const [showUpdateUser, setShowUpdateUser] = useState(false)
 const [listUser, setListuser] = useState([]);
-
+const [dataUpdate, setDataUpdate] = useState({});
 
     useEffect(() => {
         fetchListUser();
@@ -23,6 +25,13 @@ const [listUser, setListuser] = useState([]);
         
     }
 
+  const  handleCkickUpdateUser = (user) => {
+    setShowUpdateUser(true);
+    setDataUpdate(user);
+    console.log(user);
+    
+    }
+
     return (
         <>
         <div className="manage-user-container">
@@ -34,10 +43,13 @@ const [listUser, setListuser] = useState([]);
             </div>
           
             <div className="table-users-container">
-              <TableUser  listUser = {listUser}/>
-    
+              <TableUser  listUser = {listUser}
+              handleCkickUpdateUser={handleCkickUpdateUser}
+              />
+
                 </div>
                 <ModelCreateUser  show = {showCreateUser} setShow = {setShowCreatUser} fetchListUser = {fetchListUser}/>
+                <ModelUpdateUser  show = {showUpdateUser} setShow = {setShowUpdateUser}  dataUpdate = {dataUpdate}/>
            </div>
         </div>
         </>
