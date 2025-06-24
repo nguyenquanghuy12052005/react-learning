@@ -32,6 +32,9 @@ const [dataUpdate, setDataUpdate] = useState({});
     
     }
 
+    
+
+
     return (
         <>
         <div className="manage-user-container">
@@ -49,7 +52,10 @@ const [dataUpdate, setDataUpdate] = useState({});
 
                 </div>
                 <ModelCreateUser  show = {showCreateUser} setShow = {setShowCreatUser} fetchListUser = {fetchListUser}/>
-                <ModelUpdateUser  show = {showUpdateUser} setShow = {setShowUpdateUser}  dataUpdate = {dataUpdate}/>
+                <ModelUpdateUser  show = {showUpdateUser} setShow = {setShowUpdateUser}  
+                                  dataUpdate = {dataUpdate} fetchListUser = {fetchListUser}
+                                 
+                                  setDataUpdate = {setDataUpdate}/>
            </div>
         </div>
         </>

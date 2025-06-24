@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { FaFolderPlus } from "react-icons/fa6";
 
  import {  toast } from 'react-toastify';
-import { postCreateUser } from '../../../service/ApiService';
+import {  putUpdateUser } from '../../../service/ApiService';
 import _ from 'lodash';
 const  ModelUpdateUser = (props)  => {
 const {show, setShow, dataUpdate} = props;
@@ -12,7 +12,7 @@ const {show, setShow, dataUpdate} = props;
 
   
 
-  
+ 
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
    const [userName, setUserName] = useState("");
@@ -42,6 +42,7 @@ const {show, setShow, dataUpdate} = props;
     setRole("USER");
     setImage("");
     setPreviewImage("");
+   props.setDataUpdate();
   }
 
    const handleUploadImage = (event) => {
@@ -53,40 +54,17 @@ const {show, setShow, dataUpdate} = props;
     }
    }
 
-   const validateEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
+ 
 
 
-const validatePassword = (pw)  => {
-
-    return /[a-z]/       .test(pw) &&
-           /[0-9]/       .test(pw) &&
-            // /[A-Z]/       .test(pw) &&   
-           pw.length > 4;
-
-}
 
 
-   const handleCreateUser = async() => {
+
+   const handleUpdateUser = async() => {
    //validate
-   const isValidateEmail = validateEmail(email)
-   if(!isValidateEmail ){
-    toast.error("sai email rồi cu")
-    return;
-   }
+  
 
 
-
-   const isValidatePassword = validatePassword(password)
-   if(!isValidatePassword ){
-    toast.error("sai pass rồi cu")
-    return;
-   }
 
 
 
@@ -98,7 +76,7 @@ const validatePassword = (pw)  => {
 // form.append('role', role);
 // form.append('userImage', image);
 
-let data = await postCreateUser(email,password,userName,role,image)
+let data = await putUpdateUser(dataUpdate.id,userName,role,image)
 console.log(data);
      if(data && data.EC === 0) {
       toast.success(data.EM)
@@ -164,7 +142,7 @@ console.log(data);
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleCreateUser()}>
+          <Button variant="primary" onClick={() => handleUpdateUser()}>
             Save 
           </Button>
         </Modal.Footer>
