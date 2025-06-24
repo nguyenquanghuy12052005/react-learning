@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import TableUser from "./TableUser";
 import { getAllUser } from "../../../service/ApiService";
 import ModelUpdateUser from "./ModelUpdateUser";
+import ModelViewUser from "./ModelViewUser";
 
 
 const ManageUser  = (props) => {
 const [showCreateUser, setShowCreatUser] = useState(false)
 const [showUpdateUser, setShowUpdateUser] = useState(false)
+const [showViewUser, setShowViewUser] = useState(false)
 const [listUser, setListuser] = useState([]);
 const [dataUpdate, setDataUpdate] = useState({});
 
@@ -32,7 +34,12 @@ const [dataUpdate, setDataUpdate] = useState({});
     
     }
 
+      const  handleClickViewUser = (user) => {
+    setShowViewUser(true);
+    setDataUpdate(user);
+    console.log(user);
     
+    }
 
 
     return (
@@ -48,14 +55,16 @@ const [dataUpdate, setDataUpdate] = useState({});
             <div className="table-users-container">
               <TableUser  listUser = {listUser}
               handleCkickUpdateUser={handleCkickUpdateUser}
+              handleClickViewUser = {handleClickViewUser}
               />
 
                 </div>
                 <ModelCreateUser  show = {showCreateUser} setShow = {setShowCreatUser} fetchListUser = {fetchListUser}/>
                 <ModelUpdateUser  show = {showUpdateUser} setShow = {setShowUpdateUser}  
-                                  dataUpdate = {dataUpdate} fetchListUser = {fetchListUser}
-                                 
-                                  setDataUpdate = {setDataUpdate}/>
+                                  dataUpdate = {dataUpdate} fetchListUser = {fetchListUser}                             
+                                  setDataUpdate = {setDataUpdate}
+                />
+                <ModelViewUser    show = {showViewUser} setShow = {setShowViewUser}   dataUpdate = {dataUpdate}/>
            </div>
         </div>
         </>
