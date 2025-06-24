@@ -23,7 +23,14 @@ return  axios.put('api/v1/participant', form);
 }
 
 
+const putDeleteUser = (id) => {
+  return axios.delete('api/v1/participant', {
+    data: { id: id }
+  });
+};
+
+
 const getAllUser = () => {
        return  axios.get('api/v1/participant/all');
 }
-export {postCreateUser, getAllUser, putUpdateUser}
+export {postCreateUser, getAllUser, putUpdateUser,putDeleteUser}
