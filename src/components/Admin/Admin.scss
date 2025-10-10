@@ -2,7 +2,6 @@
     display: flex; //mặc đinh các thằng con sắp theo hàng ngang
     .admin-sidebar {
         .pro-sidebar {
-            //  position: fixed;
             height: 100vh !important;
         }
     }
@@ -15,7 +14,7 @@
         }
 
         .admin-main {
-      
+        border: 1px solid red;
         }
     }
 } 

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FaFolderPlus } from "react-icons/fa6";
-
+import axios from 'axios';
  import {  toast } from 'react-toastify';
-import { postCreateUser } from '../../../service/ApiService';
+
 const  ModelCreateUser = (props)  => {
 const {show, setShow} = props;
 
@@ -49,9 +49,10 @@ const {show, setShow} = props;
 
 const validatePassword = (pw)  => {
 
-    return /[a-z]/       .test(pw) &&
+    return /[A-Z]/       .test(pw) &&
+           /[a-z]/       .test(pw) &&
            /[0-9]/       .test(pw) &&
-            // /[A-Z]/       .test(pw) &&   
+         
            pw.length > 4;
 
 }
@@ -76,30 +77,29 @@ const validatePassword = (pw)  => {
 
 
    //call api
-//    const form = new FormData();
-// form.append('email', email);
-// form.append('password', password);
-// form.append('username', userName);
-// form.append('role', role);
-// form.append('userImage', image);
+   const form = new FormData();
+form.append('email', email);
+form.append('password', password);
+form.append('username', userName);
+form.append('role', role);
+form.append('userImage', image);
 
-let data = await postCreateUser(email,password,userName,role,image)
-console.log(data);
-     if(data && data.EC === 0) {
-      toast.success(data.EM)
+let res = await axios.post('http://localhost:8081/api/v1/participant', form);
+console.log(res);
+     if(res.data && res.data.EC === 0) {
+      toast.success(res.data.EM)
       handleClose();
-     await  props.fetchListUser();
      }
      
      
-     if(data && data.EC !== 0) {
-      toast.error(data.EM)
+     if(res.data && res.data.EC !== 0) {
+      toast.error(res.data.EM)
      }
 
    }
 
   return (
-    <> 
+    <>
    
 
       <Modal show={show} onHide={handleClose} size='xl' backdrop='static' className='model-add-user'>
