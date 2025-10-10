@@ -2,30 +2,21 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FaFolderPlus } from "react-icons/fa6";
-import axios from 'axios';
-const  ModelCreateUser = (props)  => {
-const {show, setShow} = props;
 
+const  ModelCreateUser = ()  => {
+  const [show, setShow] = useState(false);
 
-  
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
    const [userName, setUserName] = useState("");
    const [role, setRole] = useState("USER");
-   const [image, setImage] = useState("");
+   const [iamge, setImage] = useState("");
    const [previewIamge, setPreviewImage] = useState("");
 
-  const handleClose = () => {
-    setShow(false);
-    setEmail("");
-    setPassword("");
-    setUserName("");
-    setRole("USER");
-    setImage("");
-    setPreviewImage("");
-  }
 
    const handleUploadImage = (event) => {
     if(event.target && event.target.files && event.target.files[0]){
@@ -37,37 +28,11 @@ const {show, setShow} = props;
       
    }
 
-
-   const handleCreateUser = async() => {
-   //validate
-
-
-   //call api
-  //  let data = {
-  //       email: email,
-  //       password: password,
-  //       username: userName, 
-  //       role: role,
-  //       userImage: iamge
-  //  }
-   //console.log(data)
-   const form = new FormData();
-form.append('email', email);
-form.append('password', password);
-form.append('username', userName);
-form.append('role', role);
-form.append('userImage', image);
-
-let res = await axios.post('http://localhost:8081/api/v1/participant', form);
-console.log(res);
-
-   }
-
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
+      <Button variant="primary" onClick={handleShow}>
         Launch demo modal
-      </Button> */}
+      </Button>
 
       <Modal show={show} onHide={handleClose} size='xl' backdrop='static' className='model-add-user'>
         <Modal.Header closeButton>
@@ -90,7 +55,7 @@ console.log(res);
   </div>
   <div className="col-md-4">
     <label  className="form-label">Role</label>
-    <select  className="form-select"  onChange={(event) => setRole(event.target.value)} >
+    <select  className="form-select" value={role} onChange={(event) => setRole(event.target.value)} >
       <option  value='USER'>USER</option>
       <option value='ADMIN'>ADMIN</option>
     </select>
@@ -116,7 +81,7 @@ console.log(res);
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleCreateUser()}>
+          <Button variant="primary" onClick={handleClose}>
             Save 
           </Button>
         </Modal.Footer>
