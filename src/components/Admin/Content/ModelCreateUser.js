@@ -88,7 +88,7 @@ console.log(data);
      if(data && data.EC === 0) {
       toast.success(data.EM)
       handleClose();
-     await props.fetchListUser();
+     await  props.fetchListUser();
      }
      
      
