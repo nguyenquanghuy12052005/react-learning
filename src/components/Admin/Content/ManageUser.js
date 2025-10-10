@@ -5,7 +5,6 @@ import TableUser from "./TableUser";
 import { getAllUser } from "../../../service/ApiService";
 import ModelUpdateUser from "./ModelUpdateUser";
 import ModelViewUser from "./ModelViewUser";
-import ModelDeleteUser from "./ModelDeleteUser";
 
 
 const ManageUser  = (props) => {
@@ -14,7 +13,6 @@ const [showUpdateUser, setShowUpdateUser] = useState(false)
 const [showViewUser, setShowViewUser] = useState(false)
 const [listUser, setListuser] = useState([]);
 const [dataUpdate, setDataUpdate] = useState({});
-const [showDeleteUser, setShowDeleteUser] = useState(false)
 
     useEffect(() => {
         fetchListUser();
@@ -43,13 +41,6 @@ const [showDeleteUser, setShowDeleteUser] = useState(false)
     
     }
 
-       const  handleClickDeleteUser = (user) => {
-    setShowDeleteUser(true);
-    setDataUpdate(user);
-    console.log(user);
-    
-    }
-
 
     return (
         <>
@@ -65,7 +56,6 @@ const [showDeleteUser, setShowDeleteUser] = useState(false)
               <TableUser  listUser = {listUser}
               handleCkickUpdateUser={handleCkickUpdateUser}
               handleClickViewUser = {handleClickViewUser}
-              handleClickDeleteUser = {handleClickDeleteUser}
               />
 
                 </div>
@@ -75,8 +65,6 @@ const [showDeleteUser, setShowDeleteUser] = useState(false)
                                   setDataUpdate = {setDataUpdate}
                 />
                 <ModelViewUser    show = {showViewUser} setShow = {setShowViewUser}   dataUpdate = {dataUpdate}/>
-                <ModelDeleteUser  show = {showDeleteUser} setShow = {setShowDeleteUser}   dataUpdate = {dataUpdate}
-                fetchListUser = {fetchListUser}/>
            </div>
         </div>
         </>
