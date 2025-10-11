@@ -16,9 +16,10 @@ const App = () => {
       <div className='main-container'>
          <div className='sidenav-container'></div>
          <div className='app-content'>
-           <div className='footer-container'><Footer/>
-      </div>
+        
           <Outlet></Outlet>
+             <div className='footer-container'><Footer/>
+      </div>
          </div>
         
       </div>
