@@ -1,7 +1,7 @@
 // Footer Variables
-$footer-bg: #2c3e50;
-$footer-text-primary: #ecf0f1;
-$footer-text-secondary: #bdc3c7;
+$footer-bg: #fbc497;
+$footer-text-primary: #ffffff;
+$footer-text-secondary: #ffffff;
 $footer-border: #34495e;
 $footer-accent: #3498db;
 $footer-social-bg: rgba(255, 255, 255, 0.1);
@@ -9,7 +9,7 @@ $footer-social-bg: rgba(255, 255, 255, 0.1);
 // Footer Base Styles
 .footer {
   background: $footer-bg;
-  color: white;
+  color: #FFFBFA;
   padding: 60px 0 20px;
 
   &__container {

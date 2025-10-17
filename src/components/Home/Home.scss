@@ -1,38 +1,59 @@
 // Home Page Variables
-$hero-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-$accent-color: #ffd700;
-$primary-gradient: linear-gradient(135deg, #667eea, #764ba2);
+$accent-color: #FFDDAE;
+$primary-gradient: linear-gradient(135deg, #C6E7FF, #D4F6FF);
+$bg-light: #FBFBFB;
 $text-primary: #333;
 $text-secondary: #666;
-$bg-light: #f8f9fa;
-$shadow-light: rgba(0, 0, 0, 0.08);
-$shadow-accent: rgba(102, 126, 234, 0.3);
+$shadow-light: rgba(198, 231, 255, 0.5);
+$shadow-accent: rgba(255, 221, 174, 0.6);
 
 // Home Container
 .home {
-  min-height: 100vh;
+  min-height: 100vh; // Giữ nhưng không chặn sticky
 }
 
 // Hero Section
 .hero {
   position: relative;
-  min-height: 100vh;
+  // min-height: 100vh; // BỎ ĐI để không chặn scroll
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $hero-bg;
   color: white;
   overflow: hidden;
+
+  &__video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; // Giới hạn video ở 100vh
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; // Giới hạn overlay
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 2;
+  }
 
   &__container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    text-align: center;
     width: 100%;
+    position: relative;
+    z-index: 3;
+    min-height: 100vh; // Giữ chiều cao cho hero
   }
 
   &__content {
@@ -55,12 +76,16 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
     margin-bottom: 40px;
     opacity: 0.9;
     line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   &__actions {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   &__cta-btn {
@@ -73,11 +98,11 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 15px $shadow-accent;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+      box-shadow: 0 6px 20px $shadow-accent;
     }
   }
 
@@ -98,19 +123,6 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
     }
   }
 
-  &__image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &-src {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
-    }
-  }
-
   &__scroll-indicator {
     position: absolute;
     bottom: 40px;
@@ -121,6 +133,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
     align-items: center;
     gap: 8px;
     animation: bounce 2s infinite;
+    z-index: 3;
   }
 
   &__scroll-text {
@@ -149,7 +162,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 // Services Section
 .services {
   padding: 100px 0;
-  background: $bg-light;
+  background: linear-gradient(135deg, #F5F7FD 0%, #F5F7FD 100%);
 
   &__container {
     max-width: 1200px;
@@ -165,13 +178,13 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
   &__title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: $text-primary;
+    color: #F4A261;
     margin-bottom: 20px;
   }
 
   &__description {
     font-size: 1.1rem;
-    color: $text-secondary;
+    color: #2A3D45;
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
@@ -185,22 +198,23 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 }
 
 .service-card {
-  background: white;
+  background: #FFFFFF;
   padding: 40px 30px;
   border-radius: 12px;
-  box-shadow: 0 5px 20px $shadow-light;
+  box-shadow: 0 5px 20px rgba(244, 162, 97, 0.2);
   transition: all 0.3s ease;
   text-align: center;
+  border: 1px solid rgba(244, 162, 97, 0.1);
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 15px 40px rgba(244, 162, 97, 0.3);
   }
 
   &__icon {
     width: 80px;
     height: 80px;
-    background: $primary-gradient;
+    background: #F4A261;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -216,24 +230,24 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
   &__title {
     font-size: 1.4rem;
     font-weight: 600;
-    color: $text-primary;
+    color: #2A3D45;
     margin-bottom: 15px;
   }
 
   &__description {
-    color: $text-secondary;
+    color: #5D737E;
     line-height: 1.6;
     margin-bottom: 20px;
   }
 
   &__link {
-    color: lighten(#667eea, 10%);
+    color: #F4A261;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
 
     &:hover {
-      color: #764ba2;
+      color: darken(#F4A261, 20%);
     }
   }
 }
@@ -241,7 +255,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 // About Section
 .about {
   padding: 100px 0;
-  background: white;
+  background: linear-gradient(135deg, #F5F7FD 0%, #F5F7FD 100%);
 
   &__container {
     max-width: 1200px;
@@ -260,13 +274,16 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
   &__title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: $text-primary;
+    background: linear-gradient(135deg, #F4A261, #E9B384);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 30px;
   }
 
   &__description {
     font-size: 1.1rem;
-    color: $text-secondary;
+    color: #5D737E;
     margin-bottom: 20px;
     line-height: 1.6;
   }
@@ -281,7 +298,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
       max-width: 400px;
       height: auto;
       border-radius: 12px;
-      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+      filter: drop-shadow(0 10px 30px rgba(244, 162, 97, 0.2));
     }
   }
 }
@@ -289,7 +306,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 // Contact Section
 .contact {
   padding: 100px 0;
-  background: $bg-light;
+  background: #F5F7FD;
 
   &__container {
     max-width: 1200px;
@@ -307,13 +324,13 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
   &__title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: $text-primary;
+    color: #F4A261;
     margin-bottom: 20px;
   }
 
   &__description {
     font-size: 1.1rem;
-    color: $text-secondary;
+    color: #2A3D45;
     margin-bottom: 40px;
     line-height: 1.6;
   }
@@ -329,18 +346,19 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
     align-items: center;
     gap: 15px;
     font-size: 1.1rem;
-    color: $text-primary;
+    color: #2A3D45;
   }
 
   &__info-icon {
     font-size: 1.5rem;
+    color: #F4A261;
   }
 
   &__form {
-    background: white;
+    background: #FFFFFF;
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 5px 20px $shadow-light;
+    box-shadow: 0 5px 20px rgba(244, 162, 97, 0.2);
   }
 }
 
@@ -353,7 +371,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
     display: block;
     font-size: 0.9rem;
     font-weight: 500;
-    color: $text-primary;
+    color: #2A3D45;
     margin-bottom: 8px;
   }
 
@@ -369,8 +387,8 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 
     &:focus {
       outline: none;
-      border-color: lighten(#667eea, 10%);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: #F4A261;
+      box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.3);
     }
   }
 
@@ -381,8 +399,8 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 
   &__submit-btn {
     width: 100%;
-    background: $primary-gradient;
-    color: white;
+    background: #F4A261;
+    color: #2A3D45;
     border: none;
     padding: 14px 24px;
     font-size: 1rem;
@@ -393,7 +411,7 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 15px rgba(244, 162, 97, 0.3);
     }
   }
 }
@@ -411,17 +429,12 @@ $shadow-accent: rgba(102, 126, 234, 0.3);
 
   .hero {
     &__container {
-      grid-template-columns: 1fr;
       gap: 40px;
       text-align: center;
     }
 
     &__title {
       font-size: 2.2rem;
-    }
-
-    &__image-src {
-      max-width: 300px;
     }
 
     &__actions {

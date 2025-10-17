@@ -1,12 +1,10 @@
-import VideoHomePage from "../../assets/video-homepage.mp4"
+import VideoBG from "../../assets/videobg.mp4"; // Import video của bạn
 import React, { useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import './Home.scss';
 
-
 const Home = () => {
   useEffect(() => {
-    // Smooth scroll for anchor links
     const handleSmoothScroll = (e) => {
       const target = e.target.closest('a[href^="#"]');
       if (target) {
@@ -29,11 +27,16 @@ const Home = () => {
     <main className="home">
       {/* Hero Section */}
       <section id="home" className="hero">
+        <video autoPlay loop muted className="hero__video-bg">
+          <source src={VideoBG} type="video/mp4" />
+          Trình duyệt của bạn không hỗ trợ thẻ video.
+        </video>
+        <div className="hero__overlay"></div>
         <div className="hero__container">
           <div className="hero__content">
             <h1 className="hero__title">
               Chào mừng đến với
-              <span className="hero__title-highlight"> Website của chúng tôi</span>
+              <span className="hero__title-highlight"> Website Toeic của chúng tôi</span>
             </h1>
             <p className="hero__description">
               Chúng tôi cung cấp các dịch vụ chất lượng cao với trải nghiệm tuyệt vời
@@ -42,9 +45,6 @@ const Home = () => {
               <button className="hero__cta-btn">Khám phá ngay</button>
               <button className="hero__secondary-btn">Tìm hiểu thêm</button>
             </div>
-          </div>
-          <div className="hero__image">
-            <img src="/logo192.png" alt="Hero illustration" className="hero__image-src" />
           </div>
         </div>
         <div className="hero__scroll-indicator">
@@ -64,43 +64,27 @@ const Home = () => {
           </div>
           <div className="services__grid">
             <div className="service-card">
-              <div className="service-card__icon">
-                <span className="service-card__icon-symbol">🚀</span>
-              </div>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">🚀</span></div>
               <h3 className="service-card__title">Dịch vụ 1</h3>
-              <p className="service-card__description">
-                Mô tả ngắn gọn về dịch vụ đầu tiên mà chúng tôi cung cấp
-              </p>
+              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ đầu tiên</p>
               <a href="#" className="service-card__link">Xem chi tiết →</a>
             </div>
             <div className="service-card">
-              <div className="service-card__icon">
-                <span className="service-card__icon-symbol">💡</span>
-              </div>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">💡</span></div>
               <h3 className="service-card__title">Dịch vụ 2</h3>
-              <p className="service-card__description">
-                Mô tả ngắn gọn về dịch vụ thứ hai mà chúng tôi cung cấp
-              </p>
+              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ thứ hai</p>
               <a href="#" className="service-card__link">Xem chi tiết →</a>
             </div>
             <div className="service-card">
-              <div className="service-card__icon">
-                <span className="service-card__icon-symbol">🎯</span>
-              </div>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">🎯</span></div>
               <h3 className="service-card__title">Dịch vụ 3</h3>
-              <p className="service-card__description">
-                Mô tả ngắn gọn về dịch vụ thứ ba mà chúng tôi cung cấp
-              </p>
+              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ thứ ba</p>
               <a href="#" className="service-card__link">Xem chi tiết →</a>
             </div>
             <div className="service-card">
-              <div className="service-card__icon">
-                <span className="service-card__icon-symbol">⚡</span>
-              </div>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">⚡</span></div>
               <h3 className="service-card__title">Dịch vụ 4</h3>
-              <p className="service-card__description">
-                Mô tả ngắn gọn về dịch vụ thứ tư mà chúng tôi cung cấp
-              </p>
+              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ thứ tư</p>
               <a href="#" className="service-card__link">Xem chi tiết →</a>
             </div>
           </div>
@@ -114,11 +98,9 @@ const Home = () => {
             <h2 className="about__title">Về chúng tôi</h2>
             <p className="about__description">
               Chúng tôi là một đội ngũ chuyên nghiệp với nhiều năm kinh nghiệm
-              trong lĩnh vực cung cấp dịch vụ chất lượng cao.
             </p>
             <p className="about__description">
-              Với sứ mệnh mang đến trải nghiệm tốt nhất cho khách hàng,
-              chúng tôi luôn nỗ lực không ngừng để phát triển và cải thiện dịch vụ.
+              Với sứ mệnh mang đến trải nghiệm tốt nhất, chúng tôi luôn nỗ lực.
             </p>
           </div>
           <div className="about__image">
@@ -133,7 +115,7 @@ const Home = () => {
           <div className="contact__content">
             <h2 className="contact__title">Liên hệ với chúng tôi</h2>
             <p className="contact__description">
-              Hãy liên hệ với chúng tôi để được tư vấn và hỗ trợ tốt nhất
+              Hãy liên hệ để được tư vấn và hỗ trợ tốt nhất
             </p>
             <div className="contact__info">
               <div className="contact__info-item">
@@ -154,37 +136,17 @@ const Home = () => {
             <form className="contact-form">
               <div className="contact-form__group">
                 <label className="contact-form__label" htmlFor="name">Họ tên</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="contact-form__input"
-                  required
-                />
+                <input type="text" id="name" name="name" className="contact-form__input" required />
               </div>
               <div className="contact-form__group">
                 <label className="contact-form__label" htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="contact-form__input"
-                  required
-                />
+                <input type="email" id="email" name="email" className="contact-form__input" required />
               </div>
               <div className="contact-form__group">
                 <label className="contact-form__label" htmlFor="message">Tin nhắn</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="5"
-                  className="contact-form__textarea"
-                  required
-                ></textarea>
+                <textarea id="message" name="message" rows="5" className="contact-form__textarea" required></textarea>
               </div>
-              <button type="submit" className="contact-form__submit-btn">
-                Gửi tin nhắn
-              </button>
+              <button type="submit" className="contact-form__submit-btn">Gửi tin nhắn</button>
             </form>
           </div>
         </div>
