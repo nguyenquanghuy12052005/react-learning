@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <header className={`header ${isScrolled ? 'header--scrolled' : ''}`}>
       <div style={{ position: 'absolute', top: 10, right: 10, color: 'red' }}>
-        Scroll: {window.scrollY}px | State: {isScrolled ? 'YES' : 'NO'}
+        {/* Scroll: {window.scrollY}px | State: {isScrolled ? 'YES' : 'NO'} */}
       </div>
       <div className="header__container">
         <div className="header__logo">

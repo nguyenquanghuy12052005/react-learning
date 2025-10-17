@@ -252,3 +252,16 @@ a:focus {
     }
   }
 }
+
+// .content-wrapper {
+//   flex: 1;
+//   padding-top: 91.2px;
+// }
+
+.header-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+}
