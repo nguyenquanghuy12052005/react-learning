@@ -9,14 +9,13 @@ import 'aos/dist/aos.css'; // Import CSS cần thiết cho AOS
 
 const Home = () => {
   useEffect(() => {
-    // 1. Khởi tạo AOS với cấu hình mới
+    // Khởi tạo AOS với cấu hình mới
     AOS.init({
-      duration: 1500, // Tăng thời gian animation lên 1500ms (1.5s) để chậm hơn
-      once: false,     // THAY ĐỔI: Đặt thành 'false' để chạy animation MỖI LẦN scroll qua
-      easing: 'ease-in-out', // Hiệu ứng chuyển động
+      duration: 500,
+      once: false,
+      easing: 'ease-in-out',
     });
 
-    // Hàm xử lý cuộn mượt (giữ nguyên)
     const handleSmoothScroll = (e) => {
       const target = e.target.closest('a[href^="#"]');
       if (target) {
@@ -45,8 +44,7 @@ const Home = () => {
         </video>
         <div className="hero__overlay"></div>
         <div className="hero__container">
-          {/* Tăng duration lên 2000ms cho phần chính */}
-          <div className="hero__content" data-aos="fade-up" data-aos-duration="2000"> 
+          <div className="hero__content" data-aos="fade-up" data-aos-duration="2000">
             <h1 className="hero__title">
               Chào mừng đến với
               <span className="hero__title-highlight"> Website Toeic của chúng tôi</span>
@@ -66,44 +64,39 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Services Section - Có Animation cho từng thành phần */}
+      {/* Services Section */}
       <section id="services" className="services">
         <div className="services__container">
-          {/* Animation Header: Fade Right, chậm 1.5s */}
-          <div className="services__header" data-aos="fade-right" data-aos-duration="1500"> 
-            <h2 className="services__title">Dịch vụ của chúng tôi</h2>
+          <div className="services__header" data-aos="fade-right" data-aos-duration="1500">
+            <h2 className="services__title">Nền tảng luyện tập các chứng chỉ ngoại ngữ online</h2>
             <p className="services__description">
-              Chúng tôi cung cấp các giải pháp toàn diện cho nhu cầu của bạn
+              Chào mừng bạn đến với nền tảng THS, một trong những trang web học tập trực tuyến hàng đầu nơi bạn có thể tìm thấy tất cả các giải pháp luyện thi miễn phí và hiệu quả.
             </p>
           </div>
           <div className="services__grid">
-            {/* Thẻ Dịch vụ 1: Fade Up, chậm 1.5s, delay 300ms */}
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">
-              <div className="service-card__icon"><span className="service-card__icon-symbol">🚀</span></div>
-              <h3 className="service-card__title">Dịch vụ 1</h3>
-              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ đầu tiên</p>
-              <a href="#" className="service-card__link">Xem chi tiết →</a>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">🎧</span></div>
+              <h3 className="service-card__title">Listening</h3>
+              <p className="service-card__description">Đánh giá khả năng nghe và hiểu tiếng Anh trong hội thoại, thông báo và bài nói trong môi trường làm việc quốc tế.</p>
+              <button className="service-card__link-button">Xem chi tiết →</button>
             </div>
-            {/* Thẻ Dịch vụ 2: Fade Up, chậm 1.5s, delay 600ms */}
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="600">
-              <div className="service-card__icon"><span className="service-card__icon-symbol">💡</span></div>
-              <h3 className="service-card__title">Dịch vụ 2</h3>
-              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ thứ hai</p>
-              <a href="#" className="service-card__link">Xem chi tiết →</a>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">📖</span></div>
+              <h3 className="service-card__title">Reading</h3>
+              <p className="service-card__description">Kiểm tra khả năng đọc hiểu văn bản, email, thông báo, và tài liệu công việc bằng tiếng Anh một cách chính xác và nhanh chóng.</p>
+              <button className="service-card__link-button">Xem chi tiết →</button>
             </div>
-            {/* Thẻ Dịch vụ 3: Fade Up, chậm 1.5s, delay 900ms */}
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="900">
-              <div className="service-card__icon"><span className="service-card__icon-symbol">🎯</span></div>
-              <h3 className="service-card__title">Dịch vụ 3</h3>
-              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ thứ ba</p>
-              <a href="#" className="service-card__link">Xem chi tiết →</a>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">🗣️</span></div>
+              <h3 className="service-card__title">Speaking</h3>
+              <p className="service-card__description">Đánh giá khả năng phát âm, diễn đạt và phản xạ trong giao tiếp tiếng Anh, giúp thể hiện ý tưởng rõ ràng và tự tin.</p>
+              <button className="service-card__link-button">Xem chi tiết →</button>
             </div>
-            {/* Thẻ Dịch vụ 4: Fade Up, chậm 1.5s, delay 1200ms */}
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1200">
-              <div className="service-card__icon"><span className="service-card__icon-symbol">⚡</span></div>
-              <h3 className="service-card__title">Dịch vụ 4</h3>
-              <p className="service-card__description">Mô tả ngắn gọn về dịch vụ thứ tư</p>
-              <a href="#" className="service-card__link">Xem chi tiết →</a>
+              <div className="service-card__icon"><span className="service-card__icon-symbol">✍️</span></div>
+              <h3 className="service-card__title">Writing</h3>
+              <p className="service-card__description">Kiểm tra kỹ năng viết câu, soạn email và trình bày ý kiến bằng tiếng Anh một cách logic, chuyên nghiệp và tự nhiên.</p>
+              <button className="service-card__link-button">Xem chi tiết →</button>
             </div>
           </div>
         </div>
@@ -112,19 +105,42 @@ const Home = () => {
       {/* About Section */}
       <section id="about" className="about">
         <div className="about__container">
-          {/* Animation Content: Fade Right, chậm 1.5s */}
-          <div className="about__content" data-aos="fade-right" data-aos-duration="1500"> 
-            <h2 className="about__title">Về chúng tôi</h2>
+          <div className="about__header" data-aos="fade-right" data-aos-duration="1500">
+            <h2 className="about__title">Chương Trình Của Tất Cả Những Gì Bạn Đang Tìm Kiếm</h2>
             <p className="about__description">
-              Chúng tôi là một đội ngũ chuyên nghiệp với nhiều năm kinh nghiệm
-            </p>
-            <p className="about__description">
-              Với sứ mệnh mang đến trải nghiệm tốt nhất, chúng tôi luôn nỗ lực.
+              Chúng tôi đang tạo ra các khóa học trực tuyến và các bài kiểm tra giúp bạn cải thiện kỹ năng ngoại ngữ của mình.
             </p>
           </div>
-          {/* Animation Image: Fade Left, chậm 1.5s, delay 500ms */}
-          <div className="about__image" data-aos="fade-left" data-aos-duration="1500" data-aos-delay="500"> 
-            <img src="/logo192.png" alt="About us" className="about__image-src" />
+          <div className="about__grid">
+            <div className="about-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">
+              <div className="about-card__icon"><span className="about-card__icon-symbol">💻</span></div>
+              <h3 className="about-card__title">Mô phỏng đề thi thật</h3>
+              <p className="about-card__description">
+                Chúng tôi cung cấp các khóa học trực tuyến giúp bạn cải thiện kỹ năng ngoại ngữ của mình và thành công trong các kỳ thi quốc tế.
+              </p>
+            </div>
+            <div className="about-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="600">
+              <div className="about-card__icon"><span className="about-card__icon-symbol">📊</span></div>
+              <h3 className="about-card__title">Cá nhân hóa người dùng</h3>
+              <p className="about-card__description">
+                Ngay sau khi hoàn thành bài thi, các thông số đánh giá chi tiết sẽ được hiển thị để bạn có thể dễ dàng theo dõi quá trình học của mình.
+              </p>
+            </div>
+            <div className="about-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="900">
+              <div className="about-card__icon"><span className="about-card__icon-symbol">📱</span></div>
+              <h3 className="about-card__title">Hệ thống ứng dụng thông minh</h3>
+              <p className="about-card__description">
+                THS phát triển hệ thống ứng dụng học tập phong phú, người dùng có thể tải về để học tập nâng cao điểm số
+
+              </p>
+            </div>
+            <div className="about-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1200">
+              <div className="about-card__icon"><span className="about-card__icon-symbol">👥</span></div>
+              <h3 className="about-card__title">Hỗ trợ nhanh chóng</h3>
+              <p className="about-card__description">
+                Chúng tôi cung cấp đội ngũ chuyên gia hỗ trợ bạn trong suốt quá trình học tập của mình.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -132,14 +148,12 @@ const Home = () => {
       {/* Contact Section */}
       <section id="contact" className="contact">
         <div className="contact__container">
-          {/* Animation Content: Fade Up, chậm 1.5s */}
-          <div className="contact__content" data-aos="fade-up" data-aos-duration="1500"> 
+          <div className="contact__content" data-aos="fade-up" data-aos-duration="1500">
             <h2 className="contact__title">Liên hệ với chúng tôi</h2>
             <p className="contact__description">
               Hãy liên hệ để được tư vấn và hỗ trợ tốt nhất
             </p>
             <div className="contact__info">
-              {/* Thêm delay cho từng mục thông tin */}
               <div className="contact__info-item" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">
                 <span className="contact__info-icon">📞</span>
                 <span className="contact__info-text">+84 123 456 789</span>
@@ -154,8 +168,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          {/* Animation Form: Fade Left, chậm 1.5s, delay 500ms */}
-          <div className="contact__form" data-aos="fade-left" data-aos-duration="1500" data-aos-delay="500"> 
+          <div className="contact__form" data-aos="fade-left" data-aos-duration="1500" data-aos-delay="500">
             <form className="contact-form">
               <div className="contact-form__group">
                 <label className="contact-form__label" htmlFor="name">Họ tên</label>

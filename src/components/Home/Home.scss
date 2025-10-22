@@ -203,6 +203,7 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
   box-shadow: 0 5px 20px rgba(244, 162, 97, 0.2);
   transition: all 0.3s ease;
   text-align: center;
+  border-top-left-radius: 60px;
   border: 1px solid rgba(244, 162, 97, 0.1);
 
   &:hover {
@@ -239,15 +240,13 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
     margin-bottom: 20px;
   }
 
-  // Cập nhật style cho BUTTON để trông giống link (sửa lỗi a11y)
   &__link-button {
     background: none;
     border: none;
     padding: 0;
     margin: 0;
     cursor: pointer;
-    font-family: inherit; // Quan trọng để giữ font chữ
-    
+    font-family: inherit;
     color: #F4A261;
     text-decoration: none;
     font-weight: 500;
@@ -261,53 +260,173 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
   }
 }
 
-// About Section
+// About Section - ĐÃ CẬP NHẬT THEO HÌNH ẢNH
 .about {
-  padding: 100px 0;
-  background: linear-gradient(135deg, #F5F7FD 0%, #F5F7FD 100%);
-
+  padding: 80px 0; 
+  background: $bg-light;
+  
   &__container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+  }
+
+  // Header/Intro Box (Phần NỘI DUNG LUYỆN TẬP CHẤT LƯỢNG)
+  &__intro-box {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+    
+    // Thêm hình nền nhẹ ở góc trên bên phải
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: rgba(198, 231, 255, 0.4); // Màu xanh dương nhạt (hoặc tùy chỉnh)
+      border-radius: 50%;
+      z-index: 0;
+    }
   }
 
-  &__content {
-    z-index: 2;
+  &__intro-content {
+    max-width: 60%;
+    position: relative;
+    z-index: 1;
+    
+    @media (max-width: 992px) {
+      max-width: 100%;
+      text-align: center;
+    }
   }
-
+  
   &__title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #F4A261, #E9B384);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 30px;
+    color: #007bff;
+    margin-bottom: 15px;
+    
+    @media (max-width: 992px) {
+      font-size: 1.8rem;
+    }
   }
 
   &__description {
     font-size: 1.1rem;
-    color: #5D737E;
-    margin-bottom: 20px;
+    color: $text-secondary;
     line-height: 1.6;
+    
+    @media (max-width: 992px) {
+      font-size: 1rem;
+    }
+  }
+  
+  &__intro-image {
+    max-width: 300px;
+    position: relative;
+    z-index: 1;
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    @media (max-width: 992px) {
+      display: none; // Ẩn ảnh trên màn hình nhỏ
+    }
   }
 
-  &__image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  // Grid cho 4 cards
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+}
 
-    &-src {
-      width: 100%;
-      max-width: 400px;
+// Style cho 4 Cards (Mô phỏng đề thi, Cá nhân người dùng,...)
+.about-card {
+  background: #FFFFFF;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 280px; 
+  
+  // Màu viền và bo góc theo vị trí (để trông giống hình)
+  &:nth-child(2n-1) { // Card 1 & 3 (Bên trái)
+    border: 1px solid rgba(0, 123, 255, 0.1);
+    border-top-left-radius: 60px;
+    border-bottom-right-radius: 15px;
+    
+    .about-card__title {
+      background-color: #e6f2ff; // Màu nền xanh nhẹ cho tiêu đề
+    }
+  }
+  
+  &:nth-child(2n) { // Card 2 & 4 (Bên phải)
+    border: 1px solid rgba(244, 162, 97, 0.1);
+    border-top-right-radius: 60px;
+    border-bottom-left-radius: 15px;
+    
+    .about-card__title {
+      background-color: #fff4e6; // Màu nền cam nhẹ cho tiêu đề
+    }
+  }
+  
+  &__content {
+    margin-bottom: 20px;
+  }
+  
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 10px;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  &__description {
+    color: $text-secondary;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  &__image-container {
+    display: flex;
+    justify-content: flex-start; // Mặc định ảnh nằm bên trái (Card 1, 3)
+    margin-top: auto; 
+    padding-top: 10px;
+    
+    &--right {
+      justify-content: flex-end; // Ảnh nằm bên phải (Card 2, 4)
+    }
+    
+    img {
+      max-width: 100%;
       height: auto;
-      border-radius: 12px;
-      filter: drop-shadow(0 10px 30px rgba(244, 162, 97, 0.2));
+      max-height: 120px; 
+      object-fit: contain;
     }
   }
 }
@@ -426,6 +545,30 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
 }
 
 // Responsive Design
+@media (max-width: 992px) {
+  // Responsive cho Intro Box
+  .about {
+    &__intro-box {
+      flex-direction: column;
+      text-align: center;
+      padding: 30px;
+    }
+    
+    &__intro-content {
+      max-width: 100%;
+    }
+    
+    &__title {
+      font-size: 1.8rem;
+    }
+
+    &__intro-image {
+      display: none; // Ẩn ảnh trên màn hình nhỏ
+    }
+  }
+}
+
+
 @media (max-width: 768px) {
   .hero,
   .services,
@@ -464,7 +607,33 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
     }
   }
 
-  .about,
+  .about {
+    padding: 60px 0;
+
+    &__container {
+      padding: 0 16px;
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+
+  .about-card {
+    min-height: auto;
+    
+    &__image-container {
+      justify-content: center !important; // Căn giữa ảnh trên mobile
+      margin-top: 20px;
+    }
+  }
+
+
   .contact {
     padding: 60px 0;
 
@@ -520,7 +689,8 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
     }
   }
 
-  .service-card {
+  .service-card,
+  .about-card {
     padding: 30px 20px;
   }
 
