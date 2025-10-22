@@ -1,5 +1,3 @@
-
-
 $main-font: 'Inter', sans-serif;
 
 .header {
@@ -10,12 +8,13 @@ $main-font: 'Inter', sans-serif;
   z-index: 1000 !important;
   transition: all 0.3s ease !important;
   width: 100% !important;
-  border: 2px solid red !important; // XÓA SAU KHI OK
+  border: 2px solid rgb(255, 255, 255) !important; // XÓA SAU KHI OK
 
-  &.header--scrolled {
-    background: #C6E7FF !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-    // padding: 15px 0 !important;
+  // Khi cuộn xuống, bạn có thể thêm style cho .header--scrolled ở đây
+  &--scrolled {
+    // Ví dụ: làm header nhỏ lại hoặc đổi màu nền
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -29,6 +28,19 @@ $main-font: 'Inter', sans-serif;
   width: 100%;
 }
 
+// ===================================
+// STYLES CHO LOGO VÀ TEXT (ĐÃ CẬP NHẬT)
+// ===================================
+.header__logo {
+  // Dịch chuyển logo và chữ sang trái hơn
+  margin-right: 30px; 
+  max-width: 300px; 
+  height: auto; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; // Khoảng cách giữa logo và chữ
+}
+
 .header__logo-link {
   font-family: $main-font;
   font-weight: 500;
@@ -36,6 +48,25 @@ $main-font: 'Inter', sans-serif;
   color: #000000 !important;
   text-decoration: none !important;
 }
+
+.header__logo img {
+  // Cưỡng ép kích thước cho hình ảnh
+  height: 60px; // Chiều cao cố định
+  width: auto; // Giữ tỷ lệ khung hình
+  object-fit: contain; 
+  max-width: 100%; 
+  display: block; 
+}
+
+.header__logo-text {
+  // Style cho dòng chữ "THS English"
+  font-family: $main-font;
+  font-weight: 700; 
+  font-size: 20px; 
+  color: #faba60; 
+  white-space: nowrap; // Ngăn không cho chữ bị xuống dòng
+}
+// ===================================
 
 .header__nav {
   display: flex;
@@ -87,6 +118,10 @@ $main-font: 'Inter', sans-serif;
 
 .header__mobile-toggle {
   display: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
   
   span {
     display: block;
@@ -94,10 +129,44 @@ $main-font: 'Inter', sans-serif;
     height: 3px;
     background: #000 !important;
     margin: 5px 0;
+    transition: all 0.3s ease;
+  }
+  
+  // Hiệu ứng menu đóng/mở
+  &--open {
+    span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
   }
 }
 
+// ===================================
+// MEDIA QUERY CHO THIẾT BỊ DI ĐỘNG (MOBILE)
+// ===================================
 @media (max-width: 768px) {
+  .header {
+    padding: 15px 0;
+  }
+
+  .header__logo {
+    margin-right: 0; // Loại bỏ margin thêm trên mobile
+    gap: 5px; // Giảm khoảng cách giữa logo và chữ
+  }
+
+  .header__logo img {
+    height: 45px; // Giảm kích thước logo trên mobile
+  }
+
+  .header__logo-text {
+    font-size: 16px; // Giảm kích thước chữ trên mobile
+  }
+
   .header__nav {
     display: none !important;
     position: absolute;
@@ -106,6 +175,7 @@ $main-font: 'Inter', sans-serif;
     width: 100%;
     background: #D4F6FF;
     flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     
     &.header__nav--open {
       display: flex !important;
@@ -113,7 +183,8 @@ $main-font: 'Inter', sans-serif;
   }
   
   .header__actions {
-    display: none !important;
+    // Để nút ĐĂNG NHẬP hiển thị trên mobile, bạn có thể thay đổi thuộc tính này
+    display: none !important; 
   }
   
   .header__mobile-toggle {
@@ -124,19 +195,21 @@ $main-font: 'Inter', sans-serif;
     flex-direction: column;
     width: 100%;
     align-items: center;
-    padding: 20px 0;
+    padding: 10px 0;
     gap: 0;
   }
   
   .header__nav-item {
     width: 100%;
     text-align: center;
-    padding: 10px 0;
+    // padding: 5px 0;
   }
   
   .header__nav-link {
     display: block;
     width: 100%;
     padding: 15px 20px;
+    border-radius: 0;
+    color: #000 !important; // Đổi màu link cho dễ nhìn trên nền #D4F6FF
   }
 }
