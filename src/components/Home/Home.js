@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     // Khởi tạo AOS với cấu hình mới
     AOS.init({
-      duration: 500,
+      duration: 1000,
       once: false,
       easing: 'ease-in-out',
     });
