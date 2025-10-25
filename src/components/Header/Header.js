@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import logo from '../../assets/logo5.png'; 
 import './Header.scss';
@@ -42,7 +43,7 @@ const Header = () => {
           </ul>
         </nav>
         <div className="header__actions">
-          <button className="header__login-btn">ĐĂNG NHẬP</button>
+          <Link to="/login" className="header__login-btn">ĐĂNG NHẬP</Link>
         </div>
         <button 
           className={`header__mobile-toggle ${isMenuOpen ? 'header__mobile-toggle--open' : ''}`}
