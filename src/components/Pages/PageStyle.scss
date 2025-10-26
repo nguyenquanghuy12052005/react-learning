@@ -1,64 +1,31 @@
 .page {
   min-height: 100vh;
-  padding: 120px 20px 80px;
-  text-align: center;
-  background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+  padding: 100px 15px;
+  background: linear-gradient(135deg, #e0f7fa, #ede7f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  // 🔹 Thêm hiệu ứng fade-in
   opacity: 0;
   animation: fadeIn 1s ease-in-out forwards;
 
-  // 🔸 Hiệu ứng xuất hiện mượt khi hover button, tiêu đề, v.v.
-  transition: all 0.3s ease-in-out;
-
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #4a148c;
-    transform: translateY(-10px);
-    animation: slideDown 1s ease forwards;
+  h1, h3, p, ul, button {
+    animation: fadeInUp 0.8s ease forwards;
   }
 
-  p {
-    font-size: 1.2rem;
-    color: #333;
-    max-width: 800px;
-    margin: 0 auto 40px;
-    line-height: 1.6;
-    opacity: 0;
-    animation: fadeInUp 1s ease 0.3s forwards;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 40px;
-
-    li {
-      font-size: 1.1rem;
-      color: #333;
-      margin: 10px 0;
-      opacity: 0;
-      animation: fadeInUp 0.8s ease forwards;
-      animation-delay: calc(0.3s + var(--i, 0) * 0.1s);
+  .card {
+    animation: slideDown 0.8s ease forwards;
+    transition: all 0.3s ease;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
   }
 
   button {
-    background-color: #6a1b9a;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(106, 27, 154, 0.3);
-
     &:hover {
-      background-color: #8e24aa;
       transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(106, 27, 154, 0.4);
     }
   }
 }
