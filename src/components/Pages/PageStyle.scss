@@ -1,0 +1,47 @@
+.page {
+  min-height: 100vh;
+  padding: 100px 15px;
+  background: linear-gradient(135deg, #e0f7fa, #ede7f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+
+  h1, h3, p, ul, button {
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  .card {
+    animation: slideDown 0.8s ease forwards;
+    transition: all 0.3s ease;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+  }
+
+  button {
+    transition: all 0.3s ease;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+/* 🔹 Hiệu ứng keyframes */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

@@ -2,6 +2,7 @@ import VideoBG from "../../assets/videobg.mp4"; // Import video của bạn
 import React, { useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import './Home.scss';
+import { Link } from "react-router-dom";
 
 // Import thư viện AOS
 import AOS from 'aos';
@@ -78,25 +79,25 @@ const Home = () => {
               <div className="service-card__icon"><span className="service-card__icon-symbol">🎧</span></div>
               <h3 className="service-card__title">Listening</h3>
               <p className="service-card__description">Đánh giá khả năng nghe và hiểu tiếng Anh trong hội thoại, thông báo và bài nói trong môi trường làm việc quốc tế.</p>
-              <button className="service-card__link-button">Xem chi tiết →</button>
+              <Link to="/listening" className="service-card__link-button">Xem chi tiết →</Link>
             </div>
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="600">
               <div className="service-card__icon"><span className="service-card__icon-symbol">📖</span></div>
               <h3 className="service-card__title">Reading</h3>
               <p className="service-card__description">Kiểm tra khả năng đọc hiểu văn bản, email, thông báo, và tài liệu công việc bằng tiếng Anh một cách chính xác và nhanh chóng.</p>
-              <button className="service-card__link-button">Xem chi tiết →</button>
+              <Link to="/reading" className="service-card__link-button">Xem chi tiết →</Link>
             </div>
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="900">
               <div className="service-card__icon"><span className="service-card__icon-symbol">🗣️</span></div>
               <h3 className="service-card__title">Speaking</h3>
               <p className="service-card__description">Đánh giá khả năng phát âm, diễn đạt và phản xạ trong giao tiếp tiếng Anh, giúp thể hiện ý tưởng rõ ràng và tự tin.</p>
-              <button className="service-card__link-button">Xem chi tiết →</button>
+              <Link to="/speaking" className="service-card__link-button">Xem chi tiết →</Link>
             </div>
             <div className="service-card" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1200">
               <div className="service-card__icon"><span className="service-card__icon-symbol">✍️</span></div>
               <h3 className="service-card__title">Writing</h3>
               <p className="service-card__description">Kiểm tra kỹ năng viết câu, soạn email và trình bày ý kiến bằng tiếng Anh một cách logic, chuyên nghiệp và tự nhiên.</p>
-              <button className="service-card__link-button">Xem chi tiết →</button>
+              <Link to="/writting" className="service-card__link-button">Xem chi tiết →</Link>
             </div>
           </div>
         </div>
