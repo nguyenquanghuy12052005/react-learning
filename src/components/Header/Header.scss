@@ -35,6 +35,7 @@ $main-font: 'Inter', sans-serif;
   display: flex; 
   align-items: center; 
   gap: 10px; // Khoảng cách giữa logo và chữ
+ 
 }
 
 .header__logo-link {
@@ -46,12 +47,13 @@ $main-font: 'Inter', sans-serif;
 }
 
 .header__logo img {
-  // Cưỡng ép kích thước cho hình ảnh
-  height: 60px; // Chiều cao cố định
-  width: auto; // Giữ tỷ lệ khung hình
-  object-fit: contain; 
-  max-width: 100%; 
-  display: block; 
+  height: 60px;           // Chiều cao cố định
+  width: 60px;            // Quan trọng: width = height để tạo hình tròn
+  object-fit: cover;      // Cắt ảnh vừa khung (tránh méo)
+  border-radius: 50%;     // Bo tròn hoàn toàn
+  border: 3px solid #faba60; // (Tùy chọn) Viền nổi bật
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // (Tùy chọn) Hiệu ứng bóng
+  display: block;
 }
 
 .header__logo-text {
