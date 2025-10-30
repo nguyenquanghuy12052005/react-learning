@@ -1,0 +1,84 @@
+@import "~bootstrap/scss/bootstrap";
+
+/* Toàn bộ khung trang */
+.vocab-page {
+  background: linear-gradient(135deg, #f0f4ff, #e8f0ff);
+  min-height: 100vh;
+  padding: 60px 0;
+   margin-top: 100px;
+
+  h1 {
+    font-weight: 700;
+    color: #2c3e50;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Lưới chứa các thẻ từ */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 30px;
+  justify-items: center;
+  align-items: stretch;
+}
+
+/* Thẻ từ vựng */
+.vocab-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  padding: 25px 15px;
+  width: 100%;
+  max-width: 240px;
+  min-height: 240px; /* ✅ Cố định chiều cao đều */
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .vocab-image {
+    width: 90px;
+    height: 90px;
+    border: 2px dashed #dcdcdc;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    font-size: 12px;
+    color: #aaa;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d3436;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+  }
+
+  .phonetic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 14px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      margin-right: 6px;
+    }
+  }
+}

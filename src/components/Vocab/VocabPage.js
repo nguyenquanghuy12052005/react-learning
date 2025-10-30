@@ -2,22 +2,20 @@ import React, { useState } from 'react';
 import VocabCard from './VocabCard';
 import VocabModal from './VocabModal';
 import vocabData from '../../data/toeic_vocab.json';
+import '../../components/Vocab/Vocab.scss';
 
 const VocabPage = () => {
   const [selectedWord, setSelectedWord] = useState(null);
 
   return (
-    <div className="container-fluid py-5 bg-light">
+    <div className="vocab-page">
       <div className="container">
-        <h1 className="text-center display-5 fw-bold text-primary mb-5">
-          TOEIC Vocabulary
-        </h1>
+        <h1 className="text-center mb-5">TOEIC Vocabulary</h1>
 
-        <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-4">
+        {/* ✅ Dùng grid tùy chỉnh thay vì Bootstrap row */}
+        <div className="vocab-grid">
           {vocabData.map((word, i) => (
-            <div className="col" key={i}>
-              <VocabCard word={word} onClick={setSelectedWord} />
-            </div>
+            <VocabCard key={i} word={word} onClick={setSelectedWord} />
           ))}
         </div>
 
@@ -27,4 +25,4 @@ const VocabPage = () => {
   );
 };
 
-export default VocabPage; // PHẢI CÓ
+export default VocabPage;
