@@ -24,6 +24,7 @@ import Speaking from './components/Pages/Speaking';
 // ===== Import các trang Auth =====
 import Login from './components/Auth/Login';
 import Register from "./components/Auth/Register";
+import Forum from './components/Forum/Forum';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -42,6 +43,7 @@ root.render(
             <Route path="speaking" element={<Speaking />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="forum" element={<Forum />} />
           </Route>
 
           {/* ===== Phần quản trị (Admin) ===== */}

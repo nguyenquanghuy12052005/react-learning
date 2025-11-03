@@ -39,7 +39,7 @@ const Header = () => {
               <Link to="/services" className="header__nav-link">Dịch vụ</Link>
             </li>
             <li className="header__nav-item">
-              <Link to="/contact" className="header__nav-link">Liên hệ</Link>
+              <Link to="/forum" className="header__nav-link">Diễn đàn</Link>
             </li>
           </ul>
         </nav>

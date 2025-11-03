@@ -7,15 +7,22 @@ const Forum = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      author: 'Nguyen A',
+      author: 'Lọ Vương',
+      avatar: 'https://i.pravatar.cc/60?img=1',
       content: 'Từ nào trong TOEIC khiến bạn khó nhớ nhất?',
+      image: 'https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=800',
       likes: 3,
-      comments: ['Tôi thấy từ "negotiate" rất khó!', 'Từ "revenue" cũng khó đấy!'],
+      comments: [
+        'Tôi thấy từ "negotiate" rất khó!',
+        'Từ "revenue" cũng khó đấy!',
+      ],
     },
     {
       id: 2,
       author: 'Tran B',
+      avatar: 'https://i.pravatar.cc/60?img=2',
       content: 'Mọi người có mẹo học từ vựng TOEIC nhanh không?',
+      image: 'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800',
       likes: 5,
       comments: ['Dùng flashcard nha!', 'Học theo chủ đề sẽ dễ hơn.'],
     },
@@ -65,9 +72,23 @@ const Forum = () => {
 
             return (
               <div key={post.id} className="forum-card">
-                <div className="forum-author">{post.author}</div>
+                {/* === Phần Avatar + Tên người dùng === */}
+                <div className="forum-header">
+                  <img src={post.avatar} alt="avatar" className="forum-avatar" />
+                  <div className="forum-author">{post.author}</div>
+                </div>
+
+                {/* === Nội dung bài viết === */}
                 <div className="forum-content">{post.content}</div>
 
+                {/* === Ảnh bài viết (nếu có) === */}
+                {post.image && (
+                  <div className="forum-image">
+                    <img src={post.image} alt="post" />
+                  </div>
+                )}
+
+                {/* === Nút Like & Bình luận === */}
                 <div className="forum-actions">
                   <button className="btn-like" onClick={() => handleLike(post.id)}>
                     👍 {post.likes}
@@ -77,6 +98,7 @@ const Forum = () => {
                   </button>
                 </div>
 
+                {/* === Hiển thị bình luận === */}
                 <div className="forum-comments">
                   {displayedComments.map((c, i) => (
                     <p key={i} className="comment">💭 {c}</p>
@@ -93,6 +115,7 @@ const Forum = () => {
                   )}
                 </div>
 
+                {/* === Form bình luận === */}
                 {selectedPost === post.id && (
                   <div className="comment-box mt-3">
                     <input

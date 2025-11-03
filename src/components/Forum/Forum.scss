@@ -44,12 +44,51 @@
   }
 }
 
-.forum-author {
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 10px;
+/* --- HEADER --- */
+.forum-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f2f5;
 }
 
+.forum-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.forum-author {
+  font-weight: 600;
+  color: #222;
+  font-size: 1.05rem;
+  letter-spacing: 0.2px;
+
+  &::after {
+    content: " • ";
+    color: #aaa;
+    margin: 0 4px;
+  }
+
+  span {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: 400;
+  }
+}
+
+/* --- NỘI DUNG BÀI VIẾT --- */
 .forum-content {
   font-size: 1.05rem;
   color: #444;
@@ -57,6 +96,18 @@
   line-height: 1.6;
 }
 
+.forum-image {
+  margin-top: 12px;
+
+  img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    max-height: 400px;
+  }
+}
+
+/* --- HÀNH ĐỘNG --- */
 .forum-actions {
   display: flex;
   gap: 15px;
@@ -86,6 +137,7 @@
   }
 }
 
+/* --- COMMENT --- */
 .forum-comments {
   border-top: 1px solid #eee;
   padding-top: 10px;
@@ -100,6 +152,21 @@
   }
 }
 
+.toggle-comments {
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  text-align: right;
+  user-select: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #0056b3;
+  }
+}
+
+/* --- COMMENT BOX --- */
 .comment-box {
   display: flex;
   flex-direction: column;
@@ -132,18 +199,4 @@
       background-color: #0056b3;
     }
   }
-  .toggle-comments {
-  color: #007bff;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 6px;
-  text-align: right;
-  user-select: none;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #0056b3;
-  }
 }
-}
-
