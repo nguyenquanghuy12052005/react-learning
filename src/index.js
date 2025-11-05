@@ -14,7 +14,7 @@ import Admin from './components/Admin/Admin';
 import Dashboard from './components/Admin/Content/DashBoard';
 import ManageUser from './components/Admin/Content/ManageUser';
 import VocabPage from './components/Vocab/VocabPage';
-
+import ChatApp from './components/Chat/ChatApp';
 // ===== Import các trang TOEIC =====
 import Listening from './components/Pages/Listening';
 import Reading from './components/Pages/Reading';
@@ -44,6 +44,7 @@ root.render(
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="forum" element={<Forum />} />
+            <Route path="chatapp" element={<ChatApp />} />
           </Route>
 
           {/* ===== Phần quản trị (Admin) ===== */}
