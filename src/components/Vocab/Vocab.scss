@@ -82,3 +82,34 @@
     }
   }
 }
+/* Pagination styling */
+.pagination-info {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.btn-outline-primary {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+/* Thay thế phần .phonetic cũ */
+.meaning-preview {
+  color: #e67e22;
+  font-weight: 600;
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 10px;
+
+  span {
+    display: inline-block;
+    max-width: 100%;
+  }
+}
+
