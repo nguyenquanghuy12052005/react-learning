@@ -9,7 +9,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // IMPORT CÁC COMPONENT
 import Home from './components/Home/Home';
-import User from './components/User/User';
 import Admin from './components/Admin/Admin';
 import Dashboard from './components/Admin/Content/DashBoard';
 import ManageUser from './components/Admin/Content/ManageUser';
@@ -25,6 +24,8 @@ import Speaking from './components/Pages/Speaking';
 import Login from './components/Auth/Login';
 import Register from "./components/Auth/Register";
 import Forum from './components/Forum/Forum';
+import HomePage from "./components/User/HomePage";
+import ChatPage from "./components/User/ChatPage"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -32,27 +33,30 @@ root.render(
     <React.StrictMode>
       <BrowserRouter>
         <Routes>
-          {/* ===== Phần người dùng (App chính) ===== */}
-          <Route path="/" element={<App />}>
-            <Route index element={<Home />} />
-            <Route path="users" element={<User />} />
-            <Route path="vocab" element={<VocabPage />} />
-            <Route path="listening" element={<Listening />} />
-            <Route path="reading" element={<Reading />} />
-            <Route path="writting" element={<Writting />} />
-            <Route path="speaking" element={<Speaking />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="forum" element={<Forum />} />
-            <Route path="chatapp" element={<ChatApp />} />
-          </Route>
+  {/* ===== Phần người dùng (App chính) ===== */}
+  <Route path="/" element={<App />}>
+    <Route index element={<Home />} />
+    <Route path="vocab" element={<VocabPage />} />
+    <Route path="listening" element={<Listening />} />
+    <Route path="reading" element={<Reading />} />
+    <Route path="writting" element={<Writting />} />
+    <Route path="speaking" element={<Speaking />} />
+    <Route path="login" element={<Login />} />
+    <Route path="register" element={<Register />} />
+    <Route path="forum" element={<Forum />} />
+    <Route path="chatapp" element={<ChatApp />} />
+  </Route>
 
-          {/* ===== Phần quản trị (Admin) ===== */}
-          <Route path="/admin" element={<Admin />}>
-            <Route index element={<Dashboard />} />
-            <Route path="manage-users" element={<ManageUser />} />
-          </Route>
-        </Routes>
+  {/* ⚡ Các trang KHÔNG có header */}
+  <Route path="/homepage" element={<HomePage />} />
+  <Route path="/chatpage" element={<ChatPage />} />
+
+  {/* ===== Phần quản trị (Admin) ===== */}
+  <Route path="/admin" element={<Admin />}>
+    <Route index element={<Dashboard />} />
+    <Route path="manage-users" element={<ManageUser />} />
+  </Route>
+</Routes>
       </BrowserRouter>
     </React.StrictMode>
   </Provider>
