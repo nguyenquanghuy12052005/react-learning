@@ -11,7 +11,7 @@ const SideBar = () => {
   const menuItems = [
     { icon: <Home size={18} />, text: "Trang chủ", path: "/homepage" },
     { icon: <MessageCircle size={18} />, text: "Trò chuyện", path: "/chatpage" },
-    { icon: <BookOpen size={18} />, text: "Từ vựng", path: "/vocab" },
+    { icon: <BookOpen size={18} />, text: "Từ vựng", path: "/Vocab2" },
     { icon: <Globe size={18} />, text: "Thế giới thực", path: "/forum" },
     { icon: <User size={18} />, text: "Tài khoản", path: "/login" },
   ];

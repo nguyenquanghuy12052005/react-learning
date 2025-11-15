@@ -26,6 +26,7 @@ import Register from "./components/Auth/Register";
 import Forum from './components/Forum/Forum';
 import HomePage from "./components/User/HomePage";
 import ChatPage from "./components/User/ChatPage"
+import Vocab2 from "./components/User/Vocab2"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -45,11 +46,14 @@ root.render(
     <Route path="register" element={<Register />} />
     <Route path="forum" element={<Forum />} />
     <Route path="chatapp" element={<ChatApp />} />
+     
+   
   </Route>
 
   {/* ⚡ Các trang KHÔNG có header */}
   <Route path="/homepage" element={<HomePage />} />
   <Route path="/chatpage" element={<ChatPage />} />
+  <Route path="vocab2" element={<Vocab2 />} />
 
   {/* ===== Phần quản trị (Admin) ===== */}
   <Route path="/admin" element={<Admin />}>
