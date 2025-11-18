@@ -13,7 +13,7 @@ const SideBar = () => {
     { icon: <MessageCircle size={18} />, text: "Trò chuyện", path: "/chatpage" },
     { icon: <BookOpen size={18} />, text: "Từ vựng", path: "/Vocab2" },
     { icon: <Globe size={18} />, text: "Thế giới thực", path: "/forum" },
-    { icon: <User size={18} />, text: "Tài khoản", path: "/login" },
+    { icon: <User size={18} />, text: "Tài khoản", path: "/userprofile" },
   ];
 
   return (
