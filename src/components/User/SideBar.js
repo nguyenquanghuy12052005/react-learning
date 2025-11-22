@@ -2,16 +2,16 @@
 import React from "react";
 import "./SideBar.scss";
 import { Home, MessageCircle, BookOpen, Globe, User } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom"; // ✅ Thêm useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SideBar = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ Lấy đường dẫn hiện tại
+  const location = useLocation();
 
   const menuItems = [
     { icon: <Home size={18} />, text: "Trang chủ", path: "/homepage" },
-    { icon: <MessageCircle size={18} />, text: "Trò chuyện", path: "/chatpage" },
-    { icon: <BookOpen size={18} />, text: "Từ vựng", path: "/Vocab2" },
+    { icon: <MessageCircle size={18} />, text: "Trò chuyện", path: "/chatapp" }, // Đổi thành chatapp
+    { icon: <BookOpen size={18} />, text: "Từ vựng", path: "/vocab2" },
     { icon: <Globe size={18} />, text: "Thế giới thực", path: "/forum" },
     { icon: <User size={18} />, text: "Tài khoản", path: "/userprofile" },
   ];
@@ -31,7 +31,6 @@ const SideBar = () => {
 
       <nav className="menu">
         {menuItems.map((item, i) => {
-          // ✅ Kiểm tra nếu path hiện tại trùng path menu thì sáng lên
           const isActive = location.pathname === item.path;
           return (
             <button

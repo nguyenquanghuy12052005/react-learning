@@ -1,4 +1,3 @@
-// src/index.js (hoặc main.jsx)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -12,7 +11,7 @@ import Admin from './components/Admin/Admin';
 import Dashboard from './components/Admin/Content/DashBoard';
 import ManageUser from './components/Admin/Content/ManageUser';
 import VocabPage from './components/Vocab/VocabPage';
-import ChatApp from './components/Chat/ChatApp';
+import ChatApp from './components/User/Chat/ChatApp';
 import Listening from './components/Pages/Listening';
 import Reading from './components/Pages/Reading';
 import Writting from './components/Pages/Writting';
@@ -23,9 +22,8 @@ import Forum from './components/Forum/Forum';
 
 // CÁC TRANG USER CHÍNH (CÓ SIDEBAR)
 import HomePage from "./components/User/HomePage";
-import ChatPage from "./components/User/ChatPage";
 import Vocab2 from "./components/User/Vocab2";
-import UserProfile from "./components/User/UserProfile";   // ĐÃ IMPORT
+import UserProfile from "./components/User/UserProfile";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -44,17 +42,15 @@ root.render(
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="forum" element={<Forum />} />
-            <Route path="chatapp" element={<ChatApp />} />
-          
-
-            {/* === 4 TRANG USER CHÍNH – BÂY GIỜ ĐỀU CÓ SIDEBAR === */}
-           
-             {/* ĐÃ CHUYỂN VÀO ĐÂY */}
           </Route>
-            <Route path="/homepage" element={<HomePage />} />
-            <Route path="/chatpage" element={<ChatPage />} />
-            <Route path="/vocab2" element={<Vocab2 />} />
-              <Route path="/userprofile" element={<UserProfile />} />
+
+          {/* === ChatApp KHÔNG DÙNG APP, KHÔNG HEADER/SIDEBAR === */}
+          <Route path="/chatapp" element={<ChatApp />} />
+
+          {/* === 4 TRANG USER CHÍNH – BÂY GIỜ ĐỀU CÓ SIDEBAR === */}
+          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/vocab2" element={<Vocab2 />} />
+          <Route path="/userprofile" element={<UserProfile />} />
 
           {/* === Admin vẫn giữ riêng === */}
           <Route path="/admin" element={<Admin />}>
