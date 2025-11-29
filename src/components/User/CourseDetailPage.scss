@@ -1,0 +1,108 @@
+.course-detail-page {
+  display: flex;
+  min-height: 100vh;
+  background: #0f0f0f;
+}
+
+.course-main {
+  flex: 1;
+  padding: 20px 40px;
+  color: white;
+}
+
+/* Header */
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.avatar-block {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  .teacher-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  p {
+    opacity: 0.8;
+    margin: 0;
+  }
+}
+
+.lesson-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  /* Căn giữa cả chiều ngang và dọc */
+  justify-content: center; /* căn dọc */
+  align-items: center;     /* căn ngang */
+
+  /* Chiều cao để căn dọc */
+  min-height: calc(100vh - 50px); /* trừ header nếu cần */
+}
+
+.vocab-card {
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 12px;
+
+  /* Chiều rộng cố định */
+  width: 400px;
+  max-width: 90%; /* responsive khi màn hình nhỏ */
+
+  h3 {
+    margin: 0 0 5px 0;
+  }
+
+  p {
+    opacity: 0.8;
+    margin-bottom: 12px;
+  }
+
+  .next-btn {
+    padding: 10px 18px;
+    background: #2ecc71;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
+
+
+.dialog-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dialog-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1a1a1a;
+  padding: 16px;
+  border-radius: 10px;
+
+  .dialog-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+  }
+
+  .dialog-text {
+    font-size: 16px;
+  }
+}

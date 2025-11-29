@@ -36,7 +36,7 @@ const Header = () => {
               <Link to="/vocab" className="header__nav-link">Từ vựng</Link>
             </li>
             <li className="header__nav-item">
-              <Link to="/services" className="header__nav-link">Dịch vụ</Link>
+              <Link to="/toeic-prep" className="header__nav-link">Luyện thi Toeic</Link>
             </li>
             <li className="header__nav-item">
               <Link to="/forum" className="header__nav-link">Diễn đàn</Link>
