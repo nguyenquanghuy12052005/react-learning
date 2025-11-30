@@ -75,6 +75,7 @@ root.render(
           {/* === KHÔNG DÙNG LAYOUT APP === */}
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/chatpage" element={<ChatPage />} />
+          <Route path="/userprofile" element={<UserProfile />} />
           <Route path="/vocab2" element={<Vocab2 />} />
 
           {/* === TRANG CHI TIẾT BÀI HỌC === */}
