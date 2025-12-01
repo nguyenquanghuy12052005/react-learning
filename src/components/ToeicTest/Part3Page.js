@@ -1,26 +1,31 @@
 import React from 'react';
 import { FaArrowLeft, FaClock, FaListUl, FaCrown } from 'react-icons/fa'; 
-import { Link } from 'react-router-dom';
-import './Part3Page.scss'; // Style riêng cho trang này
+import { Link, useNavigate } from 'react-router-dom'; // 1. Import useNavigate
+import './Part3Page.scss'; 
 
 const Part3Page = () => {
-  // Tạo dữ liệu giả lập 12 bài Conversations
+  const navigate = useNavigate(); // 2. Khai báo hook
+
+  // Tạo dữ liệu giả lập
   const lessons = Array.from({ length: 12 }, (_, i) => {
     const id = i + 1;
     return {
       id: id,
-      // Tên bài: "Conversations 01", "Conversations 02"...
-      name: `Conversations ${String(id).padStart(2, '0')}`,
-      // Các bài từ 4 trở đi là bài Premium (có vương miện)
+      name: `Short Conversations ${String(id).padStart(2, '0')}`, // Tên chuẩn Lingoland
       isPro: id >= 4, 
       format: "2025 Format",
       status: "Chưa làm"
     };
   });
 
+  // 3. Hàm xử lý khi click vào bài học
+  const handleLessonClick = (lessonId) => {
+    navigate(`/part3/detail/${lessonId}`);
+  };
+
   return (
     <div className="part3-page">
-      {/* Header Xanh Lá */}
+      {/* Header (Bạn có thể đổi màu background trong SCSS) */}
       <div className="part3-header">
         <div className="header-content">
           <Link to="/toeic-prep" className="back-btn">
@@ -34,7 +39,13 @@ const Part3Page = () => {
       <div className="part3-container">
         <div className="part3-grid">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="lesson-card">
+            <div 
+                key={lesson.id} 
+                className="lesson-card"
+                // 4. Thêm sự kiện onClick vào đây
+                onClick={() => handleLessonClick(lesson.id)}
+                style={{ cursor: 'pointer' }} // Thêm con trỏ chuột
+            >
               <div className="card-top">
                 <h3 className="lesson-name">
                   {lesson.name}

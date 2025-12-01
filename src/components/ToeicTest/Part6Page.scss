@@ -1,18 +1,18 @@
-// Màu sắc chủ đạo
-$green-header: #198754; 
-$bg-color: #f3f6f9;     
-$tag-bg: #d1e7dd;       
-$tag-text: #0f5132;     
-$gold: #ffc107;         
+// --- BIẾN MÀU SẮC (Dùng Teal cho Part 6) ---
+$primary-color: #009688; // Màu Teal (Xanh Cổ Vịt)
+$bg-color: #f3f6f9;      // Màu nền xám nhạt (giống mẫu)
+$tag-bg: #e0f2f1;        // Nền tag nhạt
+$tag-text: #00695c;      // Chữ tag đậm
+$gold: #ffc107;          // Màu vàng vương miện
 
-.part5-page {
+.part6-page {
   background-color: $bg-color;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 
   // 1. Header
-  .part5-header {
-    background-color: $green-header;
+  .part6-header {
+    background-color: $primary-color;
     padding: 15px 20px;
     color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -44,14 +44,14 @@ $gold: #ffc107;
   }
 
   // 2. Container chính
-  .part5-container {
+  .part6-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 50px 20px; // Padding rộng
+    padding: 50px 20px; // Padding rộng giống mẫu
 
-    .part5-grid {
+    .part6-grid {
       display: grid;
-      // Card to và khoảng cách rộng
+      // Card to (min 320px) và khoảng cách rộng (40px)
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
       gap: 40px; 
     }
@@ -61,18 +61,20 @@ $gold: #ffc107;
   .lesson-card {
     background: white;
     border-radius: 12px;
-    padding: 24px;
+    padding: 24px; // Padding trong card rộng hơn
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 140px;
+    height: 140px; // Chiều cao cố định giống mẫu
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
+    border: 1px solid transparent;
 
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      border-color: rgba($primary-color, 0.3);
     }
 
     .card-top {

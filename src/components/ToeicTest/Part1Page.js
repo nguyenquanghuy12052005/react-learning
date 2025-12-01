@@ -1,26 +1,30 @@
 import React from 'react';
 import { FaArrowLeft, FaClock, FaListUl, FaCrown } from 'react-icons/fa'; 
-import { Link } from 'react-router-dom';
-import './Part1Page.scss'; // Style riêng cho trang này
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import './Part1Page.scss';
 
 const Part1Page = () => {
-  // Tạo dữ liệu giả lập 12 bài Photographs giống trong ảnh
+  const navigate = useNavigate(); // Hook chuyển trang
+
   const lessons = Array.from({ length: 12 }, (_, i) => {
     const id = i + 1;
     return {
       id: id,
-      // Tạo tên dạng "Photographs 01", "Photographs 02"...
       name: `Photographs ${String(id).padStart(2, '0')}`,
-      // Giả lập: Các bài từ 4 trở đi là bài Premium (có vương miện) như trong ảnh
       isPro: id >= 4, 
       format: "2025 Format",
       status: "Chưa làm"
     };
   });
 
+  // Hàm xử lý khi click vào bài học
+  const handleLessonClick = (lessonId) => {
+      console.log("Click bài số:", lessonId); // Kiểm tra log
+      navigate(`/part1/detail/${lessonId}`);
+  };
+
   return (
     <div className="part1-page">
-      {/* Header Xanh Lá */}
       <div className="part1-header">
         <div className="header-content">
           <Link to="/toeic-prep" className="back-btn">
@@ -30,11 +34,15 @@ const Part1Page = () => {
         </div>
       </div>
 
-      {/* Grid Danh Sách Bài Học */}
       <div className="part1-container">
         <div className="part1-grid">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="lesson-card">
+            <div 
+                key={lesson.id} 
+                className="lesson-card"
+                // Sự kiện click ở đây
+                onClick={() => handleLessonClick(lesson.id)}
+            >
               <div className="card-top">
                 <h3 className="lesson-name">
                   {lesson.name}

@@ -1,22 +1,26 @@
 import React from 'react';
 import { FaArrowLeft, FaClock, FaListUl, FaCrown } from 'react-icons/fa'; 
-import { Link } from 'react-router-dom';
-import './Part2Page.scss'; // Style riêng cho trang này
+import { Link, useNavigate } from 'react-router-dom'; // Thêm useNavigate
+import './Part2Page.scss';
 
 const Part2Page = () => {
-  // Tạo dữ liệu giả lập 12 bài Question & Response
+  const navigate = useNavigate(); // Hook chuyển trang
+
   const lessons = Array.from({ length: 12 }, (_, i) => {
     const id = i + 1;
     return {
       id: id,
-      // Tên bài: "Question & Response 01", "02"...
       name: `Question & Response ${String(id).padStart(2, '0')}`,
-      // Giả lập: Các bài từ 4 trở đi là bài Premium (có vương miện) như trong ảnh
       isPro: id >= 4, 
       format: "2025 Format",
       status: "Chưa làm"
     };
   });
+
+  // Hàm chuyển sang trang làm bài chi tiết
+  const handleLessonClick = (lessonId) => {
+    navigate(`/part2/detail/${lessonId}`);
+  };
 
   return (
     <div className="part2-page">
@@ -34,7 +38,12 @@ const Part2Page = () => {
       <div className="part2-container">
         <div className="part2-grid">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="lesson-card">
+            <div 
+                key={lesson.id} 
+                className="lesson-card"
+                onClick={() => handleLessonClick(lesson.id)} // Sự kiện Click
+                style={{ cursor: 'pointer' }}
+            >
               <div className="card-top">
                 <h3 className="lesson-name">
                   {lesson.name}

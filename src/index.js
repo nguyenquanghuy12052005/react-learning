@@ -1,4 +1,3 @@
-// src/index.js (hoặc main.jsx)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -12,7 +11,7 @@ import Admin from './components/Admin/Admin';
 import Dashboard from './components/Admin/Content/DashBoard';
 import ManageUser from './components/Admin/Content/ManageUser';
 import VocabPage from './components/Vocab/VocabPage';
-import ChatApp from './components/Chat/ChatApp';
+import ChatApp from './components/User/Chat/ChatApp';
 import Listening from './components/Pages/Listening';
 import Reading from './components/Pages/Reading';
 import Writting from './components/Pages/Writting';
@@ -23,7 +22,6 @@ import Forum from './components/Forum/Forum';
 
 // CÁC TRANG USER CHÍNH (CÓ SIDEBAR)
 import HomePage from "./components/User/HomePage";
-import ChatPage from "./components/User/ChatPage";
 import Vocab2 from "./components/User/Vocab2";
 import UserProfile from "./components/User/UserProfile";  
 // của thiên
@@ -36,6 +34,15 @@ import Part4Page from './components/ToeicTest/Part4Page';
 import Part5Page from './components/ToeicTest/Part5Page';
 import Part6Page from './components/ToeicTest/Part6Page';
 import Part7Page from './components/ToeicTest/Part7Page';
+import Part1Detail from './components/Assignment/Part1Detail';
+import Part2Detail from './components/Assignment/Part2Detail';
+import Part3Detail from './components/Assignment/Part3Detail';
+import Part4Detail from './components/Assignment/Part4Detail';
+import Part5Detail from './components/Assignment/Part5Detail';
+import Part6Detail from './components/Assignment/Part6Detail';
+import Part7Detail from './components/Assignment/Part7Detail';
+import FullTestDetail from './components/Assignment/FullTestDetail';
+
 
 
 // === Component placeholder cho TOEIC Part ===
@@ -63,15 +70,15 @@ root.render(
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="forum" element={<Forum />} />
-            <Route path="chatapp" element={<ChatApp />} />
           </Route>
-          
-          {/* CÁC ROUTE KHÔNG DÙNG LAYOUT <App /> */}
+
+          {/* === ChatApp KHÔNG DÙNG APP, KHÔNG HEADER/SIDEBAR === */}
+          <Route path="/chatapp" element={<ChatApp />} />
+
+          {/* === 4 TRANG USER CHÍNH – BÂY GIỜ ĐỀU CÓ SIDEBAR === */}
           <Route path="/homepage" element={<HomePage />} />
-          <Route path="/chatpage" element={<ChatPage />} />
           <Route path="/vocab2" element={<Vocab2 />} />
           <Route path="/userprofile" element={<UserProfile />} />
-
 
           <Route path="/toeic-prep" element={<ToeicPage />} />
           <Route path="/test-full" element={<TestFullPage />} />
@@ -81,23 +88,23 @@ root.render(
           <Route path="/toeic/part4" element={<Part4Page />} />
           <Route path="/toeic/part5" element={<Part5Page />} />
           <Route path="/toeic/part6" element={<Part6Page />} />
-           <Route path="/toeic/part7" element={<Part7Page />} />
+          <Route path="/toeic/part7" element={<Part7Page />} />
 
 
-          {/*cua em thien*/}
-           {/* CÁC ROUTE KHÔNG DÙNG LAYOUT <App /> */}
-       
+          <Route path="/part1/detail/:id" element={<Part1Detail />} />
+          <Route path="/part2/detail/:id" element={<Part2Detail />} />
+          <Route path="/part3/detail/:id" element={<Part3Detail />} />
+          <Route path="/part4/detail/:id" element={<Part4Detail />} />
+          <Route path="/part5/detail/:id" element={<Part5Detail />} />
+          <Route path="/part6/detail/:id" element={<Part6Detail />} />
+          <Route path="/part7/detail/:id" element={<Part7Detail />} />
+          <Route path="/fulltest/detail/:id" element={<FullTestDetail />} />
+
 
           {/* === TOEIC ROUTE SỬ DỤNG PART PLACEHOLDER === */}
           <Route path="/toeic">
             {/* Trang mặc định /toeic */}
             <Route index element={<PartPlaceholder partTitle="Part 1: Photographs" />} />
-
-        
-            
-
-            {/* Các Part */}
-            
           </Route>
 
           {/* === Admin route === */}

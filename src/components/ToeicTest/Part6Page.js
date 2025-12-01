@@ -1,41 +1,50 @@
-
 import React from 'react';
 import { FaArrowLeft, FaClock, FaListUl, FaCrown } from 'react-icons/fa'; 
-import { Link } from 'react-router-dom';
-import './Part6Page.scss'; // Style riêng cho trang này
+import { Link, useNavigate } from 'react-router-dom';
+import './Part6Page.scss'; // Link tới file SCSS của Part 6
 
 const Part6Page = () => {
-  // Tạo dữ liệu giả lập 12 bài Incomplete Sentences
+  const navigate = useNavigate();
+
+  // Tạo dữ liệu giả lập 12 bài Text Completion
   const lessons = Array.from({ length: 12 }, (_, i) => {
     const id = i + 1;
     return {
       id: id,
-      // Tên bài: "Incomplete Sentences 01", "02"...
-      name: `Text Completion  ${String(id).padStart(2, '0')}`,
-      // Các bài từ 4 trở đi là bài Premium (có vương miện)
+      // Đổi tên thành Text Completion
+      name: `Text Completion ${String(id).padStart(2, '0')}`,
       isPro: id >= 4, 
       format: "2025 Format",
       status: "Chưa làm"
     };
   });
 
+  const handleLessonClick = (lessonId) => {
+    // Chuyển hướng sang trang chi tiết Part 6
+    navigate(`/part6/detail/${lessonId}`);
+  };
+
   return (
-    <div className="part5-page">
-      {/* Header Xanh Lá */}
-      <div className="part5-header">
+    <div className="part6-page">
+      {/* Header - Tôi sẽ dùng màu Teal cho Part 6 */}
+      <div className="part6-header">
         <div className="header-content">
           <Link to="/toeic-prep" className="back-btn">
             <FaArrowLeft />
           </Link>
-          <h1 className="header-title">Part 6</h1>
+          <h1 className="header-title">Part 6: Text Completion</h1>
         </div>
       </div>
 
-      {/* Grid Danh Sách Bài Học */}
-      <div className="part5-container">
-        <div className="part5-grid">
+      <div className="part6-container">
+        <div className="part6-grid">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="lesson-card">
+            <div 
+                key={lesson.id} 
+                className="lesson-card"
+                onClick={() => handleLessonClick(lesson.id)}
+                style={{ cursor: 'pointer' }}
+            >
               <div className="card-top">
                 <h3 className="lesson-name">
                   {lesson.name}
@@ -43,7 +52,6 @@ const Part6Page = () => {
                 </h3>
                 <FaClock className="icon-history" />
               </div>
-              
               <div className="card-bottom">
                 <span className="tag-format">{lesson.format}</span>
                 <div className="status">

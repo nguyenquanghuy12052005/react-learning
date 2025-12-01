@@ -1,38 +1,53 @@
 import React from 'react';
 import { FaArrowLeft, FaClock, FaListUl, FaCrown } from 'react-icons/fa'; 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // 1. Import useNavigate
 import './TestFullPage.scss'; 
 
 const TestFullPage = () => {
-  const tests = [
-    { id: 1, name: "L&R Test 01", isPro: false },
-    { id: 2, name: "L&R Test 02", isPro: false },
-    { id: 3, name: "L&R Test 03", isPro: false },
-    { id: 4, name: "L&R Test 04", isPro: true }, 
-    { id: 5, name: "L&R Test 05", isPro: true },
-    { id: 6, name: "L&R Test 06", isPro: true },
-    { id: 7, name: "L&R Test 07", isPro: true },
-    { id: 8, name: "L&R Test 08", isPro: true },
-    { id: 9, name: "L&R Test 09", isPro: true },
-  ];
+  const navigate = useNavigate(); // 2. Khai báo hook chuyển trang
+
+  // 3. Tạo dữ liệu giả lập giống hệt cách làm ở Part 1
+  // Tạo 10 đề thi "L&R Test 01" -> "L&R Test 10"
+  const tests = Array.from({ length: 12 }, (_, i) => {
+    const id = i + 1;
+    return {
+      id: id,
+      name: `L&R Test ${String(id).padStart(2, '0')}`, // Tên chuẩn
+      isPro: id >= 4, // Từ đề 4 trở đi là Premium
+      format: "2025 Format",
+      status: "Chưa làm"
+    };
+  });
+
+  // 4. Hàm xử lý khi click vào đề thi
+  const handleTestClick = (testId) => {
+      console.log("Click đề số:", testId); // Log kiểm tra
+      navigate(`/fulltest/detail/${testId}`); // Chuyển sang trang chi tiết
+  };
 
   return (
     <div className="test-full-page">
-      {/* Header xanh lá */}
+      {/* Header */}
       <div className="test-header">
         <div className="header-content">
           <Link to="/toeic-prep" className="back-btn">
             <FaArrowLeft />
           </Link>
-          <h1 className="header-title">Full Test</h1>
+          <h1 className="header-title">Full Test Simulator</h1>
         </div>
       </div>
 
-      {/* Danh sách đề thi */}
+      {/* Grid Danh Sách Đề Thi */}
       <div className="test-container">
         <div className="test-grid">
           {tests.map((test) => (
-            <div key={test.id} className="test-card">
+            <div 
+                key={test.id} 
+                className="test-card"
+                // 5. Sự kiện click giống hệt Part 1
+                onClick={() => handleTestClick(test.id)}
+                style={{cursor: 'pointer'}} 
+            >
               <div className="card-top">
                 <h3 className="test-name">
                   {test.name}
@@ -42,10 +57,10 @@ const TestFullPage = () => {
               </div>
               
               <div className="card-bottom">
-                <span className="tag-format">2025 Format</span>
+                <span className="tag-format">{test.format}</span>
                 <div className="status">
                   <FaListUl className="icon-list" />
-                  <span>Chưa làm</span>
+                  <span>{test.status}</span>
                 </div>
               </div>
             </div>
