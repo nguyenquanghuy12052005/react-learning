@@ -1,18 +1,34 @@
 @import "~bootstrap/scss/bootstrap";
 
+/* === BẢNG MÀU (VARIABLES) === */
+// Định nghĩa màu ở đây để dễ quản lý
+$primary-orange: #ff7e5f;       // Cam san hô chủ đạo (mềm mại hơn cam thuần)
+$accent-orange: #feb47b;        // Cam phấn (dùng cho gradient)
+$text-dark: #5d4037;            // Nâu đậm (thay cho màu đen, dịu mắt hơn)
+$text-highlight: #e64a19;       // Cam đỏ đậm (cho tiêu đề)
+$bg-page: #fffbf7;              // Trắng kem (nền trang)
+$card-bg: #ffffff;              // Trắng tinh (nền thẻ)
+$card-shadow: rgba(255, 126, 95, 0.15); // Bóng đổ màu cam nhạt
+
 /* === Toàn bộ trang === */
 .vocab-page {
-  background: linear-gradient(135deg, #fff8e7, #fff3e0); // nền pastel vàng nhạt
+  background-color: $bg-page;
+  // Bỏ gradient nền trang để nhìn sạch mắt hơn, hoặc dùng gradient rất nhẹ
+  background-image: radial-gradient(#fff3e0 1px, transparent 1px);
+  background-size: 20px 20px; // Hiệu ứng chấm bi nhỏ mờ nhạt (optional)
   min-height: 100vh;
-  padding: 80px 0;
+  padding-top: 120px; // Tăng padding-top để đẩy nội dung xuống
+  padding-bottom: 80px;
 
   h1 {
     font-weight: 800;
-    color: #ff8c42; // màu cam nổi bật
+    background: linear-gradient(to right, $text-highlight, $primary-orange);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; // Hiệu ứng chữ gradient
     text-align: center;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.08);
     margin-bottom: 50px;
     font-size: 2.8rem;
+    letter-spacing: -1px;
   }
 }
 
@@ -27,59 +43,80 @@
 
 /* === Thẻ từ vựng === */
 .vocab-card {
-  background: linear-gradient(145deg, #fff3e0, #ffe0b2);
-  border-radius: 25px;
-  box-shadow: 0 8px 20px rgba(255, 140, 66, 0.2);
-  padding: 25px 15px;
+  // Chuyển sang nền trắng chủ đạo để nổi bật hình ảnh và chữ
+  background: $card-bg;
+  border: 1px solid rgba($primary-orange, 0.1); // Viền mỏng
+  border-radius: 24px;
+  box-shadow: 0 10px 25px -5px $card-shadow;
+  padding: 25px 20px;
   width: 100%;
   max-width: 240px;
-  min-height: 260px; // chiều cao chuẩn
+  min-height: 280px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  overflow: hidden;
 
+  // Hiệu ứng hover hiện đại
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(255, 140, 66, 0.3);
+    box-shadow: 0 20px 35px -5px rgba($primary-orange, 0.25);
+    border-color: rgba($primary-orange, 0.3);
+
+    // Một thanh màu nhỏ hiện lên khi hover
+    &::after {
+      height: 6px;
+    }
+  }
+
+  // Thanh trang trí dưới đáy card
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0px; // Ẩn mặc định
+    background: linear-gradient(to right, $primary-orange, $accent-orange);
+    transition: height 0.3s ease;
   }
 
   .vocab-image {
-    width: 90px;
-    height: 90px;
-    border: 2px dashed #ffc107;
-    border-radius: 15px;
-    margin-bottom: 15px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; // Bo tròn hoàn toàn trông thân thiện hơn
+    background: #fff3e0; // Nền ảnh màu cam rất nhạt
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff5e6;
     font-size: 12px;
-    color: #d48806;
+    color: $text-highlight;
+    box-shadow: inset 0 0 0 4px #ffffff, 0 4px 10px rgba(0,0,0,0.05); // Viền trắng tạo chiều sâu
   }
 
   h3 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    color: #d48806;
-    margin-bottom: 8px;
+    color: $text-dark; // Dùng màu nâu đậm thay vì cam
+    margin-bottom: 5px;
     text-transform: capitalize;
   }
 
   .meaning-preview {
-    color: #ff8c42;
-    font-weight: 600;
-    font-size: 14px;
-    font-style: italic;
-    text-align: center;
-    margin-top: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
+    color: $primary-orange;
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 5px;
+    background: #fff8f5; // Highlight nhẹ nền chữ
+    padding: 4px 12px;
+    border-radius: 20px;
+    
     span {
       display: inline-block;
       max-width: 100%;
@@ -89,30 +126,32 @@
 
 /* === Thanh tìm kiếm === */
 .input-group {
-  box-shadow: 0 8px 20px rgba(255, 140, 66, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   border-radius: 50px;
-  overflow: hidden;
-  background: #fff7ed;
+  background: #ffffff;
+  border: 2px solid transparent; // Chuẩn bị cho focus
   transition: all 0.3s ease;
 
   &:focus-within {
-    box-shadow: 0 12px 30px rgba(255, 140, 66, 0.25);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba($primary-orange, 0.2);
+    border-color: rgba($primary-orange, 0.5); // Viền cam khi gõ
+    transform: translateY(-1px);
   }
 
   .input-group-text {
-    background: #ffb74d;
+    background: transparent;
     border: none;
-    color: #fff;
-    padding: 0 1.2rem;
-    font-size: 1.1rem;
+    color: $primary-orange;
+    padding-left: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .form-control {
     border: none;
-    padding: 0.9rem 1.5rem;
+    padding: 1rem 1rem 1rem 0.5rem;
     font-size: 1.1rem;
-    height: auto;
+    color: $text-dark;
+    background: transparent;
 
     &:focus {
       box-shadow: none;
@@ -120,82 +159,95 @@
     }
 
     &::placeholder {
-      color: #d48806;
-      font-style: italic;
+      color: #9e9e9e;
+      font-weight: 400;
     }
   }
 
   .btn-outline-secondary {
     border: none;
     background: transparent;
-    color: #d48806;
-    padding: 0 1rem;
-    transition: all 0.2s ease;
-
+    color: #9e9e9e;
+    padding-right: 1.5rem;
+    
     &:hover {
-      background: #ffe0b2;
-      color: #ff8c42;
-    }
-
-    .bi-x-lg {
-      font-size: 1.2rem;
+      background: transparent;
+      color: $text-highlight;
     }
   }
 }
 
-/* === Pagination === */
-.btn-outline-primary {
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-/* === Thông báo tìm kiếm === */
+/* === Thông báo tìm kiếm & Pagination === */
 .text-muted em {
-  color: #ff8c42;
-  font-weight: 600;
+  color: $text-highlight;
+  font-style: normal;
+  font-weight: 700;
+  background: #ffecb3; // Highligher style
+  padding: 0 4px;
 }
 
 /* === Modal từ vựng === */
 .modal-content {
-  border-radius: 25px;
+  border-radius: 24px;
+  border: none;
+  overflow: hidden;
 
   .modal-header {
-    background: #ffb74d;
+    background: linear-gradient(135deg, $primary-orange, $accent-orange);
     color: #fff;
-    font-weight: 700;
+    border-bottom: none;
+    padding: 1.5rem;
+    
+    .btn-close {
+        filter: brightness(0) invert(1); // Nút đóng màu trắng
+    }
   }
 
   .modal-body {
+    padding: 2rem;
+    background: #fff;
+
     h5 {
-      color: #d48806;
+      color: $text-highlight;
+      font-weight: 700;
+      margin-top: 1rem;
     }
 
     ol li {
-      font-weight: 500;
-      color: #6c4c2e;
+      margin-bottom: 0.5rem;
+      color: $text-dark;
     }
 
     p {
-      color: #5a3e1b;
+      color: #666;
+      line-height: 1.6;
     }
-
+    
+    // Badge ví dụ từ loại
     .badge {
-      font-weight: 600;
-    }
-
-    .bg-light {
-      background: #fff3e0 !important;
+        background-color: #fff3e0 !important;
+        color: $text-highlight !important;
+        border: 1px solid rgba($primary-orange, 0.2);
+        padding: 0.5em 1em;
     }
   }
 
-  .modal-footer .btn-outline-secondary {
-    border: 1px solid #ffb74d;
-    color: #ff8c42;
-    &:hover {
-      background: #ffb74d;
-      color: #fff;
+  .modal-footer {
+    border-top: none;
+    padding-bottom: 1.5rem;
+    
+    .btn-outline-secondary {
+      border: 2px solid #eee;
+      color: #777;
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+
+      &:hover {
+        background: $text-dark;
+        color: #fff;
+        border-color: $text-dark;
+      }
     }
   }
 }

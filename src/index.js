@@ -10,9 +10,8 @@ import Home from './components/Home/Home';
 import Admin from './components/Admin/Admin';
 import Dashboard from './components/Admin/Content/DashBoard';
 import ManageUser from './components/Admin/Content/ManageUser';
-
+import Vocab from './components/Vocab/VocabPage'
 import ChatApp from './components/User/Chat/ChatApp';
-import ChatPage from "./components/User/ChatPage";
 import Listening from './components/Pages/Listening';
 import Reading from './components/Pages/Reading';
 import Writting from './components/Pages/Writting';
@@ -28,7 +27,7 @@ import VocabularyPage from "./components/User/VocabularyPage";
 // CÁC TRANG USER CHÍNH (CÓ SIDEBAR)
 import HomePage from "./components/User/HomePage";
 import Vocab2 from "./components/User/Vocab2";
-import UserProfile from "./components/User/UserProfile";  
+import UserProfile from "./components/User/UserProfile";
 
 // TOEIC
 import ToeicPage from './components/ToeicTest/ToeicPage';
@@ -40,14 +39,9 @@ import Part4Page from './components/ToeicTest/Part4Page';
 import Part5Page from './components/ToeicTest/Part5Page';
 import Part6Page from './components/ToeicTest/Part6Page';
 import Part7Page from './components/ToeicTest/Part7Page';
-import Part1Detail from './components/Assignment/Part1Detail';
-import Part2Detail from './components/Assignment/Part2Detail';
-import Part3Detail from './components/Assignment/Part3Detail';
-import Part4Detail from './components/Assignment/Part4Detail';
-import Part5Detail from './components/Assignment/Part5Detail';
-import Part6Detail from './components/Assignment/Part6Detail';
-import Part7Detail from './components/Assignment/Part7Detail';
-import FullTestDetail from './components/Assignment/FullTestDetail';
+
+// ChatPage
+import ChatPage from "./components/User/ChatPage";
 
 // Placeholder TOEIC
 const PartPlaceholder = ({ partTitle }) => (
@@ -76,6 +70,7 @@ root.render(
             <Route path="register" element={<Register />} />
             <Route path="forum" element={<Forum />} />
             <Route path="chatapp" element={<ChatApp />} />
+            <Route path="vocab" element={<Vocab />} />
           </Route>
 
           {/* === KHÔNG DÙNG LAYOUT APP === */}
@@ -101,16 +96,6 @@ root.render(
           <Route path="/toeic/part6" element={<Part6Page />} />
           <Route path="/toeic/part7" element={<Part7Page />} />
 
-          <Route path="/part1/detail/:id" element={<Part1Detail />} />
-          <Route path="/part2/detail/:id" element={<Part2Detail />} />
-          <Route path="/part3/detail/:id" element={<Part3Detail />} />
-          <Route path="/part4/detail/:id" element={<Part4Detail />} />
-          <Route path="/part5/detail/:id" element={<Part5Detail />} />
-          <Route path="/part6/detail/:id" element={<Part6Detail />} />
-          <Route path="/part7/detail/:id" element={<Part7Detail />} />
-          <Route path="/fulltest/detail/:id" element={<FullTestDetail />} />
-
-          {/* === TOEIC ROUTE SỬ DỤNG PART PLACEHOLDER === */}
           <Route path="/toeic">
             <Route index element={<PartPlaceholder partTitle="Part 1: Photographs" />} />
           </Route>
