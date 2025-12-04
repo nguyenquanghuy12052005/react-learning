@@ -71,6 +71,7 @@ root.render(
             <Route path="forum" element={<Forum />} />
             <Route path="chatapp" element={<ChatApp />} />
             <Route path="vocab" element={<Vocab />} />
+            
           </Route>
 
           {/* === KHÔNG DÙNG LAYOUT APP === */}
@@ -86,7 +87,7 @@ root.render(
           <Route path="/vocab-page" element={<VocabularyPage />} />
 
           {/* === TOEIC === */}
-          <Route path="/toeic-prep" element={<ToeicPage />} />
+          
           <Route path="/test-full" element={<TestFullPage />} />
           <Route path="/toeic/part1" element={<Part1Page />} />
           <Route path="/toeic/part2" element={<Part2Page />} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import SideBar from "./SideBar";
+import SideBar from "../User/SideBar";
 import "./CourseDetailPage.scss";
 
 export default function CourseDetailPage() {

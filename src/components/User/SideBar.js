@@ -45,16 +45,6 @@ const SideBar = () => {
         })}
       </nav>
 
-      <div className="app-links">
-        <img
-          src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-          alt="App Store"
-        />
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-          alt="Google Play"
-        />
-      </div>
     </aside>
   );
 };

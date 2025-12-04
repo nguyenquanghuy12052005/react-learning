@@ -1,11 +1,15 @@
+/* CẬP NHẬT: Giao diện tối (Dark Mode) */
+
 .forum-container {
-  margin-top: 100px; // tránh bị che bởi Header
-  margin-bottom: 60px; // tránh đè Footer
+  /* Giữ nguyên layout, tập trung vào thẻ con */
+  margin-top: 100px; /* tránh bị che bởi Header */
+  margin-bottom: 60px; /* tránh đè Footer */
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
   font-family: 'Poppins', sans-serif;
+  /* Nên đặt nền tổng thể của body/html là màu tối (ví dụ: #121212) để có hiệu ứng tối hoàn chỉnh */
 }
 
 .text-center {
@@ -13,7 +17,7 @@
 }
 
 .text-primary {
-  color: #007bff;
+  color: #007bff; /* Giữ nguyên màu chủ đạo */
 }
 
 .fw-bold {
@@ -31,16 +35,19 @@
 }
 
 .forum-card {
-  background: #ffffff;
+  /* Nền thẻ bài viết: Trắng -> Xám tối */
+  background: #1e1e1e; 
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Đổ bóng nhẹ nhàng cho nền tối */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); 
   padding: 25px;
   transition: all 0.3s ease;
-  border-left: 6px solid #007bff;
+  /* Giữ màu accent bên trái */
+  border-left: 6px solid #007bff; 
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -51,7 +58,8 @@
   gap: 14px;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #f0f2f5;
+  /* Đường viền dưới: Trắng nhạt -> Xám đậm */
+  border-bottom: 1px solid #333333; 
 }
 
 .forum-avatar {
@@ -59,31 +67,35 @@
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  /* Đường viền avatar: Trắng -> Nền rất tối */
+  border: 2px solid #121212; 
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   }
 }
 
 .forum-author {
   font-weight: 600;
-  color: #222;
+  /* Tên tác giả: Đen -> Trắng nhạt */
+  color: #f5f5f5; 
   font-size: 1.05rem;
   letter-spacing: 0.2px;
 
   &::after {
+    /* Dấu chấm: Xám -> Xám đậm hơn */
     content: " • ";
-    color: #aaa;
+    color: #777; 
     margin: 0 4px;
   }
 
   span {
     font-size: 0.9rem;
-    color: #888;
+    /* Thời gian: Xám -> Xám nhạt */
+    color: #b3b3b3; 
     font-weight: 400;
   }
 }
@@ -91,7 +103,8 @@
 /* --- NỘI DUNG BÀI VIẾT --- */
 .forum-content {
   font-size: 1.05rem;
-  color: #444;
+  /* Nội dung: Xám đậm -> Trắng/Xám nhạt */
+  color: #e0e0e0; 
   margin-bottom: 15px;
   line-height: 1.6;
 }
@@ -115,7 +128,10 @@
 
   button {
     border: none;
-    background: #f0f2f5;
+    /* Nền nút hành động: Xám nhạt -> Xám tối hơn */
+    background: #333333; 
+    /* Màu chữ mặc định cho nút */
+    color: #e0e0e0; 
     padding: 8px 14px;
     border-radius: 10px;
     cursor: pointer;
@@ -123,37 +139,44 @@
     transition: all 0.2s ease;
 
     &:hover {
+      /* Giữ nguyên hover */
       background: #007bff;
       color: white;
     }
   }
 
   .btn-like {
-    color: #ff4d4d;
+    /* Giữ màu accent Đỏ */
+    color: #ff4d4d; 
   }
 
   .btn-comment {
-    color: #007bff;
+    /* Giữ màu accent Xanh dương */
+    color: #007bff; 
   }
 }
 
 /* --- COMMENT --- */
 .forum-comments {
-  border-top: 1px solid #eee;
+  /* Đường viền trên: Xám rất nhạt -> Xám đậm */
+  border-top: 1px solid #333; 
   padding-top: 10px;
 
   .comment {
-    background: #f9f9f9;
+    /* Nền comment: Gần trắng -> Xám tối */
+    background: #2c2c2c; 
     border-radius: 10px;
     padding: 8px 12px;
     margin-top: 6px;
     font-size: 0.95rem;
-    color: #333;
+    /* Chữ comment: Xám -> Trắng nhạt */
+    color: #cccccc; 
   }
 }
 
 .toggle-comments {
-  color: #007bff;
+  /* Giữ nguyên màu accent */
+  color: #007bff; 
   font-weight: 600;
   cursor: pointer;
   margin-top: 6px;
@@ -174,20 +197,27 @@
 
   input {
     border-radius: 8px;
-    border: 1px solid #ccc;
+    /* Viền input: Xám -> Xám đậm */
+    border: 1px solid #555; 
+    /* Nền input: Trắng -> Xám tối */
+    background-color: #1e1e1e;
+    /* Màu chữ input: Đen -> Trắng nhạt */
+    color: #e0e0e0;
     padding: 8px 10px;
     outline: none;
     transition: border 0.2s ease;
 
     &:focus {
-      border-color: #007bff;
+      /* Giữ nguyên focus color */
+      border-color: #007bff; 
     }
   }
 
   button {
     align-self: flex-end;
     border: none;
-    background-color: #007bff;
+    /* Giữ nguyên màu nút Gửi */
+    background-color: #007bff; 
     color: white;
     padding: 8px 16px;
     border-radius: 8px;
