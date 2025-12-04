@@ -71,6 +71,7 @@ root.render(
             <Route path="forum" element={<Forum />} />
             <Route path="chatapp" element={<ChatApp />} />
             <Route path="vocab" element={<Vocab />} />
+            <Route path="toeic-prep" element={<ToeicPage />} />
             
           </Route>
 

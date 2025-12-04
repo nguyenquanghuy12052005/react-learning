@@ -1,292 +1,233 @@
-@import "~bootstrap/scss/bootstrap";
-
-/* ========================================================= */
-/* === [FIX CỨNG] ÉP BUỘC GIAO DIỆN SÁNG (LIGHT MODE) === */
-/* ========================================================= */
+/* === BẢNG MÀU === */
 :root {
-  /* Ghi đè biến toàn cục của Bootstrap để tắt Dark Mode */
-  --bs-body-bg: #fffbf7 !important;      /* Màu nền kem */
-  --bs-body-color: #8d7b72 !important;   /* Màu chữ nâu */
-  --bs-theme: light !important;          /* Ép theme sáng */
-  color-scheme: light !important;        /* Báo trình duyệt render chế độ sáng */
+  --primary-color: #ff7e5f;
+  --secondary-color: #feb47b;
+  --text-main: #5d4037;
+  --text-light: #8d7b72;
+  --bg-color: #fffbf7;
+  --white: #ffffff;
 }
 
-/* Đảm bảo body luôn nhận màu nền này, bất kể thẻ cha là gì */
+/* Reset CSS cơ bản vì đã bỏ Bootstrap */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #fffbf7 !important;
-  color: #8d7b72 !important;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
 }
-/* ========================================================= */
 
-/* === BẢNG MÀU (VARIABLES) === */
-$primary-orange: #ff7e5f;       // Cam san hô
-$accent-orange: #feb47b;        // Cam phấn
-$text-dark: #8d7b72;            // Nâu sữa đậm (Warm Taupe)
-$text-highlight: #e64a19;       // Cam đỏ đậm
-$bg-page: #fffbf7;              // Trắng kem (nền trang)
-$card-bg: #ffffff;              // Trắng tinh (nền thẻ)
-$card-shadow: rgba(255, 126, 95, 0.15);
-$text-muted-milk: #bcaaa4;      // Màu ghi nâu sữa nhạt
-
-/* === Toàn bộ trang === */
-.vocab-page {
-  // Vì đã fix ở :root và body ở trên, dòng này để đảm bảo container cũng đúng màu
-  background-color: $bg-page !important; 
-  color: $text-dark !important;
-  
-  // Nền chấm bi (vân)
+/* === Layout Chung === */
+.vocab-page-custom {
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  /* Đã tăng padding-top lên 140px để tránh bị Header che */
+  padding: 140px 20px 60px;
   background-image: radial-gradient(#ffe0b2 1px, transparent 1px);
   background-size: 20px 20px;
-  
-  min-height: 100vh;
-  width: 100%; 
-  padding-top: 120px;
-  padding-bottom: 80px;
-  position: relative;
-
-  h1 {
-    font-weight: 800;
-    background: linear-gradient(to right, $text-highlight, $primary-orange);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-align: center;
-    margin-bottom: 50px;
-    font-size: 2.8rem;
-    letter-spacing: -1px;
-    display: inline-block; 
-    width: 100%;
-  }
 }
 
-/* === Grid từ vựng === */
-.vocab-grid {
+.vocab-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  background: linear-gradient(to right, #e64a19, #ff7e5f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* === Thanh Tìm Kiếm (Tự code) === */
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.search-box-custom {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  background: var(--white);
+  border-radius: 50px;
+  padding: 10px 25px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.search-box-custom:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 25px rgba(255, 126, 95, 0.2);
+  transform: translateY(-2px);
+}
+
+.search-icon {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-right: 15px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.search-input::placeholder {
+  color: #bcaaa4;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.clear-btn:hover { color: var(--primary-color); }
+
+.search-result-count {
+  text-align: center;
+  color: var(--text-light);
+  margin-top: -35px;
+  margin-bottom: 40px;
+}
+
+/* === Grid Layout === */
+.vocab-grid-custom {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 30px;
   justify-items: center;
-  align-items: stretch;
 }
 
-/* === Thẻ từ vựng === */
-.vocab-card {
-  background: $card-bg !important; // Ép nền trắng cho thẻ
-  border: 1px solid rgba($primary-orange, 0.1);
+/* === Card Styles (Không dùng class Bootstrap) === */
+.vocab-card-custom {
+  background-color: var(--white);
   border-radius: 24px;
-  box-shadow: 0 10px 25px -5px $card-shadow;
-  padding: 25px 20px;
   width: 100%;
-  max-width: 240px;
-  min-height: 280px;
-  text-align: center;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  cursor: pointer;
+  max-width: 260px;
+  min-height: 300px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
-  color: $text-dark; 
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 35px -5px rgba($primary-orange, 0.25);
-    border-color: rgba($primary-orange, 0.3);
-
-    &::after {
-      height: 6px;
-    }
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0px;
-    background: linear-gradient(to right, $primary-orange, $accent-orange);
-    transition: height 0.3s ease;
-  }
-
-  .vocab-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #fff3e0;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: $text-highlight;
-    box-shadow: inset 0 0 0 4px #ffffff, 0 4px 10px rgba(0,0,0,0.05);
-    
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-  }
-
-  h3 {
-    font-size: 20px;
-    font-weight: 700;
-    color: $text-dark;
-    margin-bottom: 5px;
-    text-transform: capitalize;
-  }
-
-  .meaning-preview {
-    color: $primary-orange;
-    font-weight: 500;
-    font-size: 15px;
-    margin-top: 5px;
-    background: #fff8f5;
-    padding: 4px 12px;
-    border-radius: 20px;
-    
-    span {
-      display: inline-block;
-      max-width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
 }
 
-/* === Thanh tìm kiếm === */
-.input-group {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 50px;
-  background: #ffffff !important; // Ép nền trắng cho ô tìm kiếm
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-
-  &:focus-within {
-    box-shadow: 0 8px 25px rgba($primary-orange, 0.2);
-    border-color: rgba($primary-orange, 0.5);
-    transform: translateY(-1px);
-  }
-
-  .input-group-text {
-    background: transparent;
-    border: none;
-    color: $primary-orange;
-    padding-left: 1.5rem;
-    font-size: 1.2rem;
-  }
-
-  .form-control {
-    border: none;
-    padding: 1rem 1rem 1rem 0.5rem;
-    font-size: 1.1rem;
-    color: $text-dark !important;
-    background: transparent !important; 
-
-    &:focus {
-      box-shadow: none;
-      outline: none;
-    }
-
-    &::placeholder {
-      color: $text-muted-milk;
-      font-weight: 400;
-    }
-  }
-
-  .btn-outline-secondary {
-    border: none;
-    background: transparent;
-    color: $text-muted-milk;
-    padding-right: 1.5rem;
-    
-    &:hover {
-      background: transparent;
-      color: $text-highlight;
-    }
-  }
+.vocab-card-custom:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px -10px rgba(255, 126, 95, 0.2);
+  border-color: rgba(255, 126, 95, 0.3);
 }
 
-/* === Thông báo tìm kiếm & Pagination === */
-.text-muted {
-    color: $text-muted-milk !important;
+/* Thanh màu dưới chân card */
+.vocab-card-custom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.text-muted em {
-    color: $text-highlight;
-    font-style: normal;
-    font-weight: 700;
-    background: #ffecb3;
-    padding: 0 4px;
+.vocab-card-custom:hover::after {
+  opacity: 1;
 }
 
-/* === Modal từ vựng === */
-.modal-content {
-  border-radius: 24px;
-  border: none;
-  overflow: hidden;
-  background-color: #ffffff !important; // Ép nền trắng cho Modal
-  color: $text-dark !important; // Chống chữ trắng của Dark mode
+.card-img-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #fff3e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
 
-  .modal-header {
-    background: linear-gradient(135deg, $primary-orange, $accent-orange);
-    color: #fff;
-    border-bottom: none;
-    padding: 1.5rem;
-    
-    .btn-close {
-        filter: brightness(0) invert(1);
-    }
-  }
+.card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-  .modal-body {
-    padding: 2rem;
-    background: #fff;
-    color: $text-dark;
+.card-word {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 10px 0;
+  text-transform: capitalize;
+}
 
-    h5 {
-      color: $text-highlight;
-      font-weight: 700;
-      margin-top: 1rem;
-    }
+.card-meaning {
+  background-color: #fff3e0;
+  color: #e64a19;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid #ffe0b2;
+}
 
-    ol li {
-      margin-bottom: 0.5rem;
-      color: $text-dark;
-    }
+/* === Pagination === */
+.pagination-custom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 60px;
+}
 
-    p {
-      color: rgba($text-dark, 0.85);
-      line-height: 1.6;
-    }
-    
-    .badge {
-        background-color: #fff3e0 !important;
-        color: $text-highlight !important;
-        border: 1px solid rgba($primary-orange, 0.2);
-        padding: 0.5em 1em;
-    }
-  }
+.page-btn {
+  padding: 10px 25px;
+  border-radius: 30px;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-  .modal-footer {
-    border-top: none;
-    padding-bottom: 1.5rem;
-    
-    .btn-outline-secondary {
-      border: 2px solid #eee;
-      color: $text-muted-milk;
-      border-radius: 50px;
-      padding: 0.5rem 1.5rem;
-      font-weight: 600;
+.page-btn:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: white;
+}
 
-      &:hover {
-        background: $text-dark;
-        color: #fff;
-        border-color: $text-dark;
-      }
-    }
-  }
+.page-btn:disabled {
+  border-color: #ccc;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-weight: 700;
+  color: var(--primary-color);
 }

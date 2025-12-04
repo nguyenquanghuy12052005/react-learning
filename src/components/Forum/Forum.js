@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+
 import './Forum.scss';
 
 const Forum = () => {
@@ -139,7 +139,6 @@ const Forum = () => {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 };
