@@ -69,7 +69,7 @@ const Register = () => {
 
       if (result.success) {
         toast.success("Đăng ký thành công!");
-        navigate("/homepage"); // Chuyển đến trang homepage
+        navigate("/login"); 
       } else {
         setError(result.error);
         toast.error(result.error);

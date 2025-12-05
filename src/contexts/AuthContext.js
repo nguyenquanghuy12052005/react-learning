@@ -10,59 +10,140 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Load user từ localStorage khi app khởi động
   useEffect(() => {
-    const loadUser = () => {
+    const loadUser = async () => {
       const storedToken = authService.getToken();
-      const storedUser = authService.getCurrentUser();
+      const storedUser = authService.getCurrentUserFromStorage();
 
-      if (storedToken && storedUser) {
+      if (storedToken) {
         setToken(storedToken);
-        setUser(storedUser);
-        setIsAuthenticated(true);
+        
+        // Nếu có user trong localStorage, dùng tạm
+        if (storedUser) {
+          setUser(storedUser);
+          setIsAuthenticated(true);
+        }
+
+        // Gọi API để lấy thông tin user mới nhất
+        try {
+          const userData = await authService.getCurrentUserFromAPI();
+          setUser(userData);
+          authService.saveUser(userData); // Lưu vào localStorage
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error('Lỗi khi lấy thông tin user:', error);
+          // Nếu token không hợp lệ, xóa hết
+          if (error.response?.status === 401) {
+            authService.logout();
+            setToken(null);
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+        }
       }
+      
       setLoading(false);
     };
 
     loadUser();
   }, []);
 
+  // Đăng ký
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
-      authService.saveAuthData(response.token, response.user);
       
-      setToken(response.token);
-      setUser(response.user);
-      setIsAuthenticated(true);
+      // Nếu API đăng ký trả về cả user và token
+      if (response.user && response.token) {
+        authService.saveToken(response.token);
+        authService.saveUser(response.user);
+        
+        setToken(response.token);
+        setUser(response.user);
+        setIsAuthenticated(true);
+        
+        return { success: true, data: response };
+      }
       
-      return { success: true, data: response };
+      // Nếu chỉ trả về token, gọi API để lấy thông tin user
+      if (response.token) {
+        authService.saveToken(response.token);
+        setToken(response.token);
+        
+        const userData = await authService.getCurrentUserFromAPI();
+        authService.saveUser(userData);
+        setUser(userData);
+        setIsAuthenticated(true);
+        
+        return { success: true, data: { token: response.token, user: userData } };
+      }
+      
+      return { success: false, error: 'Đăng ký thất bại' };
     } catch (error) {
       const message = error.response?.data?.message || 'Đăng ký thất bại';
       return { success: false, error: message };
     }
   };
 
+  // Đăng nhập
   const login = async (credentials) => {
     try {
+      // Gọi API đăng nhập - chỉ trả về token
       const response = await authService.login(credentials);
-      authService.saveAuthData(response.token, response.user);
       
+      if (!response.token) {
+        return { success: false, error: 'Không nhận được token' };
+      }
+
+      // Lưu token
+      authService.saveToken(response.token);
       setToken(response.token);
-      setUser(response.user);
-      setIsAuthenticated(true);
-      
-      return { success: true, data: response };
+
+      // Gọi API để lấy thông tin user
+      try {
+        const userData = await authService.getCurrentUserFromAPI();
+        
+        // Lưu thông tin user
+        authService.saveUser(userData);
+        
+        setUser(userData);
+        setIsAuthenticated(true);
+        
+        return { success: true, data: { token: response.token, user: userData } };
+      } catch (userError) {
+        console.error('Lỗi khi lấy thông tin user:', userError);
+        
+        // Nếu không lấy được thông tin user, vẫn cho đăng nhập
+        // nhưng sẽ thử lại sau
+        setIsAuthenticated(true);
+        return { success: true, data: { token: response.token, user: null } };
+      }
     } catch (error) {
       const message = error.response?.data?.message || 'Đăng nhập thất bại';
       return { success: false, error: message };
     }
   };
 
+  // Đăng xuất
   const logout = () => {
     authService.logout();
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
+  };
+
+  // Refresh thông tin user (gọi khi cần cập nhật thông tin)
+  const refreshUser = async () => {
+    try {
+      const userData = await authService.getCurrentUserFromAPI();
+      authService.saveUser(userData);
+      setUser(userData);
+      return { success: true, user: userData };
+    } catch (error) {
+      console.error('Lỗi khi refresh user:', error);
+      return { success: false, error: 'Không thể cập nhật thông tin' };
+    }
   };
 
   const value = {
@@ -73,6 +154,7 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
+    refreshUser, // Thêm function này để component khác có thể gọi
   };
 
   return (

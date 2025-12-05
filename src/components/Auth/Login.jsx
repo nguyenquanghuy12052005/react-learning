@@ -43,7 +43,10 @@ const Login = () => {
 
       if (result.success) {
         toast.success("Đăng nhập thành công!");
-        navigate("/homepage"); // Chuyển đến trang homepage
+        // Đợi một chút để toast hiển thị
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
       } else {
         setError(result.error);
         toast.error(result.error);

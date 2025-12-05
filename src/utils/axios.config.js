@@ -9,12 +9,12 @@ const axiosInstance = axios.create({
   },
 });
 
-// Tự động thêm token vào header
+// Interceptor để tự động thêm token vào mỗi request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('x-auth-token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+     config.headers['X-auth-token'] = token;
     }
     return config;
   },
@@ -23,14 +23,20 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Xử lý response lỗi
+// Interceptor để xử lý response và lỗi
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // Token hết hạn hoặc không hợp lệ
       localStorage.removeItem('x-auth-token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      
+      // Chỉ redirect nếu không phải trang login/register
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/login' && currentPath !== '/register') {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

@@ -1,4 +1,4 @@
-// src/hooks/useAuth.js
+//gộp các component
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
