@@ -28,7 +28,6 @@ import VocabularyPage from "./components/User/VocabularyPage";
 import HomePage from "./components/User/HomePage";
 import Vocab2 from "./components/User/Vocab2";
 import UserProfile from "./components/User/UserProfile";
-
 // TOEIC
 import ToeicPage from './components/ToeicTest/ToeicPage';
 import TestFullPage from './components/ToeicTest/TestFullPage';
@@ -39,7 +38,14 @@ import Part4Page from './components/ToeicTest/Part4Page';
 import Part5Page from './components/ToeicTest/Part5Page';
 import Part6Page from './components/ToeicTest/Part6Page';
 import Part7Page from './components/ToeicTest/Part7Page';
-
+import Part1Detail from './components/Assignment/Part1Detail';
+import Part2Detail from './components/Assignment/Part2Detail';
+import Part3Detail from './components/Assignment/Part3Detail';
+import Part4Detail from './components/Assignment/Part4Detail';
+import Part5Detail from './components/Assignment/Part5Detail';
+import Part6Detail from './components/Assignment/Part6Detail';
+import Part7Detail from './components/Assignment/Part7Detail';
+import FullTestDetail from './components/Assignment/FullTestDetail';
 // ChatPage
 import ChatPage from "./components/User/ChatPage";
 
@@ -71,8 +77,6 @@ root.render(
             <Route path="forum" element={<Forum />} />
             <Route path="chatapp" element={<ChatApp />} />
             <Route path="vocab" element={<Vocab />} />
-            <Route path="toeic-prep" element={<ToeicPage />} />
-            
           </Route>
 
           {/* === KHÔNG DÙNG LAYOUT APP === */}
@@ -88,7 +92,7 @@ root.render(
           <Route path="/vocab-page" element={<VocabularyPage />} />
 
           {/* === TOEIC === */}
-          
+          <Route path="/toeic-prep" element={<ToeicPage />} />
           <Route path="/test-full" element={<TestFullPage />} />
           <Route path="/toeic/part1" element={<Part1Page />} />
           <Route path="/toeic/part2" element={<Part2Page />} />
@@ -96,7 +100,18 @@ root.render(
           <Route path="/toeic/part4" element={<Part4Page />} />
           <Route path="/toeic/part5" element={<Part5Page />} />
           <Route path="/toeic/part6" element={<Part6Page />} />
-          <Route path="/toeic/part7" element={<Part7Page />} />
+          <Route path="/toeic/part7:id" element={<Part7Page />} />
+
+
+           <Route path="/part1/detail/:id" element={<Part1Detail />} />
+          <Route path="/part2/detail/:id" element={<Part2Detail />} />
+          <Route path="/part3/detail/:id" element={<Part3Detail />} />
+          <Route path="/part4/detail/:id" element={<Part4Detail />} />
+          <Route path="/part5/detail/:id" element={<Part5Detail />} />
+          <Route path="/part6/detail/:id" element={<Part6Detail />} />
+          <Route path="/part7/detail/:id" element={<Part7Detail />} />
+          <Route path="/fulltest/detail/:id" element={<FullTestDetail />} />
+          
 
           <Route path="/toeic">
             <Route index element={<PartPlaceholder partTitle="Part 1: Photographs" />} />
