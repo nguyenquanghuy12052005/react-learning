@@ -57,6 +57,7 @@ import FullTestDetail from './components/Assignment/FullTestDetail';
 
 // ChatPage
 import ChatPage from "./components/User/ChatPage";
+import Authentication from './core/Authentication';
 
 // Placeholder TOEIC
 const PartPlaceholder = ({ partTitle }) => (
@@ -85,14 +86,14 @@ root.render(
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="forum" element={<Forum />} />
-              <Route path="chatapp" element={<ChatApp />} />
+              <Route path="chatapp" element={<Authentication> <ChatApp /> </Authentication>} />
               <Route path="vocab" element={<Vocab />} />
             </Route>
 
             {/* === KHÔNG DÙNG LAYOUT APP === */}
-            <Route path="/homepage" element={<HomePage />} />
+            <Route path="/homepage" element={<Authentication> <HomePage /></Authentication>} />
             <Route path="/chatpage" element={<ChatPage />} />
-            <Route path="/userprofile" element={<UserProfile />} />
+            <Route path="/userprofile" element={<Authentication> <UserProfile /> </Authentication>} />
             <Route path="/vocab2" element={<Vocab2 />} />
 
             {/* === TRANG CHI TIẾT BÀI HỌC === */}

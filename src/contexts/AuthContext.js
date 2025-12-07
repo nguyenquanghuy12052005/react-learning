@@ -125,6 +125,40 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+
+
+
+   //update user 
+   const updateProfile = async (data) => {
+     try {
+
+      if(!user?._id) {
+         return { success: false, error: 'Không tìm thấy thông tin user' };
+      }
+
+      const currentToken = authService.getToken();
+      if (!currentToken) {
+        return { success: false, error: 'Vui lòng đăng nhập lại' };
+      }
+
+      console.log('Updating profile for user:', user._id);
+      console.log('Update data:', data);
+
+      //update
+    const response = await authService.updateUser(data, user._id);
+
+    //cập nhập user mới
+    authService.saveUser(response);
+    setUser(response);
+
+    return { success: true, user: response };
+   } catch (error) {
+      const message = error.response?.data?.message || 'Cập nhật thất bại';
+      return { success: false, error: message };
+    }
+  };
+
+
   // Đăng xuất
   const logout = () => {
     authService.logout();
@@ -154,7 +188,8 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
-    refreshUser, // Thêm function này để component khác có thể gọi
+    refreshUser, 
+    updateProfile,
   };
 
   return (

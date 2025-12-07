@@ -40,7 +40,6 @@ const Login = () => {
 
     try {
       const result = await login({ email, password });
-
       if (result.success) {
         toast.success("Đăng nhập thành công!");
         // Đợi một chút để toast hiển thị

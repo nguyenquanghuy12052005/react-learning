@@ -43,7 +43,7 @@ const Header = () => {
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
+const avatarUrl = user?.avatar || "https://hinhnenpowerpoint.app/wp-content/uploads/2025/07/avatar-con-gian-cute.jpg";
   return (
     <header className={`header ${isScrolled ? 'header--scrolled' : ''}`}>
       <div className="header__container">
@@ -88,9 +88,11 @@ const Header = () => {
           ) : isAuthenticated ? (
             <div className="header__user-menu">
               <button className="header__user-btn" onClick={toggleDropdown}>
-                <span className="header__user-avatar">
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </span>
+               
+                 <img  className="header__user-avatar" src={avatarUrl} alt="avatar" onError={(e) => {
+              e.target.src = "https://via.placeholder.com/120";
+            }} />
+               
                 <span className="header__user-name">
                   Xin chào, {user?.name || 'User'}
                 </span>
@@ -103,7 +105,9 @@ const Header = () => {
                 <div className="header__dropdown">
                   <div className="header__dropdown-header">
                     <div className="header__dropdown-avatar">
-                      {user?.name?.charAt(0).toUpperCase() || 'U'}
+                     <img  className="header__user-avatar" src={avatarUrl} alt="avatar" onError={(e) => {
+              e.target.src = "https://via.placeholder.com/120";
+            }} />
                     </div>
                     <div className="header__dropdown-info">
                       <div className="header__dropdown-name">{user?.name || 'User'}</div>

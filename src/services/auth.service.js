@@ -20,6 +20,14 @@ class AuthService {
     return response.data; // Trả về thông tin user từ API
   }
 
+
+  //update user
+   async updateUser (data, userId) {
+    const response = await axiosInstance.put(`/users/${userId}`, data);
+     return response.data;
+   }
+
+
   // Đăng xuất
   logout() {
     localStorage.removeItem('x-auth-token');
