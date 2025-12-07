@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Import AuthProvider
 import { AuthProvider } from './contexts/AuthContext';
-
+import { PostProvider } from './contexts/PostContext';
 // IMPORT CÁC TRANG
 import Home from './components/Home/Home';
 import Admin from './components/Admin/Admin';
@@ -72,6 +72,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <AuthProvider>
+        <PostProvider>
       <React.StrictMode>
         <BrowserRouter>
           <Routes>
@@ -85,7 +86,7 @@ root.render(
               <Route path="speaking" element={<Speaking />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
-              <Route path="forum" element={<Forum />} />
+            
               <Route path="chatapp" element={<Authentication> <ChatApp /> </Authentication>} />
               <Route path="vocab" element={<Vocab />} />
             </Route>
@@ -104,6 +105,7 @@ root.render(
 
             {/* === TOEIC === */}
             <Route path="/toeic-prep" element={<ToeicPage />} />
+              <Route path="forum" element={<Forum />} />
             <Route path="/test-full" element={<TestFullPage />} />
             <Route path="/toeic/part1" element={<Part1Page />} />
             <Route path="/toeic/part2" element={<Part2Page />} />
@@ -149,6 +151,7 @@ root.render(
           theme="light"
         />
       </React.StrictMode>
+      </PostProvider>
     </AuthProvider>
   </Provider>
 );

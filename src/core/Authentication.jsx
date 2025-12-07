@@ -12,9 +12,12 @@ const Authentication = ({children}) => {
     return null; 
   }
 
-  if(!isAuthenticated) {
+  if(!isAuthenticated ) {
    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
   return children;
 }
+
+
+
 export default Authentication;
