@@ -11,48 +11,40 @@ import './Forum.scss';
 const Forum = () => {
   const { user, isAuthenticated } = useAuth();
   const { 
-    posts, 
-    loading, 
-    error, 
-    currentPost,
-    getAllPosts, 
-    createPost, 
-    updatePost, 
-    deletePost, 
-    likePost, 
-    commentPost,
-    setPostForEdit,
-    clearCurrentPost,
-    clearError 
+    posts, loading, error, currentPost,
+    getAllPosts, createPost, updatePost, deletePost, likePost, commentPost,
+    setPostForEdit, clearCurrentPost, clearError 
   } = usePost();
 
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Fetch posts khi component mount
+  // Hiệu ứng scroll cho header
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   useEffect(() => {
     loadPosts();
   }, []);
 
-  // Tự động đóng error sau 5 giây
   useEffect(() => {
     if (error) {
-      const timer = setTimeout(() => {
-        clearError();
-      }, 5000);
+      const timer = setTimeout(() => clearError(), 5000);
       return () => clearTimeout(timer);
     }
   }, [error, clearError]);
 
   const loadPosts = useCallback(async () => {
     const result = await getAllPosts();
-    if (!result.success && result.error) {
-      console.error('Failed to load posts:', result.error);
-    }
+    if (!result.success && result.error) console.error(result.error);
   }, [getAllPosts]);
 
+  // --- Handlers (Giữ nguyên logic cũ) ---
   const handleCreatePost = async (postData) => {
     const result = await createPost(postData);
-    
     if (result.success) {
       toast.success('Đăng bài thành công!');
       setShowCreateForm(false);
@@ -62,227 +54,181 @@ const Forum = () => {
   };
 
   const handleUpdatePost = async (postData) => {
-    if (!currentPost) {
-      toast.error('Không tìm thấy bài viết cần cập nhật');
-      return;
-    }
-
+    if (!currentPost) return;
     const result = await updatePost(currentPost._id, postData);
-    
     if (result.success) {
-      toast.success('Cập nhật bài viết thành công!');
+      toast.success('Cập nhật thành công!');
       clearCurrentPost();
     } else {
-      toast.error(result.error || 'Cập nhật thất bại');
-    }
-  };
-
-  const handleDeletePost = async (postId) => {
-    const result = await deletePost(postId);
-    
-    if (result.success) {
-      toast.success('Đã xóa bài viết');
-    } else {
-      toast.error(result.error || 'Xóa bài viết thất bại');
-    }
-  };
-
-  const handleLikePost = async (postId) => {
-    const result = await likePost(postId);
-    await loadPosts();
-    if (!result.success && result.error) {
       toast.error(result.error);
     }
   };
 
-  const handleCommentPost = async (postId, comment) => {
-    const result = await commentPost(postId, comment);
-    await loadPosts();
-    if (result.success) {
-      toast.success('Đã gửi bình luận');
-    } else {
-      toast.error(result.error || 'Gửi bình luận thất bại');
+  const handleDeletePost = async (postId) => {
+    if(window.confirm('Bạn có chắc chắn muốn xóa bài viết này?')) {
+        const result = await deletePost(postId);
+        if (result.success) toast.success('Đã xóa bài viết');
+        else toast.error(result.error);
     }
-  };
-
-  const handleEditPost = (post) => {
-    setPostForEdit(post);
-    setShowCreateForm(false);
-  };
-
-  const handleCancelEdit = () => {
-    clearCurrentPost();
-  };
-
-  const handleCancelCreate = () => {
-    setShowCreateForm(false);
   };
 
   const handleToggleCreateForm = () => {
     if (!isAuthenticated) {
-      toast.error('Vui lòng đăng nhập để đăng bài');
+      toast.info('Vui lòng đăng nhập để tham gia thảo luận');
       return;
     }
-
-    if (currentPost) {
-      clearCurrentPost();
-    }
-    
+    if (currentPost) clearCurrentPost();
     setShowCreateForm(!showCreateForm);
   };
 
   return (
-    <>
-      <Header />
+    <div className="forum-page-wrapper">
+      <Header className={isScrolled ? 'scrolled' : ''} />
       
-      <div className="forum-container">
-        {/* Header */}
-        <div className="forum-header">
-          <div className="forum-header-content">
-            <h1 className="forum-title">
-              <i className="fa-solid fa-comments"></i>
-              Diễn đàn TOEIC
-            </h1>
-            <p className="forum-subtitle">
-              Chia sẻ kinh nghiệm học tập, tips luyện thi và thảo luận cùng cộng đồng
+      {/* Hero Section - Banner đẹp mắt */}
+      <div className="forum-hero">
+        <div className="hero-overlay"></div>
+        <div className="hero-content container">
+          <div className="text-content">
+            <h1 className="hero-title">Cộng đồng TOEIC Việt Nam</h1>
+            <p className="hero-subtitle">
+              Nơi chia sẻ kiến thức, kinh nghiệm và cùng nhau chinh phục mục tiêu 990+.
             </p>
+            {isAuthenticated && !showCreateForm && !currentPost && (
+              <button 
+                className="btn-hero-create"
+                onClick={handleToggleCreateForm}
+              >
+                <i className="fa-solid fa-pen-nib"></i> Viết bài mới
+              </button>
+            )}
           </div>
-
-          {isAuthenticated && !currentPost && (
-            <button 
-              className={`btn-create-post ${showCreateForm ? 'active' : ''}`}
-              onClick={handleToggleCreateForm}
-            >
-              <i className={`fa-solid ${showCreateForm ? 'fa-xmark' : 'fa-plus'}`}></i>
-              <span>{showCreateForm ? 'Hủy' : 'Tạo bài viết'}</span>
-            </button>
-          )}
-        </div>
-
-        {/* Thông báo yêu cầu đăng nhập */}
-        {!isAuthenticated && (
-          <div className="alert alert-info">
-            <i className="fa-solid fa-circle-info"></i>
-            <span>
-              Vui lòng <a href="/login" className="alert-link">đăng nhập</a> để tạo bài viết, thích và bình luận.
-            </span>
-          </div>
-        )}
-
-        {/* Thông báo lỗi */}
-        {error && (
-          <div className="alert alert-danger">
-            <div className="alert-content">
-              <i className="fa-solid fa-circle-exclamation"></i>
-              <span>{error}</span>
+          <div className="hero-stats">
+            <div className="stat-item">
+              <span className="count">{posts.length}+</span>
+              <span className="label">Bài viết</span>
             </div>
-            <button 
-              className="btn-close-alert" 
-              onClick={clearError}
-              title="Đóng"
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        )}
-
-        {/* Form chỉnh sửa bài viết */}
-        {currentPost && isAuthenticated && (
-          <div className="form-section edit-mode">
-            <PostForm 
-              onSubmit={handleUpdatePost}
-              initialData={currentPost}
-              onCancel={handleCancelEdit}
-              loading={loading}
-              mode="edit"
-            />
-          </div>
-        )}
-
-        {/* Form tạo bài viết mới */}
-        {showCreateForm && !currentPost && isAuthenticated && (
-          <div className="form-section create-mode">
-            <PostForm 
-              onSubmit={handleCreatePost}
-              onCancel={handleCancelCreate}
-              loading={loading}
-              mode="create"
-            />
-          </div>
-        )}
-
-        {/* Loading state */}
-        {loading && posts.length === 0 && (
-          <div className="loading-container">
-            <div className="spinner-wrapper">
-              <i className="fa-solid fa-spinner fa-spin"></i>
+            <div className="stat-item">
+              <span className="count">1000+</span>
+              <span className="label">Thành viên</span>
             </div>
-            <p className="loading-text">Đang tải bài viết...</p>
           </div>
-        )}
-
-        {/* Danh sách bài viết */}
-        <div className="posts-list">
-          {!loading && posts.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-state-icon">
-                <i className="fa-solid fa-inbox"></i>
-              </div>
-              <h3 className="empty-state-title">Chưa có bài viết nào</h3>
-              <p className="empty-state-text">
-                Hãy là người đầu tiên chia sẻ kinh nghiệm học TOEIC của bạn!
-              </p>
-              {isAuthenticated && !showCreateForm && (
-                <button 
-                  className="btn-primary-large"
-                  onClick={() => setShowCreateForm(true)}
-                >
-                  <i className="fa-solid fa-plus"></i>
-                  <span>Tạo bài viết đầu tiên</span>
-                </button>
-              )}
-            </div>
-          ) : (
-            <>
-              {posts.map(post => (
-                <PostItem
-                  key={post._id}
-                  post={post}
-                  onDelete={handleDeletePost}
-                  onLike={handleLikePost}
-                  onComment={handleCommentPost}
-                  onEdit={handleEditPost}
-                  showActions={isAuthenticated}
-                />
-              ))}
-
-              {/* Load more button - Nếu có pagination */}
-              {posts.length > 0 && posts.length % 10 === 0 && (
-                <div className="load-more-container">
-                  <button 
-                    className="btn-load-more"
-                    onClick={loadPosts}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <i className="fa-solid fa-spinner fa-spin"></i>
-                        <span>Đang tải...</span>
-                      </>
-                    ) : (
-                      <>
-                        <i className="fa-solid fa-arrow-down"></i>
-                        <span>Tải thêm bài viết</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
-            </>
-          )}
         </div>
       </div>
-    </>
+
+      <div className="forum-container container">
+        {/* Khu vực thông báo lỗi */}
+        {error && (
+          <div className="alert-floating">
+            <i className="fa-solid fa-triangle-exclamation"></i>
+            <span>{error}</span>
+            <button onClick={clearError}><i className="fa-solid fa-xmark"></i></button>
+          </div>
+        )}
+
+        {/* Layout chính: 2 Cột (Nếu màn hình lớn) hoặc 1 Cột */}
+        <div className="forum-layout">
+          {/* Cột trái: Form & Danh sách bài viết */}
+          <div className="main-feed">
+            
+            {/* Form Editor */}
+            <div className={`editor-collapse ${showCreateForm || currentPost ? 'open' : ''}`}>
+               {(currentPost && isAuthenticated) && (
+                <PostForm 
+                  onSubmit={handleUpdatePost}
+                  initialData={currentPost}
+                  onCancel={() => clearCurrentPost()}
+                  loading={loading}
+                  mode="edit"
+                />
+              )}
+
+              {(showCreateForm && !currentPost && isAuthenticated) && (
+                <PostForm 
+                  onSubmit={handleCreatePost}
+                  onCancel={() => setShowCreateForm(false)}
+                  loading={loading}
+                  mode="create"
+                />
+              )}
+            </div>
+
+            {/* Loading Skeleton */}
+            {loading && posts.length === 0 && (
+              <div className="loading-skeleton">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="skeleton-card">
+                    <div className="sk-header"><div className="sk-avatar"></div><div className="sk-name"></div></div>
+                    <div className="sk-body"></div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Danh sách bài viết */}
+            <div className="posts-stream">
+              {!loading && posts.length === 0 ? (
+                <div className="empty-state-modern">
+                  <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png" alt="Empty" />
+                  <h3>Chưa có bài viết nào</h3>
+                  <p>Hãy trở thành người đầu tiên chia sẻ kiến thức!</p>
+                </div>
+              ) : (
+                posts.map(post => (
+                  <PostItem
+                    key={post._id}
+                    post={post}
+                    onDelete={handleDeletePost}
+                    onLike={async (id) => { await likePost(id); loadPosts(); }}
+                    onComment={async (id, cmt) => { await commentPost(id, cmt); loadPosts(); }}
+                    onEdit={(p) => { setPostForEdit(p); setShowCreateForm(false); window.scrollTo({top: 400, behavior: 'smooth'}); }}
+                    showActions={isAuthenticated}
+                  />
+                ))
+              )}
+            </div>
+            
+             {/* Load more */}
+             {posts.length > 0 && posts.length % 10 === 0 && (
+                <button className="btn-load-more-modern" onClick={loadPosts} disabled={loading}>
+                  {loading ? 'Đang tải...' : 'Xem thêm bài viết cũ hơn'}
+                </button>
+             )}
+          </div>
+
+          {/* Cột phải: Sidebar (Thông tin thêm) */}
+          <div className="sidebar">
+            <div className="sidebar-card user-welcome">
+                {isAuthenticated ? (
+                    <>
+                        <div className="avatar-circle">{user?.username?.charAt(0).toUpperCase()}</div>
+                        <h3>Xin chào, {user?.username}</h3>
+                        <p>Hôm nay bạn đã học từ vựng chưa?</p>
+                    </>
+                ) : (
+                    <>
+                        <i className="fa-solid fa-user-astronaut icon-large"></i>
+                        <h3>Tham gia cộng đồng</h3>
+                        <p>Đăng nhập để tương tác và lưu bài viết hay.</p>
+                        <a href="/login" className="btn-sidebar-login">Đăng nhập ngay</a>
+                    </>
+                )}
+            </div>
+            
+            <div className="sidebar-card trending-tags">
+                <h4><i className="fa-solid fa-arrow-trend-up"></i> Chủ đề nổi bật</h4>
+                <div className="tags-cloud">
+                    <span>#Part5</span>
+                    <span>#Listening</span>
+                    <span>#NewEconomy</span>
+                    <span>#Tips</span>
+                    <span>#Grammar</span>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

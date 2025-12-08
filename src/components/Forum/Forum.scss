@@ -1,317 +1,746 @@
-// src/components/Forum/Forum.scss
-.forum-container {
-  max-width: 800px;
+/* src/components/Forum/Forum.scss */
+
+// --- Variables & Themes ---
+$primary-color: #4F46E5; // Indigo modern
+$primary-hover: #4338ca;
+$secondary-color: #EC4899; // Pink accent
+$bg-color: #F3F4F6;
+$card-bg: #FFFFFF;
+$text-main: #1F2937;
+$text-secondary: #6B7280;
+$border-radius: 16px;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+// --- Reset & Base ---
+.forum-page-wrapper {
+  background-color: $bg-color;
+  min-height: 100vh;
+  font-family: $font-stack;
+  color: $text-main;
+  padding-bottom: 60px;
+}
+
+.container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-
+  padding: 0 20px;
 }
 
-.forum-header {
-  text-align: center;
-  margin-bottom: 30px;
-  
-  .forum-title {
-    color: #2c3e50;
-    font-weight: 700;
-  }
-  
-  .forum-subtitle {
-    color: #7f8c8d;
-    font-size: 1.1rem;
-  }
-}
+// --- Hero Section ---
+.forum-hero {
+  position: relative;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  padding: 80px 0 60px;
+  margin-bottom: 40px;
+  color: white;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: $shadow-md;
+  overflow: hidden;
 
-.btn-create-post {
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 0 auto;
-}
+  .hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url('https://www.transparenttextures.com/patterns/cubes.png'); // Subtle pattern
+    opacity: 0.1;
+  }
 
-.post-form-container {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  
-  .post-form-title {
-    color: #2c3e50;
-    margin-bottom: 25px;
-    font-weight: 600;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-    
-    label {
-      font-weight: 600;
-      color: #34495e;
-      margin-bottom: 8px;
-    }
-    
-    .form-control {
-      border: 2px solid #ecf0f1;
-      border-radius: 8px;
-      padding: 12px 15px;
-      transition: all 0.3s;
-      
-      &:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-      }
-      
-      &.is-invalid {
-        border-color: #e74c3c;
-      }
-    }
-    
-    textarea.form-control {
-      resize: vertical;
-      min-height: 120px;
-    }
-  }
-  
-  .form-actions {
+  .hero-content {
+    position: relative;
+    z-index: 2;
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 30px;
-    
-    .btn {
-      padding: 10px 25px;
-      font-weight: 600;
-      border-radius: 8px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    .text-content {
+      max-width: 600px;
+      .hero-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+      }
+      
+      .btn-hero-create {
+        background: white;
+        color: $primary-color;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+      }
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 30px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 20px 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+
+      .stat-item {
+        text-align: center;
+        .count {
+          display: block;
+          font-size: 1.8rem;
+          font-weight: 700;
+        }
+        .label {
+          font-size: 0.9rem;
+          opacity: 0.8;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+      }
     }
   }
 }
 
-.posts-container {
+// --- Layout Grid ---
+.forum-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px; // Main feed + Sidebar
+  gap: 30px;
+  padding-bottom: 50px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// --- Post Form Modern ---
+.modern-post-form {
+  background: $card-bg;
+  border-radius: $border-radius;
+  padding: 20px;
+  box-shadow: $shadow-md;
+  margin-bottom: 30px;
+  animation: slideDown 0.4s ease;
+  border: 1px solid #e5e7eb;
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    h4 {
+      margin: 0;
+      font-weight: 700;
+      color: $text-main;
+    }
+    .btn-icon-close {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: $text-secondary;
+      &:hover { color: #ef4444; }
+    }
+  }
+
+  .input-group-modern {
+    margin-bottom: 12px;
+    
+    input, textarea {
+      width: 100%;
+      border: none;
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.2s;
+      resize: none;
+
+      &:focus {
+        background: #fff;
+        outline: 2px solid $primary-color;
+        box-shadow: 0 0 0 4px rgba($primary-color, 0.1);
+      }
+    }
+    input { font-weight: 600; color: $text-main; }
+  }
+
+  .image-preview-area {
+    position: relative;
+    margin: 15px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+    }
+    .remove-img {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      &:hover { background: #ef4444; }
+    }
+  }
+
+  .form-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 15px;
+
+    .btn-tool {
+      background: none;
+      border: none;
+      color: $text-secondary;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: 0.2s;
+      
+      &:hover, &.active {
+        background: #eff6ff;
+        color: $primary-color;
+      }
+      i { margin-right: 6px; }
+    }
+
+    .tools-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      .char-count {
+        font-size: 0.85rem;
+        color: #9ca3af;
+      }
+
+      .btn-submit-modern {
+        background: $primary-color;
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+        
+        &:hover { background: $primary-hover; transform: translateY(-1px); }
+        &:disabled { opacity: 0.7; cursor: not-allowed; }
+      }
+    }
+  }
+
+  .image-url-input {
+    margin-top: 10px;
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// --- Post Item & List (Styling the generic structure) ---
+.posts-stream {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.post-item {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  margin-top: 50px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s, box-shadow 0.3s;
-  
+// Giả định class của PostItem.jsx (Nếu bạn chưa có CSS cho PostItem, hãy dùng cái này)
+.post-card {
+  background: $card-bg;
+  border-radius: $border-radius;
+  padding: 20px;
+  box-shadow: $shadow-sm;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid rgba(0,0,0,0.03);
+
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: $shadow-md;
   }
   
+  // Style cho phần header của post
   .post-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      
+      .author-info {
+          display: flex;
+          gap: 12px;
+          img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+          .meta {
+              display: flex;
+              flex-direction: column;
+              .name { font-weight: 700; color: $text-main; }
+              .time { font-size: 0.85rem; color: $text-secondary; }
+          }
+      }
+  }
+  
+  // Style cho content
+  .post-content {
+      .title { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: #111; }
+      .text { color: #374151; line-height: 1.6; margin-bottom: 15px; white-space: pre-line; }
+      img { border-radius: 12px; width: 100%; margin-top: 10px; border: 1px solid #f3f4f6; }
+  }
+
+  // Style cho actions (Like/Comment)
+  .post-actions {
+      display: flex;
+      gap: 5px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #f3f4f6;
+      
+      button {
+          flex: 1;
+          background: transparent;
+          border: none;
+          padding: 8px;
+          border-radius: 8px;
+          color: $text-secondary;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.2s;
+          
+          &:hover { background: #f3f4f6; color: $text-main; }
+          &.liked { color: $secondary-color; i { color: $secondary-color; } }
+          i { margin-right: 6px; }
+      }
+  }
+}
+
+// --- Sidebar ---
+.sidebar-card {
+  background: $card-bg;
+  border-radius: $border-radius;
+  padding: 25px;
+  box-shadow: $shadow-sm;
+  margin-bottom: 25px;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.03);
+
+  &.user-welcome {
+    .avatar-circle {
+      width: 70px; height: 70px;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      box-shadow: 0 4px 10px rgba(79, 172, 254, 0.4);
+    }
+    .icon-large { font-size: 3rem; color: $primary-color; margin-bottom: 15px; display: block;}
+    h3 { font-size: 1.2rem; margin: 10px 0; }
+    p { font-size: 0.9rem; color: $text-secondary; margin-bottom: 15px; }
+    .btn-sidebar-login {
+        display: inline-block;
+        padding: 8px 20px;
+        background: $primary-color;
+        color: white;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s;
+        &:hover { background: $primary-hover; }
+    }
+  }
+
+  &.trending-tags {
+      text-align: left;
+      h4 { margin: 0 0 15px 0; font-size: 1rem; color: $text-main; }
+      .tags-cloud {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          span {
+              background: #f3f4f6;
+              padding: 5px 10px;
+              border-radius: 15px;
+              font-size: 0.85rem;
+              color: $text-secondary;
+              cursor: pointer;
+              transition: 0.2s;
+              &:hover { background: #e5e7eb; color: $primary-color; }
+          }
+      }
+  }
+}
+/* src/components/Forum/Forum.scss */
+
+// ... (Giữ nguyên các biến $primary-color, $bg-color... ở đầu file của bạn)
+
+// ==========================================
+// MODERN POST FORM STYLING
+// ==========================================
+
+.post-form-container {
+  background: $card-bg;
+  border-radius: $border-radius;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1); // Shadow sâu hơn để nổi bật
+  padding: 0; // Padding sẽ được xử lý bên trong
+  margin-bottom: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.05);
+  animation: slideDown 0.4s ease-out;
+
+  // --- Header ---
+  .post-form-header {
+    background: linear-gradient(to right, rgba($primary-color, 0.05), white);
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    
-    .post-author {
+
+    .post-form-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-main;
       display: flex;
       align-items: center;
-      gap: 15px;
-      
-      .post-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #ecf0f1;
-      }
-      
-      .post-author-info {
-        .post-author-name {
-          font-weight: 600;
-          color: #2c3e50;
-          font-size: 1.1rem;
-        }
-        
-        .post-date {
-          color: #95a5a6;
-          font-size: 0.9rem;
-        }
+      gap: 10px;
+
+      i {
+        color: $primary-color;
+        font-size: 1.4rem;
       }
     }
-    
-    .post-actions {
-      .btn {
-        font-size: 0.9rem;
-        padding: 5px 15px;
-      }
-    }
-  }
-  
-  .post-content {
-    .post-title {
-      color: #2c3e50;
-      font-weight: 600;
-      margin-bottom: 15px;
-      font-size: 1.3rem;
-    }
-    
-    .post-text {
-      color: #34495e;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      white-space: pre-wrap;
-    }
-    
-    .post-image {
-      margin-top: 20px;
-      text-align: center;
-      img {
-        max-width: 100%;
-        border-radius: 8px;
-        height: auto;
-        
-      }
-    }
-  }
-  
-  .post-stats {
-    display: flex;
-    gap: 20px;
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    padding: 15px 0;
-    border-top: 1px solid #ecf0f1;
-    border-bottom: 1px solid #ecf0f1;
-    margin: 20px 0;
-  }
-  
-  .post-actions-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    
-    .btn-action {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ecf0f1;
-      background: #f8f9fa;
-      color: #2c3e50;
-      border-radius: 6px;
-      font-weight: 500;
-      transition: all 0.3s;
-      
-      &:hover:not(:disabled) {
-        background: #3498db;
-        color: white;
-        border-color: #3498db;
-      }
-      
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-      
-      &.liked {
-        background: #3498db;
-        color: white;
-        border-color: #3498db;
-      }
-    }
-  }
-  
-  .comment-form {
-    margin: 20px 0;
-    
-    .input-group {
-      .form-control {
-        border-radius: 6px 0 0 6px;
-      }
-      
-      .btn {
-        border-radius: 0 6px 6px 0;
-      }
-    }
-  }
-  
-  .post-comments-section {
-    .comment-item {
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      
-      .comment-author {
-        display: flex;
-        gap: 12px;
-        
-        .comment-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-        
-        .comment-content {
-          flex: 1;
-          
-          .comment-author-name {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-          }
-          
-          .comment-text {
-            color: #34495e;
-            margin-bottom: 5px;
-          }
-          
-          .comment-date {
-            color: #95a5a6;
-            font-size: 0.85rem;
-          }
-        }
-      }
-    }
-    
-    .btn-toggle-comments {
-      background: none;
+
+    .btn-close-form {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       border: none;
-      color: #3498db;
-      font-weight: 500;
-      padding: 10px 0;
+      background: transparent;
+      color: $text-secondary;
       cursor: pointer;
-      text-align: center;
-      display: block;
-      width: 100%;
-      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
       &:hover {
-        text-decoration: underline;
+        background: rgba(239, 68, 68, 0.1); // Màu đỏ nhạt
+        color: #ef4444;
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  // --- Form Body ---
+  .post-form {
+    padding: 25px;
+
+    .form-group {
+      margin-bottom: 24px;
+      position: relative;
+
+      // Label Styling
+      .form-label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: $text-main;
+        margin-bottom: 8px;
+
+        .required {
+          color: $secondary-color;
+          margin-left: 4px;
+        }
+      }
+
+      // Input & Textarea Styling
+      .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: $text-main;
+        background-color: #f9fafb; // Màu nền xám rất nhạt
+        border: 2px solid transparent; // Border ẩn để tránh nhảy layout khi focus
+        border-radius: 12px;
+        transition: all 0.2s ease-in-out;
+        font-family: inherit;
+
+        &::placeholder {
+          color: #9ca3af;
+          font-weight: 400;
+        }
+
+        &:hover {
+          background-color: #f3f4f6;
+        }
+
+        &:focus {
+          background-color: #fff;
+          border-color: $primary-color;
+          outline: none;
+          box-shadow: 0 0 0 4px rgba($primary-color, 0.15);
+        }
+
+        &:disabled {
+          background-color: #e5e7eb;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+
+        // Validation States
+        &.is-invalid {
+          border-color: #ef4444;
+          background-color: #fef2f2;
+          
+          &:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+          }
+        }
+        
+        &.is-valid {
+          border-color: #10b981;
+        }
+      }
+
+      textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      // Helper Text & Counters
+      .form-text {
+        font-size: 0.85rem;
+        margin-top: 6px;
+        color: $text-secondary;
+        
+        &.text-end {
+          text-align: right;
+          font-variant-numeric: tabular-nums; // Số thẳng hàng
+        }
+
+        i { margin-right: 5px; }
+      }
+
+      // Invalid Feedback Message
+      .invalid-feedback {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        animation: fadeIn 0.3s ease;
+      }
+    }
+
+    // --- Image Preview Section ---
+    .image-preview {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 24px;
+      text-align: center;
+
+      .form-label {
+        margin-bottom: 15px;
+        color: $text-secondary;
+      }
+
+      .preview-wrapper {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        max-width: 100%;
+
+        img {
+          display: block;
+          max-width: 100%;
+          max-height: 400px;
+          object-fit: contain;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.02);
+          }
+        }
+      }
+    }
+
+    // --- Actions Buttons ---
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid #f3f4f6;
+      margin-top: 10px;
+
+      .btn {
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        // Cancel Button
+        &.btn-cancel {
+          background-color: transparent;
+          color: $text-secondary;
+          border: 1px solid transparent;
+
+          &:hover {
+            background-color: #f3f4f6;
+            color: $text-main;
+          }
+        }
+
+        // Submit Button
+        &.btn-submit {
+          background-color: $primary-color;
+          color: white;
+          box-shadow: 0 4px 6px rgba($primary-color, 0.25);
+
+          &:hover:not(:disabled) {
+            background-color: $primary-hover;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba($primary-color, 0.3);
+          }
+
+          &:disabled {
+            background-color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+          }
+        }
       }
     }
   }
 }
 
-// Responsive
-@media (max-width: 768px) {
-  .forum-container {
-    padding: 15px;
-  }
+// Helper Colors for Character Count (Bootstrap names mapped manually just in case)
+.text-danger { color: #ef4444 !important; }
+.text-warning { color: #f59e0b !important; }
+.text-muted { color: $text-secondary !important; }
+
+// Animations
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+// --- Utilities & Animations ---
+.empty-state-modern {
+  text-align: center;
+  padding: 50px 20px;
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: $shadow-sm;
   
-  .post-item {
-    padding: 15px;
-  }
-  
-  .post-header {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 15px;
+  img { width: 200px; margin-bottom: 20px; opacity: 0.8; }
+  h3 { font-size: 1.2rem; color: $text-main; margin-bottom: 5px; }
+  p { color: $text-secondary; }
+}
+
+.btn-load-more-modern {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: $primary-color;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 20px;
     
-    .post-actions {
-      align-self: flex-end;
-    }
-  }
+    &:hover { background: #f9fafb; border-color: $primary-color; }
+}
+
+.alert-floating {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ef4444;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    button { background: none; border: none; color: white; cursor: pointer; font-size: 1.1rem; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+// Skeleton Loading
+.skeleton-card {
+    background: white; padding: 20px; border-radius: 16px; margin-bottom: 20px;
+    .sk-header { display: flex; gap: 10px; margin-bottom: 15px; }
+    .sk-avatar { width: 45px; height: 45px; border-radius: 50%; background: #eee; }
+    .sk-name { width: 120px; height: 15px; background: #eee; border-radius: 4px; margin-top: 10px; }
+    .sk-body { height: 100px; background: #eee; border-radius: 8px; }
 }

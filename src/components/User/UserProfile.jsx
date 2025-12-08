@@ -53,9 +53,9 @@ export default function UserProfile() {
             ></i>
           </p>
           <div className="header-buttons">
-            <button className="update-btn" onClick={() => setIsModalOpen(true)}>
-              <i className="fa-solid fa-user-pen"></i> Cập nhật thông tin
-            </button>
+            <button className="update-btn beautiful-btn" onClick={() => setIsModalOpen(true)}>
+  <i className="fa-solid fa-user-pen"></i> Cập nhật thông tin
+</button>
             <button className="upgrade-btn">
               <i className="fa-solid fa-crown"></i> Nâng Cấp
             </button>

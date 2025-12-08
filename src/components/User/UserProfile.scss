@@ -282,6 +282,60 @@
     cursor: pointer;
     border: 1px solid #a16207;
 }
+/* ===============================
+   BUTTON ĐẸP – STYLE HIỆN ĐẠI
+================================*/
+.beautiful-btn {
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #4b8bff, #786bff);
+  border: none;
+  color: #fff;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 4px 12px rgba(100, 110, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Icon */
+.beautiful-btn i {
+  font-size: 16px;
+}
+
+/* Hover chuyển màu + nâng nhẹ */
+.beautiful-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #5c99ff, #8c7dff);
+  box-shadow: 0 6px 16px rgba(120, 130, 255, 0.4);
+}
+
+/* Hiệu ứng nhấn */
+.beautiful-btn:active {
+  transform: scale(0.96);
+}
+
+/* Hiệu ứng “shine” khi di chuột */
+.beautiful-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  transform: skewX(-20deg);
+  transition: 0.5s;
+}
+
+.beautiful-btn:hover::after {
+  left: 120%;
+}
 
 .referral-section {
     h4 { font-size: 0.95rem; margin-bottom: 0.5rem; }
@@ -326,6 +380,7 @@
             }
         }
     }
+    
 }
 
 
