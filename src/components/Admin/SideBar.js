@@ -1,97 +1,93 @@
-import 'react-pro-sidebar/dist/css/styles.css';
-import myIcon from '../../assets/logo-3.png';
-import {ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, SidebarContent} from 'react-pro-sidebar';
-
-import { FaTachometerAlt, FaGem, FaList, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
-import sidebarBg from '../../assets/bg2.jpg';
-
-
-import { DiReact } from "react-icons/di";
-import { MdDashboard } from "react-icons/md";
-
 import './SideBar.scss';
-import { Link } from 'react-router-dom';
+// Đã xóa FaGithub ra khỏi dòng import này
+import { FaUsers, FaBook, FaQuestionCircle, FaTachometerAlt, FaSignOutAlt } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const SideBar = (props) => {
-    const { image, collapsed, toggled, handleToggleSidebar } = props;
+    const { collapsed } = props;
+    
+    // Lấy thông tin user và hàm logout từ Context
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    // Hàm xử lý đăng xuất
+    const handleLogout = () => {
+        logout();
+        navigate('/adminlogin');
+    };
+
     return (
-        <>
-            <ProSidebar
-                image={sidebarBg}
-                collapsed={collapsed}
-                toggled={toggled}
-                breakPoint="md"
-                onToggle={handleToggleSidebar}
-            >
-                <SidebarHeader>
-                    <div
-                        style={{
-                            padding: '24px 8px',
-                            textTransform: 'uppercase',
-                            fontWeight: 'bold',
-                            fontSize: 18,
-                            letterSpacing: '1px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                           
-                        }}
-                    >
-                        {/* <DiReact size={'3em'} color={"00bfff"} /> */}
-                        <img
-              src={myIcon}
-              alt="Custom Icon"
-              style={{ width: '3.5em', height: '3.5em', verticalAlign: 'middle', marginRight: '8px' }}
-            />
-                        <span >Quang Huy</span>
-                    </div>
-                </SidebarHeader>
+        <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+            <div className="sidebar-header">
+                <div className="logo-container">
+                    {/* Hiển thị Avatar */}
+                    {user && user.avatar ? (
+                        <img 
+                            src={user.avatar} 
+                            alt="Avatar" 
+                            className="logo-img" 
+                            style={{ 
+                                width: '40px', 
+                                height: '40px', 
+                                borderRadius: '50%', 
+                                objectFit: 'cover'
+                            }} 
+                        />
+                    ) : (
+                        <div className="logo-circle">
+                            {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
+                        </div>
+                    )}
+                    
+                    {/* Hiển thị Tên Admin */}
+                    {!collapsed && (
+                        <span className="logo-text">
+                            {user?.name || user?.email || "Admin"}
+                        </span>
+                    )}
+                </div>
+            </div>
 
-                <SidebarContent>
-                    <Menu iconShape="circle">
-                        <MenuItem
-                            icon={<MdDashboard />}
-                        >
-                            Dashboard
-                            <Link to="/admin"/>
-                        </MenuItem>
-                        
-                    </Menu>
-                    <Menu iconShape="circle">
-                        <SubMenu
-                            icon={<FaGem />}
-                            title="Features"
-                        >
-                            <MenuItem > Quản lý Users   <Link to="manage-users"/></MenuItem>
-                            <MenuItem > Quản lý Bài Quiz</MenuItem>
-                            <MenuItem> Quản lý Câu Hỏi</MenuItem>
-                        </SubMenu>
+            <div className="sidebar-content">
+                <nav className="sidebar-nav">
+                    <Link to="/admin" className="nav-item">
+                        <FaTachometerAlt className="nav-icon" />
+                        {!collapsed && <span>Dashboard</span>}
+                    </Link>
+                    
+                    <div className="nav-divider"></div>
+                    
+                    <Link to="/admin/manage-users" className="nav-item">
+                        <FaUsers className="nav-icon" />
+                        {!collapsed && <span>Quản lý Users</span>}
+                    </Link>
+                    
+                    <Link to="/admin/manage-quiz" className="nav-item">
+                        <FaBook className="nav-icon" />
+                        {!collapsed && <span>Quản lý Bài Quiz</span>}
+                    </Link>
+                    
+                    <Link to="/admin/manage-questions" className="nav-item">
+                        <FaQuestionCircle className="nav-icon" />
+                        {!collapsed && <span>Quản lý Câu Hỏi</span>}
+                    </Link>
+                </nav>
+            </div>
 
-                    </Menu>
-                </SidebarContent>
-
-                <SidebarFooter style={{ textAlign: 'center' }}>
-                    <div
-                        className="sidebar-btn-wrapper"
-                        style={{
-                            padding: '20px 24px',
-                        }}
-                    >
-                        <a
-                            href="https://www.facebook.com/toicamthaydanhmatchinhminh"
-                            target="_blank"
-                            className="sidebar-btn"
-                            rel="noopener noreferrer"
-                        >
-                            <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                &#169; Quang Huy
-                            </span>
-                        </a>    
-                    </div>
-                </SidebarFooter>
-            </ProSidebar>
-        </>
-    )
+            <div className="sidebar-footer">
+                {/* Nút đăng xuất */}
+                <div 
+                    className="footer-btn" 
+                    onClick={handleLogout} 
+                    style={{cursor: 'pointer'}}
+                >
+                    <FaSignOutAlt className="footer-icon" />
+                    {!collapsed && <span>Đăng xuất</span>}
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default SideBar;

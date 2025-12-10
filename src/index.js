@@ -1,9 +1,8 @@
-// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { Provider } from 'react-redux';
-import store from './redux/store'; // Store Redux cũ của bạn (nếu còn dùng)
+import store from './redux/store'; 
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -12,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Import AuthProvider
 import { AuthProvider } from './contexts/AuthContext';
 import { PostProvider } from './contexts/PostContext';
+
 // IMPORT CÁC TRANG
 import Home from './components/Home/Home';
 import Admin from './components/Admin/Admin';
@@ -31,7 +31,7 @@ import Forum from './components/Forum/Forum';
 import CourseDetailPage from "./components/User/CourseDetailPage";
 import VocabularyPage from "./components/User/VocabularyPage";
 
-// CÁC TRANG USER CHÍNH (CÓ SIDEBAR)
+// CÁC TRANG USER CHÍNH
 import HomePage from "./components/User/HomePage";
 import Vocab2 from "./components/User/Vocab2";
 import UserProfile from "./components/User/UserProfile";
@@ -59,7 +59,12 @@ import FullTestDetail from './components/Assignment/FullTestDetail';
 import ChatPage from "./components/User/ChatPage";
 import Authentication from './core/Authentication';
 
-// Placeholder TOEIC
+import AdminLogin from './components/Admin/AdminLogin';
+import AdminRegister from './components/Admin/AdminRegister';
+
+// === 1. IMPORT COMPONENT BẢO VỆ ===
+import AdminAuthentication from './core/AdminAuthentication'; 
+
 const PartPlaceholder = ({ partTitle }) => (
   <div className="toeic-main" style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
     <h2 style={{ color: '#007bff' }}>{partTitle}</h2>
@@ -77,7 +82,7 @@ root.render(
         <BrowserRouter>
           <Routes>
 
-            {/* === LAYOUT APP === */}
+            {/* === USER ROUTES (Giữ nguyên) === */}
             <Route path="/" element={<App />}>
               <Route index element={<Home />} />
               <Route path="listening" element={<Listening />} />
@@ -86,26 +91,18 @@ root.render(
               <Route path="speaking" element={<Speaking />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
-            
               <Route path="chatapp" element={<Authentication> <ChatApp /> </Authentication>} />
               <Route path="vocab" element={<Vocab />} />
             </Route>
 
-            {/* === KHÔNG DÙNG LAYOUT APP === */}
             <Route path="/homepage" element={<Authentication> <HomePage /></Authentication>} />
             <Route path="/chatpage" element={<ChatPage />} />
             <Route path="/userprofile" element={<Authentication> <UserProfile /> </Authentication>} />
             <Route path="/vocab2" element={<Vocab2 />} />
-
-            {/* === TRANG CHI TIẾT BÀI HỌC === */}
             <Route path="/course" element={<CourseDetailPage />} />
-
-            {/* === TRANG HỌC TỪ VỰNG === */}
             <Route path="/vocab-page" element={<VocabularyPage />} />
-
-            {/* === TOEIC === */}
             <Route path="/toeic-prep" element={<ToeicPage />} />
-              <Route path="forum" element={<Forum />} />
+            <Route path="forum" element={<Forum />} />
             <Route path="/test-full" element={<TestFullPage />} />
             <Route path="/toeic/part1" element={<Part1Page />} />
             <Route path="/toeic/part2" element={<Part2Page />} />
@@ -114,7 +111,6 @@ root.render(
             <Route path="/toeic/part5" element={<Part5Page />} />
             <Route path="/toeic/part6" element={<Part6Page />} />
             <Route path="/toeic/part7:id" element={<Part7Page />} />
-
             <Route path="/part1/detail/:id" element={<Part1Detail />} />
             <Route path="/part2/detail/:id" element={<Part2Detail />} />
             <Route path="/part3/detail/:id" element={<Part3Detail />} />
@@ -123,13 +119,22 @@ root.render(
             <Route path="/part6/detail/:id" element={<Part6Detail />} />
             <Route path="/part7/detail/:id" element={<Part7Detail />} />
             <Route path="/fulltest/detail/:id" element={<FullTestDetail />} />
-
             <Route path="/toeic">
               <Route index element={<PartPlaceholder partTitle="Part 1: Photographs" />} />
             </Route>
 
-            {/* === Admin === */}
-            <Route path="/admin" element={<Admin />}>
+            <Route path="/adminlogin/" element={<AdminLogin />} />
+            <Route path="/adminregister/" element={<AdminRegister />} />
+
+            {/* === 2. CẤU HÌNH ROUTE ADMIN ĐƯỢC BẢO VỆ === */}
+            <Route 
+                path="/admin" 
+                element={
+                    <AdminAuthentication>
+                        <Admin />
+                    </AdminAuthentication>
+                }
+            >
               <Route index element={<Dashboard />} />
               <Route path="manage-users" element={<ManageUser />} />
             </Route>
@@ -137,7 +142,6 @@ root.render(
           </Routes>
         </BrowserRouter>
 
-        {/* Toast Container */}
         <ToastContainer
           position="top-right"
           autoClose={3000}
