@@ -1,228 +1,122 @@
-import React, { useEffect, useState } from 'react';
-import { getUserPaging, deleteUser } from '../../../services/user.service';
-import { toast } from 'react-toastify';
-import './ManageUser.scss';
-import { FaTrash, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { FaUser, FaEnvelope, FaLock, FaUserShield, FaImage } from 'react-icons/fa';
+import './ModalCreateUser.scss';
 
-const ManageUser = () => {
-    const [listUsers, setListUsers] = useState([]);
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const LIMIT = 15; // Giới hạn 15 user/trang
+const ModalCreateUser = () => {
+  const [show, setShow] = useState(false);
 
-    // Hàm gọi API
-    const fetchListUsers = async (pageNo) => {
-        try {
-            const res = await getUserPaging(pageNo, LIMIT);
-            console.log("🔥 CHECK DATA API:", res);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-            // Xử lý nhiều định dạng trả về từ API
-            if (res && res.data && res.data.items) {
-                setListUsers(res.data.items);
-                setTotalPages(res.data.totalPages);
-            } else if (res && res.items) {
-                setListUsers(res.items);
-                setTotalPages(res.totalPages);
-            } else if (Array.isArray(res)) {
-                setListUsers(res);
-            } else if (res.data && Array.isArray(res.data)) {
-                setListUsers(res.data);
-            } else {
-                setListUsers([]);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error("Lỗi khi tải danh sách user");
-        }
-    };
+  return (
+    <>
+      <Button className="btn-add-user" onClick={handleShow}>
+        <span className="btn-icon">+</span>
+        Add New User
+      </Button>
 
-    useEffect(() => {
-        fetchListUsers(page);
-    }, [page]);
+      <Modal 
+        show={show} 
+        onHide={handleClose} 
+        size='lg' 
+        backdrop='static'
+        centered
+        className="modern-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <FaUser className="modal-title-icon" />
+            Add New User
+          </Modal.Title>
+        </Modal.Header>
+        
+        <Modal.Body>
+          <form className="modern-form">
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">
+                  <FaEnvelope className="label-icon" />
+                  Email Address
+                </label>
+                <input 
+                  type="email" 
+                  className="form-control" 
+                  placeholder="example@email.com"
+                />
+              </div>
 
-    // Chuyển trang
-    const handlePageClick = (pageNumber) => {
-        if (pageNumber > 0 && pageNumber <= totalPages && pageNumber !== page) {
-            setPage(pageNumber);
-        }
-    };
-
-    // Xóa User
-    const handleDeleteUser = async (user) => {
-        if (!window.confirm(`Bạn có chắc chắn muốn xóa user: ${user.email}?`)) {
-            return;
-        }
-        try {
-            await deleteUser(user._id);
-            toast.success("Xóa thành công user: " + user.email);
-            fetchListUsers(page);
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response?.data?.message || "Xóa thất bại");
-        }
-    };
-
-    // Format ngày
-    const formatDate = (dateString) => {
-        if (!dateString) return "N/A";
-        return new Date(dateString).toLocaleDateString('vi-VN');
-    };
-
-    // Tạo danh sách số trang để hiển thị (tối đa 7 số, có ...)
-    const getPageNumbers = () => {
-        const pages = [];
-        const maxVisible = 7;
-
-        if (totalPages <= maxVisible) {
-            for (let i = 1; i <= totalPages; i++) pages.push(i);
-        } else {
-            const half = Math.floor(maxVisible / 2);
-            let start = page - half;
-            let end = page + half;
-
-            if (start < 2) {
-                start = 1;
-                end = maxVisible - 1;
-            }
-            if (end > totalPages - 1) {
-                end = totalPages;
-                start = totalPages - maxVisible + 2;
-            }
-
-            if (start > 1) {
-                pages.push(1);
-                if (start > 2) pages.push('...');
-            }
-
-            for (let i = start; i <= end; i++) {
-                pages.push(i);
-            }
-
-            if (end < totalPages) {
-                if (end < totalPages - 1) pages.push('...');
-                pages.push(totalPages);
-            }
-        }
-        return pages;
-    };
-
-    return (
-        <div className="manage-user-container">
-            <div className="title">Quản lý Users</div>
-
-            <div className="users-content">
-                <div className="table-users-container">
-                    <table className="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">User Info</th>
-                                <th scope="col">Role</th>
-                                <th scope="col" className="text-center">Level / XP</th>
-                                <th scope="col">Ngày tạo</th>
-                                <th scope="col">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listUsers && listUsers.length > 0 ? (
-                                listUsers.map((item, index) => (
-                                    <tr key={`user-${index}`}>
-                                        {/* User Info */}
-                                        <td>
-                                            <div className="user-info-cell">
-                                                <div className="avatar-wrapper">
-                                                    {item.avatar ? (
-                                                        <img src={item.avatar} alt="avatar" />
-                                                    ) : (
-                                                        <div className="avatar-placeholder">
-                                                            {item.name ? item.name.charAt(0).toUpperCase() : "U"}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="text-info">
-                                                    <span className="user-name">{item.name || "No Name"}</span>
-                                                    <span className="user-email">{item.email}</span>
-                                                    <span className="user-id">ID: {item._id}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        {/* Role */}
-                                        <td>
-                                            <span className={`badge-role ${item.role ? item.role.toLowerCase() : 'user'}`}>
-                                                {item.role || 'user'}
-                                            </span>
-                                        </td>
-
-                                        {/* Level & XP */}
-                                        <td className="text-center">
-                                            <div className="xp-cell">
-                                                <div className="level-badge">LV.{item.level || 1}</div>
-                                                <div className="xp-text">{item.xpPoints || 0} XP</div>
-                                            </div>
-                                        </td>
-
-                                        {/* Ngày tạo */}
-                                        <td>{formatDate(item.createdAt || item.createdAT)}</td>
-
-                                        {/* Hành động - chỉ còn Xóa */}
-                                        <td>
-                                            <div className="actions-cell">
-                                                <button
-                                                    className="btn-action btn-delete"
-                                                    title="Xóa"
-                                                    onClick={() => handleDeleteUser(item)}
-                                                >
-                                                    <FaTrash />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="5" className="text-center empty-state">
-                                        Không có dữ liệu user nào
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* PHÂN TRANG - ĐÃ SỬA ĐỂ NẰM NGANG ĐẸP */}
-                {totalPages > 1 && (
-                    <div className="pagination-wrapper">
-                        <button
-                            className="btn-page prev"
-                            onClick={() => handlePageClick(page - 1)}
-                            disabled={page === 1}
-                        >
-                            <FaAngleLeft />
-                        </button>
-
-                        {getPageNumbers().map((p, idx) => (
-                            <button
-                                key={idx}
-                                className={`btn-page number ${p === page ? 'active' : ''} ${p === '...' ? 'dots' : ''}`}
-                                onClick={() => typeof p === 'number' && handlePageClick(p)}
-                                disabled={p === '...'}
-                            >
-                                {p}
-                            </button>
-                        ))}
-
-                        <button
-                            className="btn-page next"
-                            onClick={() => handlePageClick(page + 1)}
-                            disabled={page === totalPages}
-                        >
-                            <FaAngleRight />
-                        </button>
-                    </div>
-                )}
+              <div className="form-group">
+                <label className="form-label">
+                  <FaLock className="label-icon" />
+                  Password
+                </label>
+                <input 
+                  type="password" 
+                  className="form-control" 
+                  placeholder="Enter password"
+                />
+              </div>
             </div>
-        </div>
-    );
-};
 
-export default ManageUser;
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">
+                  <FaUser className="label-icon" />
+                  Username
+                </label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  placeholder="Enter username"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">
+                  <FaUserShield className="label-icon" />
+                  Role
+                </label>
+                <select className="form-select">
+                  <option value='USER'>User</option>
+                  <option value='ADMIN'>Admin</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group full-width">
+              <label className="form-label">
+                <FaImage className="label-icon" />
+                Profile Image
+              </label>
+              <div className="file-input-wrapper">
+                <input 
+                  type='file' 
+                  className="file-input"
+                  accept="image/*"
+                />
+                <div className="file-input-placeholder">
+                  <span className="upload-icon">📁</span>
+                  <span>Click to upload or drag and drop</span>
+                  <span className="file-hint">PNG, JPG or JPEG (max. 2MB)</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+        
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose} className="btn-cancel">
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose} className="btn-save">
+            Save User
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
+export default ModalCreateUser;
