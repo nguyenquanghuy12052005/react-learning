@@ -16,6 +16,6 @@ const deleteUser = (userId) => {
 
 export {
     getAllUsers,
-    getUserPaging, // Export thêm hàm này
+    getUserPaging, 
     deleteUser
 }

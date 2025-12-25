@@ -167,6 +167,24 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
 
+  //addXp 
+const addXp = async (userId, xp) => {
+  try {
+    if (!userId) {
+      return { success: false, error: "Thiếu userId" };
+    }
+
+    await authService.addXp(userId, xp);
+
+    return { success: true };
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Không thể cộng XP";
+    return { success: false, error: message };
+  }
+};
+
+
   // Refresh thông tin user (gọi khi cần cập nhật thông tin)
   const refreshUser = async () => {
     try {
@@ -190,6 +208,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     refreshUser, 
     updateProfile,
+    addXp
   };
 
   return (

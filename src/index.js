@@ -64,6 +64,7 @@ import AdminRegister from './components/Admin/AdminRegister';
 
 // === 1. IMPORT COMPONENT BẢO VỆ ===
 import AdminAuthentication from './core/AdminAuthentication'; 
+import { VocProvider } from './contexts/VocalContext';
 
 const PartPlaceholder = ({ partTitle }) => (
   <div className="toeic-main" style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
@@ -78,6 +79,7 @@ root.render(
   <Provider store={store}>
     <AuthProvider>
         <PostProvider>
+          <VocProvider>
       <React.StrictMode>
         <BrowserRouter>
           <Routes>
@@ -155,6 +157,7 @@ root.render(
           theme="light"
         />
       </React.StrictMode>
+      </VocProvider>
       </PostProvider>
     </AuthProvider>
   </Provider>

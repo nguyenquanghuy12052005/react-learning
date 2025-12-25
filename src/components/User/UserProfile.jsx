@@ -8,7 +8,7 @@ import "./UserProfile.scss";
 export default function UserProfile() {
   const { user, updateProfile } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+ 
   const handleUpdateProfile = async (updateData) => {
     const result = await updateProfile(updateData);
     if (result.success) {
@@ -73,7 +73,7 @@ export default function UserProfile() {
                   <i className="fa-solid fa-book"></i>
                 </div>
                 <div className="stat-info">
-                  <span className="stat-value">1</span>
+                  <span className="stat-value">{user.xpPoints}</span>
                   <span className="stat-label">từ đã học</span>
                 </div>
               </div>
@@ -82,8 +82,8 @@ export default function UserProfile() {
                   <i className="fa-solid fa-trophy"></i>
                 </div>
                 <div className="stat-info">
-                  <span className="stat-value">Top</span>
-                  <span className="stat-label">96%</span>
+                  <span className="stat-value">Level</span>
+                  <span className="stat-label">{user.level}</span>
                 </div>
               </div>
               <div className="stat-card gray">
@@ -91,7 +91,11 @@ export default function UserProfile() {
                   <i className="fa-solid fa-fire"></i>
                 </div>
                 <div className="stat-info">
-                  <span className="stat-value">0 ngày</span>
+                 <span className="stat-value">
+                    {Math.floor(
+                      (new Date() - new Date(user.createdAt)) / (1000 * 60 * 60 * 24)
+                    )} ngày
+                  </span>
                   <span className="stat-label">Streak</span>
                 </div>
               </div>

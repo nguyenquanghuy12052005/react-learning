@@ -27,6 +27,12 @@ class AuthService {
      return response.data;
    }
 
+        // adđ xp
+async addXp(userId, xp) { 
+  const response = await axiosInstance.post(`/users/${userId}/xp`, { xp } );
+  return response.data;
+}
+
 
   // Đăng xuất
   logout() {
