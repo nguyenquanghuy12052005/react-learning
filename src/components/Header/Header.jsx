@@ -42,7 +42,7 @@ const Header = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 const avatarUrl = user?.avatar || "https://hinhnenpowerpoint.app/wp-content/uploads/2025/07/avatar-con-gian-cute.jpg";
   return (
     <header className={`header ${isScrolled ? 'header--scrolled' : ''}`}>

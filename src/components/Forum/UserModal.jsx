@@ -22,7 +22,7 @@ const UserModal = ({ user, onClose, currentUserId }) => {
     try {
       
       // Giả lập API call
-      const result = await addFriends(user._id);
+      const result = await addFriends(user.userId);
       
       toast.success(`Đã gửi lời mời kết bạn đến ${user.name}`);
       setFriendStatus('sent');
