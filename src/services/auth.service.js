@@ -21,6 +21,13 @@ class AuthService {
   }
 
 
+    // Lấy all user 
+  async getAllUser() {
+    const response = await axiosInstance.get('/users/');
+    return response.data;
+  }
+
+
   //update user
    async updateUser (data, userId) {
     const response = await axiosInstance.put(`/users/${userId}`, data);
@@ -69,6 +76,25 @@ async addXp(userId, xp) {
   isAuthenticated() {
     return !!this.getToken();
   }
+
+//gửi kết bạn 
+async addFriends(id) {
+  const response = await axiosInstance.post('/users/friend-request', { receiverId: id});
+  return response.data;
+}
+
+
+//gửi kết bạn 
+async getFriend() {
+  const response = await axiosInstance.get('/users/my-friends');
+  return response.data;
+}
+
+
+
+
+
+
 }
 
 export default new AuthService();

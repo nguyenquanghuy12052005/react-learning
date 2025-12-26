@@ -1,50 +1,80 @@
-/* src/components/Forum/Forum.scss */
+/* ============================================
+   FORUM COMPONENT - MODERN CSS
+   ============================================ */
 
-// --- Variables & Themes ---
-$primary-color: #4F46E5; // Indigo modern
-$primary-hover: #4338ca;
-$secondary-color: #EC4899; // Pink accent
-$bg-color: #F3F4F6;
-$card-bg: #FFFFFF;
-$text-main: #1F2937;
-$text-secondary: #6B7280;
-$border-radius: 16px;
+// ---------- VARIABLES ----------
+$primary: #4F46E5;
+$primary-dark: #4338CA;
+$secondary: #EC4899;
+$success: #10B981;
+$warning: #F59E0B;
+$danger: #EF4444;
+$info: #3B82F6;
+
+$bg-light: #F8FAFC;
+$bg-white: #FFFFFF;
+$bg-gray: #F3F4F6;
+
+$text-dark: #1F2937;
+$text-gray: #6B7280;
+$text-light: #9CA3AF;
+
+$border-color: #E5E7EB;
 $shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-// --- Reset & Base ---
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ---------- RESET & BASE ----------
 .forum-page-wrapper {
-  background-color: $bg-color;
   min-height: 100vh;
-  font-family: $font-stack;
-  color: $text-main;
-  padding-bottom: 60px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  font-family: $font-family;
+  color: $text-dark;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
+  width: 100%;
 }
 
-// --- Hero Section ---
+// ---------- HEADER SCROLL EFFECT ----------
+.header-scrolled {
+  box-shadow: $shadow-md !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+}
+
+// ---------- HERO SECTION ----------
 .forum-hero {
   position: relative;
-  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  background: linear-gradient(135deg, $primary 0%, $secondary 100%);
   padding: 80px 0 60px;
   margin-bottom: 40px;
   color: white;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
-  box-shadow: $shadow-md;
   overflow: hidden;
-
-  .hero-overlay {
+  
+  &::before {
+    content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url('https://www.transparenttextures.com/patterns/cubes.png'); // Subtle pattern
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     opacity: 0.1;
   }
 
@@ -54,693 +84,976 @@ $font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, san
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    gap: 40px;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
 
-    .text-content {
+  .text-content {
+    flex: 1;
+    
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+      
+      @media (max-width: 768px) {
+        font-size: 2.5rem;
+      }
+    }
+    
+    .hero-subtitle {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 32px;
       max-width: 600px;
-      .hero-title {
+      line-height: 1.6;
+    }
+    
+    .btn-hero-create {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      color: $primary;
+      border: none;
+      padding: 16px 32px;
+      border-radius: $radius-full;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: $transition;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      }
+      
+      i {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 24px 32px;
+    border-radius: $radius-xl;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    @media (max-width: 768px) {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .stat-item {
+      text-align: center;
+      
+      .count {
+        display: block;
         font-size: 2.5rem;
         font-weight: 800;
-        margin-bottom: 10px;
-        letter-spacing: -0.02em;
-      }
-      .hero-subtitle {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        margin-bottom: 25px;
+        line-height: 1;
+        margin-bottom: 4px;
       }
       
-      .btn-hero-create {
-        background: white;
-        color: $primary-color;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 30px;
-        font-weight: 600;
-        font-size: 1rem;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-
-        &:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-      }
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: 30px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 20px 30px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.2);
-
-      .stat-item {
-        text-align: center;
-        .count {
-          display: block;
-          font-size: 1.8rem;
-          font-weight: 700;
-        }
-        .label {
-          font-size: 0.9rem;
-          opacity: 0.8;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
+      .label {
+        font-size: 0.875rem;
+        opacity: 0.8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
       }
     }
   }
 }
 
-// --- Layout Grid ---
+// ---------- MAIN LAYOUT ----------
 .forum-layout {
   display: grid;
-  grid-template-columns: 1fr 320px; // Main feed + Sidebar
-  gap: 30px;
-  padding-bottom: 50px;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-// --- Post Form Modern ---
-.modern-post-form {
-  background: $card-bg;
-  border-radius: $border-radius;
-  padding: 20px;
-  box-shadow: $shadow-md;
-  margin-bottom: 30px;
-  animation: slideDown 0.4s ease;
-  border: 1px solid #e5e7eb;
-
-  .form-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    h4 {
-      margin: 0;
-      font-weight: 700;
-      color: $text-main;
-    }
-    .btn-icon-close {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: $text-secondary;
-      &:hover { color: #ef4444; }
-    }
-  }
-
-  .input-group-modern {
-    margin-bottom: 12px;
+  grid-template-columns: 1fr 320px 320px;
+  gap: 32px;
+  padding-bottom: 60px;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr 320px;
     
-    input, textarea {
-      width: 100%;
-      border: none;
-      background: #f9fafb;
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: inherit;
-      transition: all 0.2s;
-      resize: none;
-
-      &:focus {
-        background: #fff;
-        outline: 2px solid $primary-color;
-        box-shadow: 0 0 0 4px rgba($primary-color, 0.1);
-      }
+    .sidebar-right {
+      display: none;
     }
-    input { font-weight: 600; color: $text-main; }
   }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
 
-  .image-preview-area {
-    position: relative;
-    margin: 15px 0;
-    border-radius: 12px;
+.main-feed {
+  .editor-collapse {
+    max-height: 0;
     overflow: hidden;
-    img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-    }
-    .remove-img {
-      position: absolute;
-      top: 10px; right: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      border: none;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      &:hover { background: #ef4444; }
-    }
-  }
-
-  .form-tools {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-    border-top: 1px solid #f3f4f6;
-    padding-top: 15px;
-
-    .btn-tool {
-      background: none;
-      border: none;
-      color: $text-secondary;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: 0.2s;
-      
-      &:hover, &.active {
-        background: #eff6ff;
-        color: $primary-color;
-      }
-      i { margin-right: 6px; }
-    }
-
-    .tools-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-
-      .char-count {
-        font-size: 0.85rem;
-        color: #9ca3af;
-      }
-
-      .btn-submit-modern {
-        background: $primary-color;
-        color: white;
-        border: none;
-        padding: 10px 24px;
-        border-radius: 20px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.2s;
-        
-        &:hover { background: $primary-hover; transform: translateY(-1px); }
-        &:disabled { opacity: 0.7; cursor: not-allowed; }
-      }
-    }
-  }
-
-  .image-url-input {
-    margin-top: 10px;
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 0.9rem;
+    transition: max-height 0.4s ease;
+    
+    &.open {
+      max-height: 1000px;
+      margin-bottom: 32px;
     }
   }
 }
 
-// --- Post Item & List (Styling the generic structure) ---
+// ---------- POSTS STREAM ----------
 .posts-stream {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-// Giả định class của PostItem.jsx (Nếu bạn chưa có CSS cho PostItem, hãy dùng cái này)
-.post-card {
-  background: $card-bg;
-  border-radius: $border-radius;
-  padding: 20px;
-  box-shadow: $shadow-sm;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid rgba(0,0,0,0.03);
+// ---------- LOADING & EMPTY STATES ----------
+.loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  .skeleton-card {
+    background: white;
+    padding: 24px;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-sm;
+    
+    .sk-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      
+      .sk-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+      
+      .sk-name {
+        flex: 1;
+        height: 20px;
+        border-radius: $radius-sm;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+    }
+    
+    .sk-body {
+      height: 100px;
+      border-radius: $radius-md;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+  }
+}
 
-  &:hover {
+.empty-state-modern {
+  text-align: center;
+  padding: 64px 24px;
+  background: white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  
+  img {
+    width: 200px;
+    margin-bottom: 24px;
+    opacity: 0.7;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    color: $text-gray;
+    font-size: 1rem;
+  }
+}
+
+// ---------- LOAD MORE BUTTON ----------
+.btn-load-more-modern {
+  width: 100%;
+  padding: 16px;
+  background: white;
+  border: 2px solid $border-color;
+  border-radius: $radius-md;
+  color: $primary;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: $transition;
+  margin-top: 32px;
+  
+  &:hover:not(:disabled) {
+    border-color: $primary;
+    background: $primary;
+    color: white;
+    transform: translateY(-2px);
     box-shadow: $shadow-md;
   }
   
-  // Style cho phần header của post
-  .post-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-      
-      .author-info {
-          display: flex;
-          gap: 12px;
-          img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
-          .meta {
-              display: flex;
-              flex-direction: column;
-              .name { font-weight: 700; color: $text-main; }
-              .time { font-size: 0.85rem; color: $text-secondary; }
-          }
-      }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ---------- ALERT ----------
+.alert-floating {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $danger;
+  color: white;
+  padding: 16px 24px;
+  border-radius: $radius-full;
+  box-shadow: $shadow-lg;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideUp 0.3s ease;
+  
+  i.fa-triangle-exclamation {
+    font-size: 1.2rem;
   }
   
-  // Style cho content
-  .post-content {
-      .title { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: #111; }
-      .text { color: #374151; line-height: 1.6; margin-bottom: 15px; white-space: pre-line; }
-      img { border-radius: 12px; width: 100%; margin-top: 10px; border: 1px solid #f3f4f6; }
+  span {
+    flex: 1;
+    font-weight: 500;
   }
-
-  // Style cho actions (Like/Comment)
-  .post-actions {
-      display: flex;
-      gap: 5px;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #f3f4f6;
-      
-      button {
-          flex: 1;
-          background: transparent;
-          border: none;
-          padding: 8px;
-          border-radius: 8px;
-          color: $text-secondary;
-          font-weight: 600;
-          cursor: pointer;
-          transition: 0.2s;
-          
-          &:hover { background: #f3f4f6; color: $text-main; }
-          &.liked { color: $secondary-color; i { color: $secondary-color; } }
-          i { margin-right: 6px; }
-      }
+  
+  button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
-// --- Sidebar ---
+// ---------- SIDEBAR BASE ----------
+.sidebar, .sidebar-right {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $border-color;
+    border-radius: $radius-full;
+    
+    &:hover {
+      background: $text-light;
+    }
+  }
+}
+
+// ---------- SIDEBAR CARDS ----------
 .sidebar-card {
-  background: $card-bg;
-  border-radius: $border-radius;
-  padding: 25px;
+  background: white;
+  border-radius: $radius-lg;
+  padding: 24px;
+  margin-bottom: 24px;
   box-shadow: $shadow-sm;
-  margin-bottom: 25px;
-  text-align: center;
-  border: 1px solid rgba(0,0,0,0.03);
-
-  &.user-welcome {
-    .avatar-circle {
-      width: 70px; height: 70px;
-      background: linear-gradient(to right, #4facfe, #00f2fe);
-      color: white;
-      font-size: 2rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      margin: 0 auto 15px;
-      box-shadow: 0 4px 10px rgba(79, 172, 254, 0.4);
-    }
-    .icon-large { font-size: 3rem; color: $primary-color; margin-bottom: 15px; display: block;}
-    h3 { font-size: 1.2rem; margin: 10px 0; }
-    p { font-size: 0.9rem; color: $text-secondary; margin-bottom: 15px; }
-    .btn-sidebar-login {
-        display: inline-block;
-        padding: 8px 20px;
-        background: $primary-color;
-        color: white;
-        border-radius: 20px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: 0.2s;
-        &:hover { background: $primary-hover; }
-    }
+  border: 1px solid $border-color;
+  transition: $transition;
+  
+  &:hover {
+    box-shadow: $shadow-md;
+    border-color: darken($border-color, 5%);
   }
-
-  &.trending-tags {
-      text-align: left;
-      h4 { margin: 0 0 15px 0; font-size: 1rem; color: $text-main; }
-      .tags-cloud {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          span {
-              background: #f3f4f6;
-              padding: 5px 10px;
-              border-radius: 15px;
-              font-size: 0.85rem;
-              color: $text-secondary;
-              cursor: pointer;
-              transition: 0.2s;
-              &:hover { background: #e5e7eb; color: $primary-color; }
-          }
-      }
+  
+  &:last-child {
+    margin-bottom: 0;
   }
-}
-/* src/components/Forum/Forum.scss */
-
-// ... (Giữ nguyên các biến $primary-color, $bg-color... ở đầu file của bạn)
-
-// ==========================================
-// MODERN POST FORM STYLING
-// ==========================================
-
-.post-form-container {
-  background: $card-bg;
-  border-radius: $border-radius;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1); // Shadow sâu hơn để nổi bật
-  padding: 0; // Padding sẽ được xử lý bên trong
-  margin-bottom: 30px;
-  overflow: hidden;
-  border: 1px solid rgba(0,0,0,0.05);
-  animation: slideDown 0.4s ease-out;
-
-  // --- Header ---
-  .post-form-header {
-    background: linear-gradient(to right, rgba($primary-color, 0.05), white);
-    padding: 20px 25px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+  
+  .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .post-form-title {
-      margin: 0;
-      font-size: 1.25rem;
+    margin-bottom: 20px;
+    
+    h4 {
+      font-size: 1.125rem;
       font-weight: 700;
-      color: $text-main;
+      color: $text-dark;
+      margin: 0;
       display: flex;
       align-items: center;
       gap: 10px;
-
+      
       i {
-        color: $primary-color;
-        font-size: 1.4rem;
-      }
-    }
-
-    .btn-close-form {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      color: $text-secondary;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: rgba(239, 68, 68, 0.1); // Màu đỏ nhạt
-        color: #ef4444;
-        transform: rotate(90deg);
-      }
-    }
-  }
-
-  // --- Form Body ---
-  .post-form {
-    padding: 25px;
-
-    .form-group {
-      margin-bottom: 24px;
-      position: relative;
-
-      // Label Styling
-      .form-label {
-        display: block;
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: $text-main;
-        margin-bottom: 8px;
-
-        .required {
-          color: $secondary-color;
-          margin-left: 4px;
-        }
-      }
-
-      // Input & Textarea Styling
-      .form-control {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: $text-main;
-        background-color: #f9fafb; // Màu nền xám rất nhạt
-        border: 2px solid transparent; // Border ẩn để tránh nhảy layout khi focus
-        border-radius: 12px;
-        transition: all 0.2s ease-in-out;
-        font-family: inherit;
-
-        &::placeholder {
-          color: #9ca3af;
-          font-weight: 400;
-        }
-
-        &:hover {
-          background-color: #f3f4f6;
-        }
-
-        &:focus {
-          background-color: #fff;
-          border-color: $primary-color;
-          outline: none;
-          box-shadow: 0 0 0 4px rgba($primary-color, 0.15);
-        }
-
-        &:disabled {
-          background-color: #e5e7eb;
-          cursor: not-allowed;
-          opacity: 0.7;
-        }
-
-        // Validation States
-        &.is-invalid {
-          border-color: #ef4444;
-          background-color: #fef2f2;
-          
-          &:focus {
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
-          }
-        }
-        
-        &.is-valid {
-          border-color: #10b981;
-        }
-      }
-
-      textarea.form-control {
-        resize: vertical;
-        min-height: 120px;
-      }
-
-      // Helper Text & Counters
-      .form-text {
-        font-size: 0.85rem;
-        margin-top: 6px;
-        color: $text-secondary;
-        
-        &.text-end {
-          text-align: right;
-          font-variant-numeric: tabular-nums; // Số thẳng hàng
-        }
-
-        i { margin-right: 5px; }
-      }
-
-      // Invalid Feedback Message
-      .invalid-feedback {
-        color: #ef4444;
-        font-size: 0.875rem;
-        margin-top: 6px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        animation: fadeIn 0.3s ease;
-      }
-    }
-
-    // --- Image Preview Section ---
-    .image-preview {
-      background: #f8fafc;
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 24px;
-      text-align: center;
-
-      .form-label {
-        margin-bottom: 15px;
-        color: $text-secondary;
-      }
-
-      .preview-wrapper {
-        position: relative;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        display: inline-block;
-        max-width: 100%;
-
-        img {
-          display: block;
-          max-width: 100%;
-          max-height: 400px;
-          object-fit: contain;
-          transition: transform 0.3s ease;
-
-          &:hover {
-            transform: scale(1.02);
-          }
-        }
-      }
-    }
-
-    // --- Actions Buttons ---
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      padding-top: 20px;
-      border-top: 1px solid #f3f4f6;
-      margin-top: 10px;
-
-      .btn {
-        padding: 10px 24px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        border: none;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-        // Cancel Button
-        &.btn-cancel {
-          background-color: transparent;
-          color: $text-secondary;
-          border: 1px solid transparent;
-
-          &:hover {
-            background-color: #f3f4f6;
-            color: $text-main;
-          }
-        }
-
-        // Submit Button
-        &.btn-submit {
-          background-color: $primary-color;
-          color: white;
-          box-shadow: 0 4px 6px rgba($primary-color, 0.25);
-
-          &:hover:not(:disabled) {
-            background-color: $primary-hover;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba($primary-color, 0.3);
-          }
-
-          &:disabled {
-            background-color: #9ca3af;
-            box-shadow: none;
-            cursor: not-allowed;
-          }
-        }
+        color: $primary;
+        font-size: 1.1rem;
       }
     }
   }
 }
 
-// Helper Colors for Character Count (Bootstrap names mapped manually just in case)
-.text-danger { color: #ef4444 !important; }
-.text-warning { color: #f59e0b !important; }
-.text-muted { color: $text-secondary !important; }
+// ---------- USER WELCOME CARD ----------
+.user-welcome {
+  text-align: center;
+  background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+  color: white;
+  border: none;
+  
+  .avatar-circle {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .avatar-fallback {
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
+  }
+  
+  h3 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    margin: 0 0 16px;
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+  
+  .user-role-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 16px;
+    border-radius: $radius-full;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .icon-large {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: block;
+    opacity: 0.9;
+  }
+  
+  .btn-sidebar-login {
+    display: inline-block;
+    background: white;
+    color: $primary;
+    padding: 12px 28px;
+    border-radius: $radius-full;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: $transition;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
 
-// Animations
+// ---------- ACTIVE MEMBERS ----------
+.active-members, .friends-list {
+  .member-count {
+    font-size: 0.875rem;
+    color: $text-gray;
+    background: $bg-gray;
+    padding: 4px 12px;
+    border-radius: $radius-full;
+    font-weight: 500;
+  }
+  
+  .users-loading {
+    text-align: center;
+    padding: 40px 20px;
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid $border-color;
+      border-top: 3px solid $primary;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      animation: spin 1s linear infinite;
+    }
+    
+    p {
+      margin: 0;
+      color: $text-gray;
+      font-size: 0.95rem;
+    }
+  }
+  
+  .no-users, .no-friends {
+    text-align: center;
+    padding: 40px 20px;
+    color: $text-gray;
+    
+    i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+      display: block;
+    }
+    
+    p {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    small {
+      font-size: 0.875rem;
+      opacity: 0.7;
+      display: block;
+    }
+  }
+  
+  .members-list {
+    .member-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: $radius-md;
+      margin-bottom: 8px;
+      transition: $transition;
+      cursor: pointer;
+      
+      &:hover {
+        background: $bg-gray;
+        transform: translateX(4px);
+      }
+      
+      .member-avatar {
+        width: 48px;
+        height: 48px;
+        margin-right: 16px;
+        flex-shrink: 0;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid white;
+          box-shadow: $shadow-sm;
+        }
+        
+        .avatar-fallback {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: linear-gradient(135deg, $primary 0%, $secondary 100%);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 18px;
+        }
+      }
+      
+      .member-info {
+        flex: 1;
+        min-width: 0;
+        
+        .member-name {
+          display: block;
+          font-weight: 600;
+          color: $text-dark;
+          margin-bottom: 4px;
+          font-size: 0.95rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .member-meta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          .member-level {
+            font-size: 0.75rem;
+            color: $text-gray;
+            background: $bg-gray;
+            padding: 3px 8px;
+            border-radius: $radius-full;
+            font-weight: 500;
+          }
+          
+          .member-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: $radius-full;
+            font-weight: 700;
+            
+            &.admin {
+              background: lighten($warning, 40%);
+              color: darken($warning, 20%);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .view-all-members {
+    margin-top: 20px;
+    
+    .btn-view-all {
+      width: 100%;
+      background: transparent;
+      border: 2px solid $border-color;
+      color: $text-gray;
+      padding: 12px;
+      border-radius: $radius-md;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: $transition;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      
+      &:hover {
+        background: $bg-gray;
+        color: $primary;
+        border-color: $primary;
+      }
+    }
+  }
+}
+
+// ---------- FRIENDS LIST SPECIFIC ----------
+.friends-list {
+  background: linear-gradient(135deg, lighten($info, 45%) 0%, lighten($info, 40%) 100%);
+  border: 1px solid lighten($info, 30%);
+  
+  .card-header {
+    border-bottom: 1px solid lighten($info, 30%);
+    
+    h4 i {
+      color: $info;
+    }
+  }
+  
+  .member-item:hover {
+    background: rgba($info, 0.1);
+  }
+}
+
+// ---------- ONLINE FRIENDS ----------
+.online-friends {
+  .online-list {
+    .online-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: $radius-md;
+      margin-bottom: 8px;
+      transition: $transition;
+      
+      &:hover {
+        background: $bg-gray;
+      }
+      
+      .online-avatar {
+        position: relative;
+        width: 36px;
+        height: 36px;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid white;
+          box-shadow: $shadow-sm;
+        }
+        
+        .online-dot {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 10px;
+          height: 10px;
+          background: $success;
+          border-radius: 50%;
+          border: 2px solid white;
+        }
+      }
+      
+      .online-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: $text-dark;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  
+  .text-muted.small {
+    color: $text-light;
+    font-size: 0.875rem;
+    padding: 12px 0;
+    text-align: center;
+    font-style: italic;
+  }
+}
+
+// ---------- TRENDING TAGS ----------
+.trending-tags {
+  .tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    .tag {
+      background: lighten($primary, 45%);
+      color: $primary;
+      padding: 8px 16px;
+      border-radius: $radius-full;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: $transition;
+      cursor: pointer;
+      
+      &:hover {
+        background: $primary;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: $shadow-sm;
+      }
+    }
+  }
+}
+
+// ---------- QUICK STATS ----------
+.quick-stats {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    
+    .stat-box {
+      text-align: center;
+      padding: 16px;
+      background: $bg-gray;
+      border-radius: $radius-md;
+      transition: $transition;
+      
+      &:hover {
+        background: darken($bg-gray, 2%);
+        transform: translateY(-2px);
+      }
+      
+      .stat-number {
+        display: block;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $text-dark;
+        margin-bottom: 4px;
+        line-height: 1;
+      }
+      
+      .stat-label {
+        font-size: 0.75rem;
+        color: $text-gray;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// ---------- ANIMATIONS ----------
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-// --- Utilities & Animations ---
-.empty-state-modern {
-  text-align: center;
-  padding: 50px 20px;
-  background: white;
-  border-radius: $border-radius;
-  box-shadow: $shadow-sm;
+
+// ---------- RESPONSIVE ----------
+@media (max-width: 1200px) {
+  .forum-layout {
+    grid-template-columns: 1fr 320px;
+  }
   
-  img { width: 200px; margin-bottom: 20px; opacity: 0.8; }
-  h3 { font-size: 1.2rem; color: $text-main; margin-bottom: 5px; }
-  p { color: $text-secondary; }
+  .sidebar-right {
+    display: none;
+  }
 }
 
-.btn-load-more-modern {
-    width: 100%;
-    padding: 12px;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    color: $primary-color;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    margin-top: 20px;
+@media (max-width: 992px) {
+  .forum-hero {
+    padding: 60px 0 40px;
     
-    &:hover { background: #f9fafb; border-color: $primary-color; }
+    .hero-title {
+      font-size: 2.25rem;
+    }
+    
+    .hero-stats {
+      padding: 20px 24px;
+      gap: 24px;
+      
+      .stat-item .count {
+        font-size: 2rem;
+      }
+    }
+  }
 }
 
-.alert-floating {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ef4444;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-    button { background: none; border: none; color: white; cursor: pointer; font-size: 1.1rem; }
+@media (max-width: 768px) {
+  .forum-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar, .sidebar-right {
+    position: static;
+    max-height: none;
+    
+    &.sidebar-right {
+      display: block;
+    }
+  }
+  
+  .forum-hero {
+    padding: 40px 0 32px;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    
+    .hero-title {
+      font-size: 1.875rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    
+    .hero-content {
+      gap: 32px;
+    }
+    
+    .hero-stats {
+      width: 100%;
+      padding: 16px 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .sidebar-card {
+    padding: 20px;
+  }
+  
+  .active-members .members-list {
+    .member-item {
+      padding: 10px;
+      
+      .member-avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+      }
+    }
+  }
 }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+@media (max-width: 480px) {
+  .forum-hero {
+    .hero-stats {
+      .stat-item {
+        flex: 1;
+        min-width: 45%;
+        
+        .count {
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
+  
+  .quick-stats .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    
+    .stat-box {
+      padding: 12px;
+      
+      .stat-number {
+        font-size: 1.5rem;
+      }
+    }
+  }
+  
+  .trending-tags .tags-cloud {
+    gap: 8px;
+    
+    .tag {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+  }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+// ---------- UTILITY CLASSES ----------
+.text-success { color: $success !important; }
+.text-warning { color: $warning !important; }
+.text-danger { color: $danger !important; }
+.text-info { color: $info !important; }
+.text-primary { color: $primary !important; }
+.text-gray { color: $text-gray !important; }
+
+.bg-success { background-color: $success !important; }
+.bg-warning { background-color: $warning !important; }
+.bg-danger { background-color: $danger !important; }
+.bg-info { background-color: $info !important; }
+.bg-primary { background-color: $primary !important; }
+.bg-gray { background-color: $bg-gray !important; }
 
 .fade-in { animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.slide-up { animation: slideUp 0.3s ease; }
+.slide-down { animation: slideDown 0.3s ease; }
 
-// Skeleton Loading
-.skeleton-card {
-    background: white; padding: 20px; border-radius: 16px; margin-bottom: 20px;
-    .sk-header { display: flex; gap: 10px; margin-bottom: 15px; }
-    .sk-avatar { width: 45px; height: 45px; border-radius: 50%; background: #eee; }
-    .sk-name { width: 120px; height: 15px; background: #eee; border-radius: 4px; margin-top: 10px; }
-    .sk-body { height: 100px; background: #eee; border-radius: 8px; }
+// ---------- SCROLLBAR STYLING ----------
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-light;
+  border-radius: $radius-full;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border-color;
+  border-radius: $radius-full;
+  
+  &:hover {
+    background: $text-light;
+  }
+}
+
+// ---------- PRINT STYLES ----------
+@media print {
+  .forum-hero,
+  .sidebar,
+  .sidebar-right,
+  .btn-hero-create,
+  .alert-floating {
+    display: none !important;
+  }
+  
+  .forum-page-wrapper {
+    background: white;
+  }
+  
+  .container {
+    max-width: 100%;
+  }
+  
+  .forum-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.sidebar {
+  margin-top: 90px;
 }

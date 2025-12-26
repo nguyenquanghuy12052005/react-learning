@@ -198,6 +198,41 @@ const addXp = async (userId, xp) => {
     }
   };
 
+
+  const getAllUser = async () => {
+    try {     
+      const data = await authService.getAllUser();
+      return { success: true,data: data };
+    } catch (error) {
+      console.error('Lỗi khi getAll user:', error);
+      return { success: false, error: 'Không thể cập nhật thông tin' };
+    }
+  };
+
+
+
+    const addFriends = async (id) => {
+    try {     
+      const data = await authService.addFriends(id);
+      return { success: true,data: data };
+    } catch (error) {
+      console.error('Lỗi khi addFriends :', error);
+      return { success: false, error: 'Không thể cập nhật thông tin' };
+    }
+  };
+  
+
+  
+    const getFriend = async () => {
+    try {     
+      const data = await authService.getFriend();
+      return { success: true,data: data };
+    } catch (error) {
+      console.error('Lỗi khi getFriend :', error);
+      return { success: false, error: 'Không thể cập nhật thông tin' };
+    }
+  };
+
   const value = {
     user,
     token,
@@ -208,7 +243,10 @@ const addXp = async (userId, xp) => {
     logout,
     refreshUser, 
     updateProfile,
-    addXp
+    addXp,
+    getAllUser,
+    addFriends,
+    getFriend
   };
 
   return (
