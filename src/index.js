@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Contexts
 import { AuthProvider } from './contexts/AuthContext';
 import { PostProvider } from './contexts/PostContext';
-import { VocProvider } from './contexts/VocalContext';
+import { VocProvider } from './contexts/VocalContext.js';
 
 // User Pages
 import Home from './components/Home/Home';
@@ -72,6 +72,7 @@ import CreateQuizPart5 from './components/Admin/Content/Quiz/CreateQuizPart5';
 import CreateQuizPart6 from './components/Admin/Content/Quiz/CreateQuizPart6'; 
 import CreateQuizPart7 from './components/Admin/Content/Quiz/CreateQuizPart7';
 import CreateFullTest from './components/Admin/Content/Quiz/CreateFullTest';
+import { ChatContext, ChatProvider } from './contexts/ChatContext.js';
 
 const PartPlaceholder = ({ partTitle }) => (
   <div
@@ -97,6 +98,7 @@ root.render(
     <AuthProvider>
       <PostProvider>
         <VocProvider>
+          <ChatProvider>
           <React.StrictMode>
             <BrowserRouter>
               <Routes>
@@ -278,6 +280,7 @@ root.render(
               theme="light"
             />
           </React.StrictMode>
+          </ChatProvider>
         </VocProvider>
       </PostProvider>
     </AuthProvider>

@@ -270,70 +270,8 @@ const Forum = () => {
         )}
 
         <div className="forum-layout">
-          {/* Cột trái: Form & Danh sách bài viết */}
-          <div className="main-feed">
-            <div className={`editor-collapse ${showCreateForm || currentPost ? 'open' : ''}`}>
-               {(currentPost && isAuthenticated) && (
-                <PostForm 
-                  onSubmit={handleUpdatePost}
-                  initialData={currentPost}
-                  onCancel={() => clearCurrentPost()}
-                  loading={loading}
-                  mode="edit"
-                />
-              )}
 
-              {(showCreateForm && !currentPost && isAuthenticated) && (
-                <PostForm 
-                  onSubmit={handleCreatePost}
-                  onCancel={() => setShowCreateForm(false)}
-                  loading={loading}
-                  mode="create"
-                />
-              )}
-            </div>
-
-            {loading && posts.length === 0 && (
-              <div className="loading-skeleton">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="skeleton-card">
-                    <div className="sk-header"><div className="sk-avatar"></div><div className="sk-name"></div></div>
-                    <div className="sk-body"></div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="posts-stream">
-              {!loading && posts.length === 0 ? (
-                <div className="empty-state-modern">
-                  <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png" alt="Empty" />
-                  <h3>Chưa có bài viết nào</h3>
-                  <p>Hãy trở thành người đầu tiên chia sẻ kiến thức!</p>
-                </div>
-              ) : (
-                posts.map(post => (
-                  <PostItem
-                    key={post._id}
-                    post={post}
-                    onDelete={handleDeletePost}
-                    onLike={async (id) => { await likePost(id); loadPosts(); }}
-                    onComment={async (id, cmt) => { await commentPost(id, cmt); loadPosts(); }}
-                    onEdit={(p) => { setPostForEdit(p); setShowCreateForm(false); window.scrollTo({top: 400, behavior: 'smooth'}); }}
-                    showActions={isAuthenticated}
-                  />
-                ))
-              )}
-            </div>
-            
-             {posts.length > 0 && posts.length % 10 === 0 && (
-                <button className="btn-load-more-modern" onClick={loadPosts} disabled={loading}>
-                  {loading ? 'Đang tải...' : 'Xem thêm bài viết cũ hơn'}
-                </button>
-             )}
-          </div>
-
-          {/* Cột giữa: Sidebar - Thành viên tích cực */}
+   {/* Cột giữa: Sidebar - Thành viên tích cực */}
           <div className="sidebar">
             <div className="sidebar-card user-welcome">
                 {isAuthenticated ? (
@@ -440,6 +378,74 @@ const Forum = () => {
                 </div>
             </div>
           </div>
+
+
+
+
+          {/* Cột trái: Form & Danh sách bài viết */}
+          <div className="main-feed">
+            <div className={`editor-collapse ${showCreateForm || currentPost ? 'open' : ''}`}>
+               {(currentPost && isAuthenticated) && (
+                <PostForm 
+                  onSubmit={handleUpdatePost}
+                  initialData={currentPost}
+                  onCancel={() => clearCurrentPost()}
+                  loading={loading}
+                  mode="edit"
+                />
+              )}
+
+              {(showCreateForm && !currentPost && isAuthenticated) && (
+                <PostForm 
+                  onSubmit={handleCreatePost}
+                  onCancel={() => setShowCreateForm(false)}
+                  loading={loading}
+                  mode="create"
+                />
+              )}
+            </div>
+
+            {loading && posts.length === 0 && (
+              <div className="loading-skeleton">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="skeleton-card">
+                    <div className="sk-header"><div className="sk-avatar"></div><div className="sk-name"></div></div>
+                    <div className="sk-body"></div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="posts-stream">
+              {!loading && posts.length === 0 ? (
+                <div className="empty-state-modern">
+                  <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png" alt="Empty" />
+                  <h3>Chưa có bài viết nào</h3>
+                  <p>Hãy trở thành người đầu tiên chia sẻ kiến thức!</p>
+                </div>
+              ) : (
+                posts.map(post => (
+                  <PostItem
+                    key={post._id}
+                    post={post}
+                    onDelete={handleDeletePost}
+                    onLike={async (id) => { await likePost(id); loadPosts(); }}
+                    onComment={async (id, cmt) => { await commentPost(id, cmt); loadPosts(); }}
+                    onEdit={(p) => { setPostForEdit(p); setShowCreateForm(false); window.scrollTo({top: 400, behavior: 'smooth'}); }}
+                    showActions={isAuthenticated}
+                  />
+                ))
+              )}
+            </div>
+            
+             {posts.length > 0 && posts.length % 10 === 0 && (
+                <button className="btn-load-more-modern" onClick={loadPosts} disabled={loading}>
+                  {loading ? 'Đang tải...' : 'Xem thêm bài viết cũ hơn'}
+                </button>
+             )}
+          </div>
+
+       
 
           {/* Cột phải: Sidebar - Danh sách bạn bè */}
           <div className="sidebar-right">

@@ -1,6 +1,6 @@
 // src/hooks/usePost.js
 import { useContext } from 'react';
-import { PostContext } from '../contexts/PostContext';
+
 import { VocalContext } from '../contexts/VocalContext';
 
 export const useVoc = () => {
