@@ -6,7 +6,7 @@ const ChatWindow = ({ chat, friend, currentUserId, onMessageSent }) => {
   const [input, setInput] = useState("");
   const chatBodyRef = useRef(null);
 
-  // ĐƯA TẤT CẢ HOOKS LÊN TRÊN CÙNG - TRƯỚC MỌI RETURN
+ 
   const messages = chat?.messages || [];
 
   const sortedMessages = [...messages].sort(
@@ -20,7 +20,7 @@ const ChatWindow = ({ chat, friend, currentUserId, onMessageSent }) => {
     }
   }, [sortedMessages]);
 
-  // RETURN SAU KHI ĐÃ GỌI TẤT CẢ HOOKS
+
   if (!friend) {
     return <div className="no-chat">Chọn bạn để chat 💬</div>;
   }

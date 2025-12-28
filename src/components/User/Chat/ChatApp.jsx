@@ -68,7 +68,7 @@ const ChatApp = () => {
     setSelectedChat(chat || null);
   };
 
-  // HÀM RELOAD CHAT SAU KHI GỬI
+  // reload chat sau khi gửi
   const handleMessageSent = useCallback(async () => {
     await loadChats();
   }, [loadChats]);
