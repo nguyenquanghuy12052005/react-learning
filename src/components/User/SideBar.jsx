@@ -20,6 +20,7 @@ const SideBar = () => {
     { icon: <BookOpen size={18} />, text: "Từ vựng", path: "/vocab2" },
     { icon: <Globe size={18} />, text: "Thế giới thực", path: "/forum" },
     { icon: <User size={18} />, text: "Tài khoản", path: "/userprofile" },
+     { icon: <User size={18} />, text: "Bài thi", path: "/exams" },
     { icon: <User size={18} />, text: "Home", path: "/" },
   ];
 

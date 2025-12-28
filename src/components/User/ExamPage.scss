@@ -1,0 +1,298 @@
+$bg-dark: #0f0f0f;
+$bg-card: #1a1a1a;
+$text-primary: #fff;
+$text-secondary: #aaa;
+$accent-color: #3b82f6;
+$border-color: #333;
+
+.exam-page-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: $bg-dark;
+  font-family: 'Inter', sans-serif;
+}
+
+/* === SIDEBAR === */
+.exam-sidebar {
+  width: 280px;
+  background: #18181b;
+  border-right: 1px solid $border-color;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid $border-color;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+
+    h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: $text-secondary;
+      letter-spacing: 1px;
+    }
+  }
+
+  .sidebar-content {
+    padding: 1rem;
+  }
+
+  .part-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 0.5rem;
+    background: transparent;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    color: $text-secondary;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: $accent-color;
+      color: $text-primary;
+      transform: translateX(5px);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, $accent-color 0%, #2563eb 100%);
+      border-color: $accent-color;
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+
+      .badge-count {
+        background: rgba(255,255,255,0.2);
+        color: white;
+      }
+    }
+
+    &.all-btn {
+      border: 2px solid $accent-color;
+      font-weight: 700;
+      margin-bottom: 1rem;
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-color: #10b981;
+      }
+    }
+
+    .part-stats {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .badge-count {
+      background: $border-color;
+      color: $text-secondary;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      min-width: 30px;
+      text-align: center;
+    }
+  }
+}
+
+/* === MAIN CONTENT === */
+.exam-main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem 3rem;
+  color: $text-primary;
+  background: radial-gradient(circle at top right, #1e1e2e 0%, #0f0f0f 40%);
+}
+
+.exam-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid $border-color;
+
+  .header-info {
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      color: $text-secondary;
+      font-size: 1rem;
+    }
+  }
+}
+
+/* === EXAM LIST === */
+.exam-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* === EXAM CARD === */
+.exam-card {
+  background: $bg-card;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: $accent-color;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+    .start-btn {
+      background: $accent-color;
+      border-color: $accent-color;
+      color: white;
+      
+      .icon-circle {
+        background: rgba(255,255,255,0.2);
+        color: white;
+      }
+    }
+  }
+
+  .card-tags {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 5px;
+
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+
+      &.blue { 
+        background: rgba(59, 130, 246, 0.2); 
+        color: #60a5fa; 
+      }
+      &.red { 
+        background: rgba(239, 68, 68, 0.2); 
+        color: #f87171; 
+      }
+    }
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .level-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+
+      &.easy { color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+      &.medium { color: #facc15; background: rgba(250, 204, 21, 0.1); }
+      &.hard { color: #f87171; background: rgba(248, 113, 113, 0.1); }
+    }
+
+    .participants {
+      font-size: 0.8rem;
+      color: #666;
+    }
+  }
+
+  .exam-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .exam-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  }
+
+  .start-btn {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: transparent;
+    color: #ccc;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    .icon-circle {
+      width: 24px;
+      height: 24px;
+      background: #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+  }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .exam-sidebar {
+    width: 100%;
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid $border-color;
+  }
+
+  .exam-main-content {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+
+  .exam-page-container {
+    flex-direction: column;
+  }
+}
