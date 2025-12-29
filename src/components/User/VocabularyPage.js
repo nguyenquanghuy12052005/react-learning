@@ -5,24 +5,24 @@ import { useAuth } from "../../hooks/useAuth";
 import { useVoc } from "../../hooks/useVoc";
 import { toast } from "react-toastify";
 import PracticePage from "./learnVocal/PracticePage";
-import { useLocation } from "react-router-dom";
-
+// 1. Thêm useNavigate vào import
+import { useLocation, useNavigate } from "react-router-dom"; 
 
 const VocabularyPage = () => {
   const { user, isAuthenticated } = useAuth();
   const { voc, loading, error, getAllVoc } = useVoc();
   const [selectedWord, setSelectedWord] = useState(null);
   const [showPractice, setShowPractice] = useState(false);
-
   const [isLearned, setIsLearned] = useState(false);
 
+  // 2. Khởi tạo navigate
+  const navigate = useNavigate(); 
+  const location = useLocation();
+  const { level, lesson } = location.state || {};
 
-const location = useLocation();
-const { level, lesson } = location.state || {};
+  const [filteredVoc, setFilteredVoc] = useState([]);
 
-const [filteredVoc, setFilteredVoc] = useState([]);
-
- useEffect(() => {
+  useEffect(() => {
     loadVocabularies();
   }, []);
 
@@ -32,7 +32,8 @@ const [filteredVoc, setFilteredVoc] = useState([]);
       toast.error(result.error);
     }
   };
-useEffect(() => {
+
+  useEffect(() => {
     if (voc.length > 0 && level) {
       const filtered = voc.filter(item => item.level === level);
       setFilteredVoc(filtered);
@@ -45,20 +46,20 @@ useEffect(() => {
     <div className="vocab-page-container">
       {/* HEADER */}
       <header className="page-header">
-        <button className="btn-back">❮</button>
+        {/* 3. Thêm sự kiện onClick để quay lại trang trước */}
+        <button className="btn-back" onClick={() => navigate(-1)}>❮</button>
+        
         <div className="header-info">
           <div className="icon-header">📚</div>
           <div className="header-text">
             <h2>Từ Vựng </h2>
             <div className="progress-badge">
-              {/* <span>✔ {voc.filter(item => item.isLearned).length}/{voc.length} từ</span>
-              <span>◐ {voc.filter(item => !item.isLearned).length} cần học</span> */}
               <span>
-  ✔ {filteredVoc.filter(item => item.isLearned).length}/{filteredVoc.length} từ
-</span>
-            <span>
-  ◐ {filteredVoc.filter(item => !item.isLearned).length} cần học
-</span>
+                ✔ {filteredVoc.filter(item => item.isLearned).length}/{filteredVoc.length} từ
+              </span>
+              <span>
+                ◐ {filteredVoc.filter(item => !item.isLearned).length} cần học
+              </span>
             </div>
           </div>
         </div>
@@ -103,34 +104,29 @@ useEffect(() => {
                 onClick={() => setSelectedWord(item)}
               >
                 <div className="card-icon">
-                
-                <div className="inner-icon">
-  <img 
-    src={item.image || `https://source.unsplash.com/featured/150x150/?${item.word}`} 
-    alt={item.word}
-    className="word-image"
-    onError={(e) => {
-      e.target.onerror = null;
-      e.target.style.display = 'none';
-      // Fallback to emoji if image fails
-      e.target.parentElement.innerHTML = '📚';
-    }}
-  />
-</div>
+                  <div className="inner-icon">
+                    <img 
+                      src={item.image || `https://source.unsplash.com/featured/150x150/?${item.word}`} 
+                      alt={item.word}
+                      className="word-image"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML = '📚';
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="card-content">
                   <div className="word-top">
                     <span className="word-text">{item.word}</span>
-                  
                   </div>
-            
                 </div>
                 <div className="card-action">
                   <button 
                     className="btn-save"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Thêm logic lưu từ vựng ở đây
                       toast.success(`Đã lưu từ "${item.word}"`);
                     }}
                   >
@@ -144,12 +140,12 @@ useEffect(() => {
 
         {/* NÚT DƯỚI CÙNG */}
         <div className="bottom-action-bar">
-         <button 
-  className="btn-large btn-practice"
-  onClick={() => setShowPractice(true)}
->
-  🔥 Luyện tập
-</button>
+          <button 
+            className="btn-large btn-practice"
+            onClick={() => setShowPractice(true)}
+          >
+            🔥 Luyện tập
+          </button>
         </div>
       </div>
 
@@ -162,15 +158,14 @@ useEffect(() => {
         />
       )}
 
-
       {showPractice && (
-  <PracticePage
-   words={filteredVoc}     
-  level={level}
-  lesson={lesson}
-    onClose={() => setShowPractice(false)}
-  />
-)}   
+        <PracticePage
+          words={filteredVoc}     
+          level={level}
+          lesson={lesson}
+          onClose={() => setShowPractice(false)}
+        />
+      )}   
     </div>
   );
 };

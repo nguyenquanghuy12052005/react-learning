@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // 1. Import Link
+import { Link } from 'react-router-dom';
 import './ToeicPage.scss';
+// Thêm FaArrowLeft vào danh sách import
 import { 
   FaHeadphones, FaBookOpen, FaPen, FaMicrophone, 
-  FaClipboardList, FaImage, FaComments, FaQuestionCircle 
+  FaClipboardList, FaImage, FaComments, FaQuestionCircle,
+  FaArrowLeft 
 } from 'react-icons/fa';
 
 const ToeicPage = () => {
-  // Hàm biến tên icon thành Component Icon thật
   const getIcon = (iconName) => {
     switch(iconName) {
         case "Photo": return <FaImage />;
@@ -18,12 +19,13 @@ const ToeicPage = () => {
         case "List": return <FaClipboardList />;
         case "Book": return <FaBookOpen />;
         case "Headphones": return <FaHeadphones />;
-        case "Test": return <FaClipboardList />; // Icon cho bài thi
+        case "Test": return <FaClipboardList />;
         default: return <FaBookOpen />;
     }
   };
 
   const toeicData = [
+    // ... (Giữ nguyên dữ liệu của bạn)
     {
       title: "Luyện Nghe",
       items: [
@@ -53,7 +55,7 @@ const ToeicPage = () => {
       items: [
         { id: 10, name: "Thi Thử Phần Nghe", action: "Nghe", icon: "Headphones", link: "/test-listening" },
         { id: 11, name: "Thi Thử Phần Đọc", action: "Đọc", icon: "Book", link: "/test-reading" },
-        { id: 12, name: "Thi Thử Toàn Bài", action: "Toàn Bài", icon: "Test", link: "/test-full" }, // <-- Link này sẽ hoạt động
+        { id: 12, name: "Thi Thử Toàn Bài", action: "Toàn Bài", icon: "Test", link: "/test-full" },
       ]
     }
   ];
@@ -61,6 +63,16 @@ const ToeicPage = () => {
   return (
     <div className="toeic-page">
       <div className="toeic-container">
+        
+        {/* --- NÚT QUAY LẠI --- */}
+        <div className="back-button-wrapper">
+            <Link to="/" className="btn-back">
+                <FaArrowLeft className="icon" />
+                <span>Trang chủ</span>
+            </Link>
+        </div>
+        {/* ------------------- */}
+
         {toeicData.map((section, index) => (
           <div key={index} className="toeic-section">
             <h2 className="section-title">{section.title}</h2>
@@ -68,14 +80,10 @@ const ToeicPage = () => {
               {section.items.map((item) => (
                 <div key={item.id} className="course-card">
                   <h3 className="course-name">{item.name}</h3>
-                  
-                  {/* --- QUAN TRỌNG: Dùng Link thay vì button --- */}
                   <Link to={item.link} className="action-btn" style={{textDecoration: 'none'}}>
                     <span className="btn-icon">{getIcon(item.icon)}</span>
                     <span className="btn-text">{item.action}</span>
                   </Link>
-                  {/* ------------------------------------------ */}
-                  
                 </div>
               ))}
             </div>
@@ -83,7 +91,6 @@ const ToeicPage = () => {
         ))}
       </div>
     </div>
-    
   );
 };
 

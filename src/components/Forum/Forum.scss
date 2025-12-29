@@ -70,17 +70,18 @@ body {
     flex-direction: column;
 }
 
-// ---------- 3. HERO SECTION (UPDATED) ----------
+// ---------- 3. HERO SECTION (COMPACT VERSION) ----------
 .forum-hero {
   position: relative;
   background: linear-gradient(135deg, $primary 0%, $accent 50%, $secondary 100%);
   color: white;
-  padding: 40px 40px 60px; 
+  // GIẢM PADDING: Trước đây là 40px 40px 60px -> Giảm xuống để ngắn lại
+  padding: 25px 30px 50px; 
   
-  flex-shrink: 0; // Đảm bảo Hero không bị co lại khi scroll
+  flex-shrink: 0;
   width: 100%;
   margin-left: 0;
-  border-radius: 0 0 0 60px; 
+  border-radius: 0 0 0 50px; // Bo góc nhỏ hơn chút (trước là 60px)
 
   box-shadow: 0 4px 20px -5px rgba($primary, 0.3);
   z-index: 1;
@@ -91,31 +92,47 @@ body {
     display: flex; justify-content: space-between; align-items: center;
 
     @media (max-width: 1200px) {
-      flex-direction: column; text-align: center; gap: 24px;
+      flex-direction: column; text-align: center; gap: 16px; // Giảm gap
     }
   }
 
   @media (max-width: 900px) {
       border-radius: 0 0 30px 30px;
-      padding: 60px 20px 80px;
+      // GIẢM PADDING MOBILE: Trước là 60px... -> Giảm mạnh cho mobile đỡ chiếm chỗ
+      padding: 30px 16px 60px; 
   }
 
   .text-content {
      padding-left: 50px; 
+     
     h1.hero-title { 
-      font-size: 2.2rem; font-weight: 800; margin-bottom: 12px; 
+      // GIẢM SIZE CHỮ: Trước là 2.2rem
+      font-size: 1.75rem; 
+      font-weight: 800; 
+      margin-bottom: 8px; // Giảm margin
       text-shadow: 0 4px 12px rgba(0,0,0,0.1); 
     }
-    p.hero-subtitle { font-size: 1rem; opacity: 0.95; max-width: 550px; font-weight: 400; margin-bottom: 24px; }
+    p.hero-subtitle { 
+        font-size: 0.95rem; 
+        opacity: 0.95; 
+        max-width: 550px; 
+        font-weight: 400; 
+        margin-bottom: 16px; // Giảm khoảng cách tới nút bấm
+    }
   }
 
   .btn-hero-create {
     background: white; color: $primary; 
-    border: none; padding: 12px 28px; border-radius: 50px;
-    font-weight: 700; font-size: 1rem; cursor: pointer;
+    border: none; 
+    // NÚT NHỎ HƠN: Trước là 12px 28px
+    padding: 10px 24px; 
+    border-radius: 50px;
+    font-weight: 700; 
+    font-size: 0.9rem; // Chữ trong nút nhỏ lại
+    cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: all $anim-speed;
-    display: inline-flex; align-items: center; gap: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
 
     &:hover {
       transform: translateY(-3px);
@@ -124,16 +141,21 @@ body {
   }
 
   .hero-stats {
-    display: flex; gap: 40px;
+    display: flex; gap: 30px; // Giảm khoảng cách giữa các số liệu
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px); 
-    padding: 16px 32px; border-radius: $radius-lg;
+    // KHUNG THỐNG KÊ NHỎ HƠN
+    padding: 12px 24px; 
+    border-radius: $radius-lg;
     border: 1px solid rgba(255, 255, 255, 0.2);
 
     .stat-item { 
       text-align: center; 
-      .count { font-size: 1.6rem; font-weight: 800; display: block; }
-      .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+      .count { 
+          font-size: 1.4rem; // Số nhỏ hơn (trước là 1.6rem)
+          font-weight: 800; display: block; 
+      }
+      .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
     }
   }
 }
