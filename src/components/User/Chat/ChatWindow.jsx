@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import "./ChatApp.scss";
 import chatService from "../../../services/chatService";
@@ -6,7 +7,7 @@ const ChatWindow = ({ chat, friend, currentUserId, onMessageSent }) => {
   const [input, setInput] = useState("");
   const chatBodyRef = useRef(null);
 
- 
+  // ĐƯA TẤT CẢ HOOKS LÊN TRÊN CÙNG - TRƯỚC MỌI RETURN
   const messages = chat?.messages || [];
 
   const sortedMessages = [...messages].sort(
@@ -20,7 +21,7 @@ const ChatWindow = ({ chat, friend, currentUserId, onMessageSent }) => {
     }
   }, [sortedMessages]);
 
-
+  // RETURN SAU KHI ĐÃ GỌI TẤT CẢ HOOKS
   if (!friend) {
     return <div className="no-chat">Chọn bạn để chat 💬</div>;
   }
@@ -65,8 +66,20 @@ const ChatWindow = ({ chat, friend, currentUserId, onMessageSent }) => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           placeholder="Nhập tin nhắn..."
+          className="chat-input"
         />
-        <button onClick={handleSend}>Gửi</button>
+        <button className="send-btn" onClick={handleSend} disabled={!input.trim()}>
+          {/* Icon máy bay giấy SVG */}
+          <svg 
+            viewBox="0 0 24 24" 
+            width="24" 
+            height="24" 
+            fill="currentColor" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+          </svg>
+        </button>
       </div>
     </div>
   );

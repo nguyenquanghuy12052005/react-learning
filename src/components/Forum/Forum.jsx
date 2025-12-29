@@ -19,17 +19,33 @@ const Forum = () => {
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [allUsers, setAllUsers] = useState([]); // Đổi tên từ users sang allUsers
-  const [friends, setFriends] = useState([]); // Thêm state cho danh sách bạn bè
+  const [allUsers, setAllUsers] = useState([]); 
+  const [friends, setFriends] = useState([]); 
   const [usersLoading, setUsersLoading] = useState(false);
-  const [friendsLoading, setFriendsLoading] = useState(false); // Thêm loading riêng cho bạn bè
+  const [friendsLoading, setFriendsLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  // --- STATE MỚI CHO THÔNG BÁO ---
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [friendRequests, setFriendRequests] = useState([]);
+
+  // --- STATE MỚI: QUẢN LÝ VIỆC MỞ RỘNG DANH SÁCH THÀNH VIÊN ---
+  const [isMembersExpanded, setIsMembersExpanded] = useState(false);
 
   // Hiệu ứng scroll cho header
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Giả lập load lời mời kết bạn (thay bằng API thật của bạn sau này)
+  useEffect(() => {
+    setFriendRequests([
+      { _id: 'req1', name: 'Nguyễn Văn A', avatar: null, mutual: 2 },
+      { _id: 'req2', name: 'Trần Thị B', avatar: null, mutual: 5 },
+      { _id: 'req3', name: 'Lê Hoàng C', avatar: null, mutual: 0 },
+    ]);
   }, []);
 
   const loadPosts = useCallback(async () => {
@@ -41,11 +57,8 @@ const Forum = () => {
     try {
       setUsersLoading(true);
       const result = await getAllUser();
-      console.log('=== DEBUG ALL USERS DATA ===');
-      console.log('API result:', result);
       
       if (result.success && result.data) {
-        console.log('All users loaded:', result.data.length);
         setAllUsers(result.data);
       } else {
         console.error('Lỗi khi load users:', result.error);
@@ -62,15 +75,11 @@ const Forum = () => {
     try {
       setFriendsLoading(true);
       const result = await getFriend();
-      console.log('=== DEBUG FRIENDS DATA ===');
-      console.log('API result:', result);
       
       if (result.success && result.data) {
-        console.log('Friends loaded:', result.data.length);
         setFriends(result.data);
       } else {
         console.error('Lỗi khi load friends:', result.error);
-        // Nếu không có bạn bè, set mảng rỗng
         setFriends([]);
       }
     } catch (error) {
@@ -133,6 +142,18 @@ const Forum = () => {
     setShowCreateForm(!showCreateForm);
   };
 
+  // --- HÀM XỬ LÝ LỜI MỜI KẾT BẠN ---
+  const handleAcceptRequest = (id) => {
+    toast.success('Đã chấp nhận lời mời!');
+    setFriendRequests(prev => prev.filter(req => req._id !== id));
+    // TODO: Gọi API accept friend ở đây
+  };
+
+  const handleDeclineRequest = (id) => {
+    setFriendRequests(prev => prev.filter(req => req._id !== id));
+    // TODO: Gọi API decline friend ở đây
+  };
+
   const getAvatarUrl = useCallback((avatar) => {
     if (!avatar || avatar === 'null' || avatar === 'undefined') {
       return null;
@@ -186,21 +207,19 @@ const Forum = () => {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&bold=true`;
   }, []);
 
-  // Hàm render member item để tránh trùng code
   const renderMemberItem = (member) => {
     const displayName = member.name || member.username || 'Người dùng';
-    const avatarUrl = getAvatarUrl(member.avatar) || getFallbackAvatarUrl(displayName);
     
     return (
       <div 
         key={member._id} 
         className="member-item"
-       onClick={() => setSelectedUser(member)}
-         style={{ cursor: 'pointer' }}
+        onClick={() => setSelectedUser(member)}
+        style={{ cursor: 'pointer' }}
       >
         <div className="member-avatar">
           <img 
-            src={member.avatar}
+            src={getAvatarUrl(member.avatar)}
             alt={displayName}
             onError={(e) => {
               e.target.onerror = null;
@@ -225,285 +244,350 @@ const Forum = () => {
     <div className="forum-page-wrapper">
       <Header className={isScrolled ? 'scrolled' : ''} />
       
-      {/* Hero Section */}
-      <div className="forum-hero">
-        <div className="hero-overlay"></div>
-        <div className="hero-content container">
-          <div className="text-content">
-            <h1 className="hero-title">Cộng đồng TOEIC Việt Nam</h1>
-            <p className="hero-subtitle">
-              Nơi chia sẻ kiến thức, kinh nghiệm và cùng nhau chinh phục mục tiêu 990+.
-            </p>
-            {isAuthenticated && !showCreateForm && !currentPost && (
-              <button 
-                className="btn-hero-create"
-                onClick={handleToggleCreateForm}
-              >
-                <i className="fa-solid fa-pen-nib"></i> Viết bài mới
-              </button>
-            )}
+      <div className="forum-body">
+        
+        {/* === LEFT SIDEBAR === */}
+        <div className="sidebar">
+          <div className="sidebar-card user-welcome">
+              {isAuthenticated ? (
+                  <>
+                      <div className="avatar-circle">
+                        {user?.avatar ? (
+                          <img 
+                            src={getAvatarUrl(user.avatar)}
+                            alt={user.username}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = getFallbackAvatarUrl(user.username);
+                            }}
+                          />
+                        ) : (
+                          <div className="avatar-fallback">
+                            {user?.username?.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <h3>Xin chào, {user?.name}</h3>
+                      <p>Level {user?.level || 1} • {user?.xpPoints || 0} XP</p>
+                      {user?.role === 'admin' && (
+                        <span className="user-role-badge">Admin</span>
+                      )}
+                  </>
+              ) : (
+                  <>
+                      <i className="fa-solid fa-user-astronaut icon-large"></i>
+                      <h3>Tham gia cộng đồng</h3>
+                      <p>Đăng nhập để tương tác và lưu bài viết hay.</p>
+                      <a href="/login" className="btn-sidebar-login">Đăng nhập ngay</a>
+                  </>
+              )}
           </div>
-          <div className="hero-stats">
-            <div className="stat-item">
-              <span className="count">{posts.length}+</span>
-              <span className="label">Bài viết</span>
-            </div>
-            <div className="stat-item">
-              <span className="count">{allUsers.length}+</span>
-              <span className="label">Thành viên</span>
-            </div>
-            <div className="stat-item">
-              <span className="count">{friends.length}+</span>
-              <span className="label">Bạn bè</span>
-            </div>
+
+          <div className="sidebar-card active-members">
+              <div className="card-header">
+                <h4><i className="fa-solid fa-users"></i> Thành viên tích cực</h4>
+                <span className="member-count">{allUsers.length} thành viên</span>
+              </div>
+              
+              {usersLoading ? (
+                <div className="users-loading">
+                  <div className="loading-spinner"></div>
+                  <p>Đang tải thành viên...</p>
+                </div>
+              ) : allUsers.length === 0 ? (
+                <div className="no-users">
+                  <i className="fa-solid fa-user-slash"></i>
+                  <p>Chưa có thành viên</p>
+                </div>
+              ) : (
+                <>
+                  <div className="members-list">
+                    {allUsers
+                      .slice(0, isMembersExpanded ? allUsers.length : 5)
+                      .map((member) => renderMemberItem(member))}
+                  </div>
+                  
+                  {allUsers.length > 5 && (
+                    <div className="view-all-members">
+                      <button 
+                        className="btn-view-all"
+                        onClick={() => setIsMembersExpanded(!isMembersExpanded)}
+                      >
+                          {isMembersExpanded ? (
+                             <><i className="fa-solid fa-angle-up"></i> Thu gọn</>
+                          ) : (
+                             <><i className="fa-solid fa-angles-right"></i> Xem tất cả thành viên</>
+                          )}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+          </div>
+
+          <div className="sidebar-card trending-tags">
+              <h4><i className="fa-solid fa-arrow-trend-up"></i> Chủ đề nổi bật</h4>
+              <div className="tags-cloud">
+                  <span className="tag">#Part5</span>
+                  <span className="tag">#Listening</span>
+                  <span className="tag">#NewEconomy</span>
+                  <span className="tag">#Tips</span>
+                  <span className="tag">#Grammar</span>
+                  <span className="tag">#Reading</span>
+                  <span className="tag">#Vocabulary</span>
+                  <span className="tag">#TestTaking</span>
+              </div>
+          </div>
+
+          <div className="sidebar-card quick-stats">
+              <h4><i className="fa-solid fa-chart-line"></i> Thống kê cộng đồng</h4>
+              <div className="stats-grid">
+                <div className="stat-box">
+                  <span className="stat-number">{posts.length}</span>
+                  <span className="stat-label">Bài viết</span>
+                </div>
+                <div className="stat-box">
+                  <span className="stat-number">{allUsers.length}</span>
+                  <span className="stat-label">Thành viên</span>
+                </div>
+                <div className="stat-box">
+                  <span className="stat-number">{friends.length}</span>
+                  <span className="stat-label">Bạn bè</span>
+                </div>
+                <div className="stat-box">
+                  <span className="stat-number">99%</span>
+                  <span className="stat-label">Tích cực</span>
+                </div>
+              </div>
           </div>
         </div>
-      </div>
 
-      <div className="forum-container container">
-        {error && (
-          <div className="alert-floating">
-            <i className="fa-solid fa-triangle-exclamation"></i>
-            <span>{error}</span>
-            <button onClick={clearError}><i className="fa-solid fa-xmark"></i></button>
-          </div>
-        )}
-
-        <div className="forum-layout">
-
-   {/* Cột giữa: Sidebar - Thành viên tích cực */}
-          <div className="sidebar">
-            <div className="sidebar-card user-welcome">
-                {isAuthenticated ? (
-                    <>
-                        <div className="avatar-circle">
-                          {user?.avatar ? (
-                            <img 
-                              src={getAvatarUrl(user.avatar)}
-                              alt={user.username}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = getFallbackAvatarUrl(user.username);
-                              }}
-                            />
-                          ) : (
-                            <div className="avatar-fallback">
-                              {user?.username?.charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                        </div>
-                        <h3>Xin chào, {user?.name}</h3>
-                        <p>Level {user?.level || 1} • {user?.xpPoints || 0} XP</p>
-                        {user?.role === 'admin' && (
-                          <span className="user-role-badge">Admin</span>
-                        )}
-                    </>
-                ) : (
-                    <>
-                        <i className="fa-solid fa-user-astronaut icon-large"></i>
-                        <h3>Tham gia cộng đồng</h3>
-                        <p>Đăng nhập để tương tác và lưu bài viết hay.</p>
-                        <a href="/login" className="btn-sidebar-login">Đăng nhập ngay</a>
-                    </>
+        {/* === RIGHT CONTENT === */}
+        <div className="forum-content">
+          
+          {/* Hero Section - Đã chỉnh sửa: Xóa Stats, dời Button sang phải */}
+          <div className="forum-hero" style={{ padding: '30px 0', minHeight: 'auto' }}>
+            <div className="hero-overlay"></div>
+            <div className="hero-content container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div className="text-content">
+                <h1 className="hero-title">Cộng đồng TOEIC Việt Nam</h1>
+                <p className="hero-subtitle">
+                  Nơi chia sẻ kiến thức, kinh nghiệm và cùng nhau chinh phục mục tiêu 990+.
+                </p>
+              </div>
+              
+              {/* Vị trí mới của nút "Viết bài mới" - Thay thế cho phần Stats cũ */}
+              <div className="hero-actions">
+                {isAuthenticated && !showCreateForm && !currentPost && (
+                  <button 
+                    className="btn-hero-create"
+                    onClick={handleToggleCreateForm}
+                    style={{ margin: 0, whiteSpace: 'nowrap' }}
+                  >
+                    <i className="fa-solid fa-pen-nib"></i> Viết bài mới
+                  </button>
                 )}
-            </div>
-
-            {/* Thành viên tích cực (tất cả user) */}
-            <div className="sidebar-card active-members">
-                <div className="card-header">
-                  <h4><i className="fa-solid fa-users"></i> Thành viên tích cực</h4>
-                  <span className="member-count">{allUsers.length} thành viên</span>
-                </div>
-                
-                {usersLoading ? (
-                  <div className="users-loading">
-                    <div className="loading-spinner"></div>
-                    <p>Đang tải thành viên...</p>
-                  </div>
-                ) : allUsers.length === 0 ? (
-                  <div className="no-users">
-                    <i className="fa-solid fa-user-slash"></i>
-                    <p>Chưa có thành viên</p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="members-list">
-                      {allUsers.slice(0, 40).map((member) => renderMemberItem(member))}
-                    </div>
-                    
-                    {allUsers.length > 8 && (
-                      <div className="view-all-members">
-                        <button className="btn-view-all">
-                          <i className="fa-solid fa-angles-right"></i> Xem tất cả thành viên
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-            </div>
-
-            <div className="sidebar-card trending-tags">
-                <h4><i className="fa-solid fa-arrow-trend-up"></i> Chủ đề nổi bật</h4>
-                <div className="tags-cloud">
-                    <span className="tag">#Part5</span>
-                    <span className="tag">#Listening</span>
-                    <span className="tag">#NewEconomy</span>
-                    <span className="tag">#Tips</span>
-                    <span className="tag">#Grammar</span>
-                    <span className="tag">#Reading</span>
-                    <span className="tag">#Vocabulary</span>
-                    <span className="tag">#TestTaking</span>
-                </div>
-            </div>
-
-            <div className="sidebar-card quick-stats">
-                <h4><i className="fa-solid fa-chart-line"></i> Thống kê cộng đồng</h4>
-                <div className="stats-grid">
-                  <div className="stat-box">
-                    <span className="stat-number">{posts.length}</span>
-                    <span className="stat-label">Bài viết</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="stat-number">{allUsers.length}</span>
-                    <span className="stat-label">Thành viên</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="stat-number">{friends.length}</span>
-                    <span className="stat-label">Bạn bè</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="stat-number">99%</span>
-                    <span className="stat-label">Tích cực</span>
-                  </div>
-                </div>
+              </div>
             </div>
           </div>
 
-
-
-
-          {/* Cột trái: Form & Danh sách bài viết */}
-          <div className="main-feed">
-            <div className={`editor-collapse ${showCreateForm || currentPost ? 'open' : ''}`}>
-               {(currentPost && isAuthenticated) && (
-                <PostForm 
-                  onSubmit={handleUpdatePost}
-                  initialData={currentPost}
-                  onCancel={() => clearCurrentPost()}
-                  loading={loading}
-                  mode="edit"
-                />
-              )}
-
-              {(showCreateForm && !currentPost && isAuthenticated) && (
-                <PostForm 
-                  onSubmit={handleCreatePost}
-                  onCancel={() => setShowCreateForm(false)}
-                  loading={loading}
-                  mode="create"
-                />
-              )}
-            </div>
-
-            {loading && posts.length === 0 && (
-              <div className="loading-skeleton">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="skeleton-card">
-                    <div className="sk-header"><div className="sk-avatar"></div><div className="sk-name"></div></div>
-                    <div className="sk-body"></div>
-                  </div>
-                ))}
+          <div className="forum-container container">
+            {error && (
+              <div className="alert-floating">
+                <i className="fa-solid fa-triangle-exclamation"></i>
+                <span>{error}</span>
+                <button onClick={clearError}><i className="fa-solid fa-xmark"></i></button>
               </div>
             )}
 
-            <div className="posts-stream">
-              {!loading && posts.length === 0 ? (
-                <div className="empty-state-modern">
-                  <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png" alt="Empty" />
-                  <h3>Chưa có bài viết nào</h3>
-                  <p>Hãy trở thành người đầu tiên chia sẻ kiến thức!</p>
-                </div>
-              ) : (
-                posts.map(post => (
-                  <PostItem
-                    key={post._id}
-                    post={post}
-                    onDelete={handleDeletePost}
-                    onLike={async (id) => { await likePost(id); loadPosts(); }}
-                    onComment={async (id, cmt) => { await commentPost(id, cmt); loadPosts(); }}
-                    onEdit={(p) => { setPostForEdit(p); setShowCreateForm(false); window.scrollTo({top: 400, behavior: 'smooth'}); }}
-                    showActions={isAuthenticated}
-                  />
-                ))
-              )}
-            </div>
-            
-             {posts.length > 0 && posts.length % 10 === 0 && (
-                <button className="btn-load-more-modern" onClick={loadPosts} disabled={loading}>
-                  {loading ? 'Đang tải...' : 'Xem thêm bài viết cũ hơn'}
-                </button>
-             )}
-          </div>
+            <div className="forum-layout">
+              {/* Cột giữa (Main Feed) - Scroll Riêng */}
+              <div className="main-feed">
+                <div className={`editor-collapse ${showCreateForm || currentPost ? 'open' : ''}`}>
+                   {(currentPost && isAuthenticated) && (
+                    <PostForm 
+                      onSubmit={handleUpdatePost}
+                      initialData={currentPost}
+                      onCancel={() => clearCurrentPost()}
+                      loading={loading}
+                      mode="edit"
+                    />
+                  )}
 
-       
-
-          {/* Cột phải: Sidebar - Danh sách bạn bè */}
-          <div className="sidebar-right">
-            <div className="sidebar-card friends-list">
-                <div className="card-header">
-                  <h4><i className="fa-solid fa-user-friends"></i> Bạn bè</h4>
-                  <span className="member-count">{friends.length} bạn bè</span>
-                </div>
-                
-                {friendsLoading ? (
-                  <div className="users-loading">
-                    <div className="loading-spinner"></div>
-                    <p>Đang tải bạn bè...</p>
-                  </div>
-                ) : friends.length === 0 ? (
-                  <div className="no-friends">
-                    <i className="fa-solid fa-user-plus"></i>
-                    <p>Chưa có bạn bè</p>
-                    <small>Hãy kết bạn với các thành viên khác!</small>
-                  </div>
-                ) : (
-                  <>
-                    <div className="members-list">
-                      {friends.slice(0, 10).map((friend) => renderMemberItem(friend))}
-                    </div>
-                    
-                    {friends.length > 10 && (
-                      <div className="view-all-members">
-                        <button className="btn-view-all" onClick={() => toast.info('Xem tất cả bạn bè')}>
-                          <i className="fa-solid fa-angles-right"></i> Xem tất cả bạn bè
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-            </div>
-
-            {/* Có thể thêm các widget khác cho sidebar phải */}
-            <div className="sidebar-card online-friends">
-                <h4><i className="fa-solid fa-circle text-success"></i> Bạn bè đang online</h4>
-                <div className="online-list">
-                  {friends.length > 0 ? (
-                    friends.slice(0, 3).map((friend) => (
-                      <div key={friend._id} className="online-item">
-                        <div className="online-avatar">
-                          <img 
-                            src={getAvatarUrl(friend.avatar) || getFallbackAvatarUrl(friend.name)}
-                            alt={friend.name}
-                          />
-                          <span className="online-dot"></span>
-                        </div>
-                        <span className="online-name">{friend.name}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-muted small">Chưa có bạn bè online</p>
+                  {(showCreateForm && !currentPost && isAuthenticated) && (
+                    <PostForm 
+                      onSubmit={handleCreatePost}
+                      onCancel={() => setShowCreateForm(false)}
+                      loading={loading}
+                      mode="create"
+                    />
                   )}
                 </div>
+
+                <div className="posts-stream">
+                  {loading && posts.length === 0 && (
+                    <div className="loading-skeleton">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="skeleton-card">
+                          <div className="sk-header"><div className="sk-avatar"></div><div className="sk-name"></div></div>
+                          <div className="sk-body"></div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {!loading && posts.length === 0 ? (
+                    <div className="empty-state-modern">
+                      <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png" alt="Empty" />
+                      <h3>Chưa có bài viết nào</h3>
+                      <p>Hãy trở thành người đầu tiên chia sẻ kiến thức!</p>
+                    </div>
+                  ) : (
+                    posts.map(post => (
+                      <PostItem
+                        key={post._id}
+                        post={post}
+                        onDelete={handleDeletePost}
+                        onLike={async (id) => { await likePost(id); loadPosts(); }}
+                        onComment={async (id, cmt) => { await commentPost(id, cmt); loadPosts(); }}
+                        onEdit={(p) => { setPostForEdit(p); setShowCreateForm(false); }}
+                        showActions={isAuthenticated}
+                      />
+                    ))
+                  )}
+                </div>
+                
+                 {posts.length > 0 && posts.length % 10 === 0 && (
+                    <button className="btn-load-more-modern" onClick={loadPosts} disabled={loading}>
+                      {loading ? 'Đang tải...' : 'Xem thêm bài viết cũ hơn'}
+                    </button>
+                 )}
+              </div>
+
+              {/* Cột phải (Sidebar 2) - Scroll Riêng */}
+              <div className="sidebar-right">
+                <div className="sidebar-card friends-list">
+                  <div className="card-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <h4><i className="fa-solid fa-user-friends"></i> Bạn bè</h4>
+                    
+                    {/* --- HEADER ACTIONS CHỨA NÚT THÔNG BÁO VÀ POPUP --- */}
+                    <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative' }}>
+                      <span className="member-count" style={{ fontSize: '0.85rem', color: '#6B7280' }}>
+                        {friends.length}
+                      </span>
+                      
+                      {/* NÚT CHUÔNG */}
+                      <button 
+                        className={`btn-fb-notify ${showNotifications ? 'active' : ''}`}
+                        onClick={() => setShowNotifications(!showNotifications)}
+                        title="Lời mời kết bạn"
+                      >
+                        <i className="fa-solid fa-bell"></i>
+                        {friendRequests.length > 0 && (
+                          <span className="notify-badge">{friendRequests.length}</span>
+                        )}
+                      </button>
+
+                      {/* POPUP HIỂN THỊ DANH SÁCH LỜI MỜI */}
+                      {showNotifications && (
+                        <div className="notifications-dropdown">
+                          <div className="notify-header">
+                            <h5>Lời mời kết bạn</h5>
+                            <span className="req-count">{friendRequests.length}</span>
+                          </div>
+                          
+                          <div className="notify-body">
+                            {friendRequests.length > 0 ? (
+                              friendRequests.map(req => (
+                                <div key={req._id} className="request-item">
+                                  <div className="req-avatar">
+                                    <img 
+                                      src={getAvatarUrl(req.avatar) || getFallbackAvatarUrl(req.name)} 
+                                      alt={req.name} 
+                                    />
+                                  </div>
+                                  <div className="req-info">
+                                    <span className="req-name">{req.name}</span>
+                                    <span className="req-mutual">{req.mutual} bạn chung</span>
+                                    <div className="req-actions">
+                                      <button 
+                                        className="btn-confirm"
+                                        onClick={() => handleAcceptRequest(req._id)}
+                                      >
+                                        Xác nhận
+                                      </button>
+                                      <button 
+                                        className="btn-delete"
+                                        onClick={() => handleDeclineRequest(req._id)}
+                                      >
+                                        Xóa
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="empty-notify">
+                                <i className="fa-regular fa-bell-slash"></i>
+                                <p>Không có lời mời nào</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                    
+                  {friendsLoading ? (
+                    <div className="users-loading">
+                      <div className="loading-spinner"></div>
+                      <p>Đang tải bạn bè...</p>
+                    </div>
+                  ) : friends.length === 0 ? (
+                    <div className="no-friends">
+                      <i className="fa-solid fa-user-plus"></i>
+                      <p>Chưa có bạn bè</p>
+                      <small>Hãy kết bạn với các thành viên khác!</small>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="members-list">
+                        {friends.slice(0, 10).map((friend) => renderMemberItem(friend))}
+                      </div>
+                      
+                      {friends.length > 10 && (
+                        <div className="view-all-members">
+                          <button className="btn-view-all" onClick={() => toast.info('Xem tất cả bạn bè')}>
+                            <i className="fa-solid fa-angles-right"></i> Xem tất cả bạn bè
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <div className="sidebar-card online-friends">
+                    <h4><i className="fa-solid fa-circle text-success"></i> Bạn bè đang online</h4>
+                    <div className="online-list">
+                      {friends.length > 0 ? (
+                        friends.slice(0, 3).map((friend) => (
+                          <div key={friend._id} className="online-item">
+                            <div className="online-avatar">
+                              <img 
+                                src={getAvatarUrl(friend.avatar) || getFallbackAvatarUrl(friend.name)}
+                                alt={friend.name}
+                              />
+                              <span className="online-dot"></span>
+                            </div>
+                            <span className="online-name">{friend.name}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-muted small">Chưa có bạn bè online</p>
+                      )}
+                    </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 // src/components/Forum/PostForm.jsx
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import './Forum.scss';
+import './PostForm.scss'; // Import style riêng của form
 
 const PostForm = ({ 
   onSubmit, 

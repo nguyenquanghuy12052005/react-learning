@@ -4,7 +4,7 @@ import VocabModal from './VocabModal';
 import vocabData from '../../data/toeic_vocab.json';
 import './Vocab.scss';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12;
 
 const VocabPage = () => {
   const [selectedWord, setSelectedWord] = useState(null);

@@ -3,6 +3,9 @@ import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
 import "./ChatApp.scss";
 
+// Import Header
+import Header from "../../Header/Header";
+
 import { useAuth } from "../../../hooks/useAuth";
 import chatService from "../../../services/chatService";
 
@@ -68,7 +71,7 @@ const ChatApp = () => {
     setSelectedChat(chat || null);
   };
 
-  // reload chat sau khi gửi
+  // HÀM RELOAD CHAT SAU KHI GỬI
   const handleMessageSent = useCallback(async () => {
     await loadChats();
   }, [loadChats]);
@@ -94,24 +97,39 @@ const ChatApp = () => {
   }, [isAuthenticated, loadFriends, loadChats]);
 
   if (!isAuthenticated) {
-    return <div className="chat-empty">Vui lòng đăng nhập để chat 💬</div>;
+    return (
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
+        <div className="chat-empty" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          Vui lòng đăng nhập để chat 💬
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="chat-app">
-      <ChatList
-        users={friends}
-        loading={friendsLoading}
-        selectedUser={selectedFriend}
-        onSelect={handleSelectFriend}
-      />
+    // Bọc trong container column để Header luôn ở trên
+    <div className="chat-page-wrapper" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      
+      {/* Header nằm ở trên cùng */}
+      <Header />
 
-      <ChatWindow
-        friend={selectedFriend}
-        chat={selectedChat}
-        currentUserId={user.userId}
-        onMessageSent={handleMessageSent}
-      />
+      {/* Phần ChatApp chiếm toàn bộ không gian còn lại */}
+      <div className="chat-app" style={{ flex: 1, overflow: 'hidden' }}>
+        <ChatList
+          users={friends}
+          loading={friendsLoading}
+          selectedUser={selectedFriend}
+          onSelect={handleSelectFriend}
+        />
+
+        <ChatWindow
+          friend={selectedFriend}
+          chat={selectedChat}
+          currentUserId={user.userId}
+          onMessageSent={handleMessageSent}
+        />
+      </div>
     </div>
   );
 };
