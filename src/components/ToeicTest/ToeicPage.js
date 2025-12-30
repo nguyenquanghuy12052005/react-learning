@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../Header/Header'; // Import Header
 import './ToeicPage.scss';
-// Thêm FaArrowLeft vào danh sách import
 import { 
   FaHeadphones, FaBookOpen, FaPen, FaMicrophone, 
   FaClipboardList, FaImage, FaComments, FaQuestionCircle,
@@ -25,7 +25,6 @@ const ToeicPage = () => {
   };
 
   const toeicData = [
-    // ... (Giữ nguyên dữ liệu của bạn)
     {
       title: "Luyện Nghe",
       items: [
@@ -62,6 +61,9 @@ const ToeicPage = () => {
 
   return (
     <div className="toeic-page">
+      {/* Thêm Header vào đây */}
+      <Header />
+
       <div className="toeic-container">
         
         {/* --- NÚT QUAY LẠI --- */}

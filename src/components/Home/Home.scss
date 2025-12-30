@@ -193,8 +193,14 @@ $shadow-accent: rgba(255, 221, 174, 0.6);
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    // Thay đổi từ auto-fit sang repeat(2, 1fr) để ép cứng 2 cột
+    grid-template-columns: repeat(2, 1fr); 
     gap: 40px;
+
+    // Đảm bảo trên điện thoại sẽ tự động về 1 cột để không bị vỡ giao diện
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 

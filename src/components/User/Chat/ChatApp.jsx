@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
+import { FaArrowLeft } from "react-icons/fa"; // Import icon mũi tên
 import "./ChatApp.scss";
-
-// Import Header
-import Header from "../../Header/Header";
 
 import { useAuth } from "../../../hooks/useAuth";
 import chatService from "../../../services/chatService";
 
 const ChatApp = () => {
   const { user, isAuthenticated, getFriend } = useAuth();
+  const navigate = useNavigate(); // Hook điều hướng
 
   const [friends, setFriends] = useState([]);
   const [friendsLoading, setFriendsLoading] = useState(false);
@@ -96,11 +96,21 @@ const ChatApp = () => {
     }
   }, [isAuthenticated, loadFriends, loadChats]);
 
+  // Handle quay lại
+  const handleGoBack = () => {
+    navigate("/userprofile");
+  };
+
   if (!isAuthenticated) {
     return (
-      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Header />
-        <div className="chat-empty" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#18191a' }}>
+        {/* Nút Back cho trường hợp chưa đăng nhập */}
+        <div className="nav-header">
+            <button className="btn-back" onClick={handleGoBack}>
+                <FaArrowLeft className="icon" /> Quay lại hồ sơ
+            </button>
+        </div>
+        <div className="chat-empty" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
           Vui lòng đăng nhập để chat 💬
         </div>
       </div>
@@ -108,11 +118,15 @@ const ChatApp = () => {
   }
 
   return (
-    // Bọc trong container column để Header luôn ở trên
+    // Bọc trong container column
     <div className="chat-page-wrapper" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       
-      {/* Header nằm ở trên cùng */}
-      <Header />
+      {/* Thay Header bằng thanh điều hướng chứa nút Back */}
+      <div className="nav-header">
+        <button className="btn-back" onClick={handleGoBack}>
+            <FaArrowLeft className="icon" /> Quay lại hồ sơ
+        </button>
+      </div>
 
       {/* Phần ChatApp chiếm toàn bộ không gian còn lại */}
       <div className="chat-app" style={{ flex: 1, overflow: 'hidden' }}>

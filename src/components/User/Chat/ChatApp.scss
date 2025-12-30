@@ -1,22 +1,59 @@
+/* ==========================
+   🔙 Navigation Header (Mới)
+   ========================== */
+.nav-header {
+  background: #1f2024; // Màu nền trùng với Chat List
+  padding: 15px 20px;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+
+  .btn-back {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid rgba(255, 204, 153, 0.3);
+    color: #ffcc99;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+
+    .icon {
+      font-size: 14px;
+    }
+
+    &:hover {
+      background: rgba(255, 204, 153, 0.1);
+      border-color: #ffcc99;
+      transform: translateX(-3px); // Hiệu ứng lùi nhẹ
+    }
+  }
+}
 
 /* ==========================
    💬 ChatApp Layout
    ========================== */
 .chat-app {
   display: flex;
-  height: 100vh;
+  // height: 100vh; // Xóa dòng này vì chiều cao đã được handle bởi flex container cha
   background: #18191a;
   color: #fff;
   overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  // border-radius: 15px; // Bỏ bo góc để liền mạch với nav bar
+  // box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); // Có thể bỏ bóng đổ nếu muốn full màn hình
   font-family: 'Poppins', sans-serif;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    height: 100vh;
+    // height: 100vh;
   }
 }
+
 /* ==========================
    📝 Chat List (trái)
    ========================== */
@@ -171,8 +208,8 @@
   display: flex;
   flex-direction: column;
   background: radial-gradient(circle at top left, #4b003d, #1a001a);
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+//   border-top-right-radius: 15px; // Xóa bo góc để full màn
+//   border-bottom-right-radius: 15px;
   overflow: hidden;
   position: relative;
 
@@ -239,91 +276,92 @@
   }
 
   /* ==========================
-   🚀 Chat Footer (Redesigned)
-   ========================== */
-.chat-footer {
-  display: flex;
-  align-items: center;
-  padding: 15px 20px;
-  background: rgba(30, 32, 36, 0.95); // Nền tối mờ nhẹ
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  gap: 15px; // Khoảng cách giữa input và nút
-  position: relative;
-  z-index: 10;
-
-  // Ô nhập liệu
-  .chat-input {
-    flex: 1;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 30px; // Bo tròn viên thuốc
-    padding: 14px 20px;
-    background: #2d2f31;
-    color: #fff;
-    outline: none;
-    font-size: 15px;
-    font-family: inherit;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &::placeholder {
-      color: #aaa;
-    }
-
-    &:focus {
-      background: #3a3b3c;
-      border-color: #ff5ebc; // Viền hồng khi focus
-      box-shadow: 0 0 0 3px rgba(255, 94, 188, 0.15); // Glow nhẹ quanh input
-    }
-  }
-
-  // Nút gửi (Tâm điểm)
-  .send-btn {
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 50%;
-    
-    // Gradient màu thương hiệu
-    background: linear-gradient(135deg, #ff9966, #ff5ebc);
-    color: white;
-    
+    🚀 Chat Footer (Redesigned)
+    ========================== */
+  .chat-footer {
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    
-    // Hiệu ứng bóng đổ màu (Glow)
-    box-shadow: 0 4px 15px rgba(255, 94, 188, 0.4);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Hiệu ứng nảy
+    padding: 15px 20px;
+    background: rgba(30, 32, 36, 0.95); // Nền tối mờ nhẹ
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 15px; // Khoảng cách giữa input và nút
+    position: relative;
+    z-index: 10;
 
-    svg {
-      margin-left: 3px; // Căn chỉnh icon máy bay cho cân giữa mắt
-      transition: transform 0.3s ease;
-    }
+    // Ô nhập liệu
+    .chat-input {
+      flex: 1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px; // Bo tròn viên thuốc
+      padding: 14px 20px;
+      background: #2d2f31;
+      color: #fff;
+      outline: none;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    // Trạng thái Hover
-    &:hover:not(:disabled) {
-      transform: scale(1.1) rotate(-5deg); // Phóng to và xoay nhẹ
-      box-shadow: 0 8px 25px rgba(255, 94, 188, 0.6); // Bóng đổ mạnh hơn
-      
-      svg {
-        transform: translate(2px, -2px); // Icon bay lên một chút
+      &::placeholder {
+        color: #aaa;
+      }
+
+      &:focus {
+        background: #3a3b3c;
+        border-color: #ff5ebc; // Viền hồng khi focus
+        box-shadow: 0 0 0 3px rgba(255, 94, 188, 0.15); // Glow nhẹ quanh input
       }
     }
 
-    // Trạng thái Click
-    &:active:not(:disabled) {
-      transform: scale(0.95);
-      box-shadow: 0 2px 8px rgba(255, 94, 188, 0.4);
-    }
+    // Nút gửi (Tâm điểm)
+    .send-btn {
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      
+      // Gradient màu thương hiệu
+      background: linear-gradient(135deg, #ff9966, #ff5ebc);
+      color: white;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      
+      // Hiệu ứng bóng đổ màu (Glow)
+      box-shadow: 0 4px 15px rgba(255, 94, 188, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Hiệu ứng nảy
 
-    // Trạng thái Disabled (Khi ô input trống)
-    &:disabled {
-      background: #3a3b3c;
-      color: #666;
-      box-shadow: none;
-      cursor: default;
-      opacity: 0.7;
-      transform: none;
+      svg {
+        margin-left: 3px; // Căn chỉnh icon máy bay cho cân giữa mắt
+        transition: transform 0.3s ease;
+      }
+
+      // Trạng thái Hover
+      &:hover:not(:disabled) {
+        transform: scale(1.1) rotate(-5deg); // Phóng to và xoay nhẹ
+        box-shadow: 0 8px 25px rgba(255, 94, 188, 0.6); // Bóng đổ mạnh hơn
+        
+        svg {
+          transform: translate(2px, -2px); // Icon bay lên một chút
+        }
+      }
+
+      // Trạng thái Click
+      &:active:not(:disabled) {
+        transform: scale(0.95);
+        box-shadow: 0 2px 8px rgba(255, 94, 188, 0.4);
+      }
+
+      // Trạng thái Disabled (Khi ô input trống)
+      &:disabled {
+        background: #3a3b3c;
+        color: #666;
+        box-shadow: none;
+        cursor: default;
+        opacity: 0.7;
+        transform: none;
+      }
     }
   }
 }
@@ -341,5 +379,4 @@
   .chat-window {
     border-radius: 0;
   }
-}
 }

@@ -119,11 +119,35 @@ $border-color: #333;
 
 .exam-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; // Đổi thành start để nút back nằm cạnh
   align-items: center;
+  gap: 20px; // Khoảng cách giữa nút back và title
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid $border-color;
+
+  // Style cho nút Back
+  .btn-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: $accent-color;
+        color: white;
+        border-color: $accent-color;
+        transform: translateX(-3px); // Hiệu ứng lùi nhẹ
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+  }
 
   .header-info {
     h1 {
