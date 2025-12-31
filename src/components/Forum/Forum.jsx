@@ -5,12 +5,14 @@ import PostForm from './PostForm.jsx';
 import PostItem from './PostItem.jsx';
 import { useAuth } from '../../hooks/useAuth';
 import { usePost } from '../../hooks/usePost';
+import { useSocket } from '../../contexts/SocketContext';
 import { toast } from 'react-toastify';
 import './Forum.scss';
 import UserModal from './UserModal.jsx';
 
 const Forum = () => {
-  const { user, isAuthenticated, getAllUser, getFriend } = useAuth();
+  const { user, isAuthenticated, getAllUser, getFriend, getPendingFriendRequests, acceptFriendRequest, rejectFriendRequest } = useAuth();
+  const { socket, connected } = useSocket();
   const { 
     posts, loading, error, currentPost,
     getAllPosts, createPost, updatePost, deletePost, likePost, commentPost,
@@ -28,6 +30,7 @@ const Forum = () => {
   // --- STATE MỚI CHO THÔNG BÁO ---
   const [showNotifications, setShowNotifications] = useState(false);
   const [friendRequests, setFriendRequests] = useState([]);
+  const [requestsLoading, setRequestsLoading] = useState(false);
 
   // --- STATE MỚI: QUẢN LÝ VIỆC MỞ RỘNG DANH SÁCH THÀNH VIÊN ---
   const [isMembersExpanded, setIsMembersExpanded] = useState(false);
@@ -39,14 +42,112 @@ const Forum = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Giả lập load lời mời kết bạn (thay bằng API thật của bạn sau này)
+  // 🔥 LOAD LỜI MỜI KẾT BẠN TỪ API
+  const loadPendingRequests = useCallback(async () => {
+    if (!isAuthenticated) return;
+    
+    try {
+      setRequestsLoading(true);
+      const result = await getPendingFriendRequests();
+      
+      if (result.success && result.data) {
+        setFriendRequests(result.data);
+      } else {
+        setFriendRequests([]);
+      }
+    } catch (error) {
+      console.error('Lỗi khi load friend requests:', error);
+      setFriendRequests([]);
+    } finally {
+      setRequestsLoading(false);
+    }
+  }, [isAuthenticated, getPendingFriendRequests]);
+
+
+
+    const loadFriends = useCallback(async () => {
+    try {
+      setFriendsLoading(true);
+      const result = await getFriend();
+      
+      if (result.success && result.data) {
+        setFriends(result.data);
+      } else {
+        console.error('Lỗi khi load friends:', result.error);
+        setFriends([]);
+      }
+    } catch (error) {
+      console.error('Lỗi khi load friends:', error);
+      toast.error('Không thể tải danh sách bạn bè');
+      setFriends([]);
+    } finally {
+      setFriendsLoading(false);
+    }
+  }, [getFriend]);
+
+  // 🔥 LẮNG NGHE SOCKET EVENTS CHO FRIEND REQUESTS
   useEffect(() => {
-    setFriendRequests([
-      { _id: 'req1', name: 'Nguyễn Văn A', avatar: null, mutual: 2 },
-      { _id: 'req2', name: 'Trần Thị B', avatar: null, mutual: 5 },
-      { _id: 'req3', name: 'Lê Hoàng C', avatar: null, mutual: 0 },
-    ]);
-  }, []);
+    if (!socket || !connected || !isAuthenticated || !user?.userId) return;
+
+    // Khi nhận được lời mời kết bạn mới
+    const handleFriendRequestReceived = (data) => {
+      console.log('🔔 Nhận được lời mời kết bạn:', data);
+      
+      // Thêm vào danh sách requests
+      setFriendRequests(prev => [data, ...prev]);
+      
+      // Hiển thị toast notification
+      toast.info(`${data.senderName} đã gửi lời mời kết bạn`);
+    };
+
+    // Khi lời mời được chấp nhận
+    const handleFriendRequestAccepted = (data) => {
+      console.log('✅ Lời mời kết bạn được chấp nhận:', data);
+      toast.success(`${data.name} đã chấp nhận lời mời kết bạn của bạn!`);
+      
+      // Reload danh sách bạn bè
+      loadFriends();
+    };
+
+    // Khi lời mời bị từ chối
+    const handleFriendRequestRejected = (data) => {
+      console.log('❌ Lời mời kết bạn bị từ chối:', data);
+      // Có thể hiển thị thông báo nếu cần
+    };
+
+    // Khi lời mời bị hủy
+    const handleFriendRequestCancelled = (data) => {
+      console.log('🚫 Lời mời kết bạn bị hủy:', data);
+      
+      // Xóa khỏi danh sách requests
+      setFriendRequests(prev => prev.filter(req => req._id !== data.requestId));
+    };
+
+    // Khi bị xóa khỏi danh sách bạn bè
+    const handleFriendRemoved = (data) => {
+      console.log('💔 Bị xóa khỏi danh sách bạn bè:', data);
+      toast.warning('Bạn đã bị xóa khỏi danh sách bạn bè');
+      
+      // Reload danh sách bạn bè
+      loadFriends();
+    };
+
+    // Đăng ký listeners
+    socket.on('friend:request:received', handleFriendRequestReceived);
+    socket.on('friend:request:accepted', handleFriendRequestAccepted);
+    socket.on('friend:request:rejected', handleFriendRequestRejected);
+    socket.on('friend:request:cancelled', handleFriendRequestCancelled);
+    socket.on('friend:removed', handleFriendRemoved);
+
+    // Cleanup
+    return () => {
+      socket.off('friend:request:received', handleFriendRequestReceived);
+      socket.off('friend:request:accepted', handleFriendRequestAccepted);
+      socket.off('friend:request:rejected', handleFriendRequestRejected);
+      socket.off('friend:request:cancelled', handleFriendRequestCancelled);
+      socket.off('friend:removed', handleFriendRemoved);
+    };
+  }, [socket, connected, isAuthenticated, loadFriends]);
 
   const loadPosts = useCallback(async () => {
     const result = await getAllPosts();
@@ -71,31 +172,14 @@ const Forum = () => {
     }
   }, [getAllUser]);
 
-  const loadFriends = useCallback(async () => {
-    try {
-      setFriendsLoading(true);
-      const result = await getFriend();
-      
-      if (result.success && result.data) {
-        setFriends(result.data);
-      } else {
-        console.error('Lỗi khi load friends:', result.error);
-        setFriends([]);
-      }
-    } catch (error) {
-      console.error('Lỗi khi load friends:', error);
-      toast.error('Không thể tải danh sách bạn bè');
-      setFriends([]);
-    } finally {
-      setFriendsLoading(false);
-    }
-  }, [getFriend]);
+
 
   useEffect(() => {
     loadPosts();
     loadUsers();
     loadFriends();
-  }, [loadPosts, loadUsers, loadFriends]);
+    loadPendingRequests();
+  }, [loadPosts, loadUsers, loadFriends, loadPendingRequests]);
 
   useEffect(() => {
     if (error) {
@@ -143,15 +227,43 @@ const Forum = () => {
   };
 
   // --- HÀM XỬ LÝ LỜI MỜI KẾT BẠN ---
-  const handleAcceptRequest = (id) => {
-    toast.success('Đã chấp nhận lời mời!');
-    setFriendRequests(prev => prev.filter(req => req._id !== id));
-    // TODO: Gọi API accept friend ở đây
+  const handleAcceptRequest = async (requestId) => {
+    try {
+      const result = await acceptFriendRequest(requestId);
+      
+      if (result.success) {
+        toast.success('Đã chấp nhận lời mời!');
+        
+        // Xóa khỏi danh sách requests
+        setFriendRequests(prev => prev.filter(req => req._id !== requestId));
+        
+        // Reload danh sách bạn bè
+        loadFriends();
+      } else {
+        toast.error(result.error || 'Không thể chấp nhận lời mời');
+      }
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+      toast.error('Có lỗi xảy ra');
+    }
   };
 
-  const handleDeclineRequest = (id) => {
-    setFriendRequests(prev => prev.filter(req => req._id !== id));
-    // TODO: Gọi API decline friend ở đây
+  const handleDeclineRequest = async (requestId) => {
+    try {
+      const result = await rejectFriendRequest(requestId);
+      
+      if (result.success) {
+        toast.info('Đã từ chối lời mời');
+        
+        // Xóa khỏi danh sách requests
+        setFriendRequests(prev => prev.filter(req => req._id !== requestId));
+      } else {
+        toast.error(result.error || 'Không thể từ chối lời mời');
+      }
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+      toast.error('Có lỗi xảy ra');
+    }
   };
 
   const getAvatarUrl = useCallback((avatar) => {
@@ -365,7 +477,7 @@ const Forum = () => {
         {/* === RIGHT CONTENT === */}
         <div className="forum-content">
           
-          {/* Hero Section - Đã chỉnh sửa: Xóa Stats, dời Button sang phải */}
+          {/* Hero Section */}
           <div className="forum-hero" style={{ padding: '30px 0', minHeight: 'auto' }}>
             <div className="hero-overlay"></div>
             <div className="hero-content container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -376,7 +488,6 @@ const Forum = () => {
                 </p>
               </div>
               
-              {/* Vị trí mới của nút "Viết bài mới" - Thay thế cho phần Stats cũ */}
               <div className="hero-actions">
                 {isAuthenticated && !showCreateForm && !currentPost && (
                   <button 
@@ -401,7 +512,7 @@ const Forum = () => {
             )}
 
             <div className="forum-layout">
-              {/* Cột giữa (Main Feed) - Scroll Riêng */}
+              {/* Cột giữa (Main Feed) */}
               <div className="main-feed">
                 <div className={`editor-collapse ${showCreateForm || currentPost ? 'open' : ''}`}>
                    {(currentPost && isAuthenticated) && (
@@ -464,7 +575,7 @@ const Forum = () => {
                  )}
               </div>
 
-              {/* Cột phải (Sidebar 2) - Scroll Riêng */}
+              {/* Cột phải (Sidebar 2) */}
               <div className="sidebar-right">
                 <div className="sidebar-card friends-list">
                   <div className="card-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -497,7 +608,12 @@ const Forum = () => {
                           </div>
                           
                           <div className="notify-body">
-                            {friendRequests.length > 0 ? (
+                            {requestsLoading ? (
+                              <div className="loading-notify">
+                                <div className="loading-spinner"></div>
+                                <p>Đang tải...</p>
+                              </div>
+                            ) : friendRequests.length > 0 ? (
                               friendRequests.map(req => (
                                 <div key={req._id} className="request-item">
                                   <div className="req-avatar">

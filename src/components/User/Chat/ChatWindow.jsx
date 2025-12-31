@@ -43,9 +43,18 @@ const ChatWindow = ({ chat, friend, currentUserId, onMessageSent }) => {
 
   return (
     <div className="chat-window">
-      <div className="chat-header">
-        <h3>{friend.name}</h3>
-      </div>
+    <div className="chat-header">
+  <div className={`header-avatar-wrapper ${friend.isOnline ? "online" : ""}`}>
+    <img
+      src={friend.avatar}
+      alt={friend.name}
+      className="header-avatar"
+    />
+  </div>
+
+  <h3>{friend.name}</h3>
+</div>
+
 
       <div className="chat-body" ref={chatBodyRef}>
         {sortedMessages.map((m) => (

@@ -85,6 +85,7 @@ import CreateQuizPart5 from './components/Admin/Content/Quiz/CreateQuizPart5';
 import CreateQuizPart6 from './components/Admin/Content/Quiz/CreateQuizPart6';
 import CreateQuizPart7 from './components/Admin/Content/Quiz/CreateQuizPart7';
 import CreateFullTest from './components/Admin/Content/Quiz/CreateFullTest';
+import { SocketProvider } from './contexts/SocketContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -94,6 +95,7 @@ root.render(
       <PostProvider>
         <VocProvider>
           <ChatProvider>
+            <SocketProvider>
             <React.StrictMode>
               <BrowserRouter>
                 <Routes>
@@ -190,6 +192,7 @@ root.render(
 
               <ToastContainer position="top-right" autoClose={3000} />
             </React.StrictMode>
+            </SocketProvider>
           </ChatProvider>
         </VocProvider>
       </PostProvider>

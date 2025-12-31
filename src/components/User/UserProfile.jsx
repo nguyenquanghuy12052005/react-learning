@@ -8,6 +8,17 @@ import "./UserProfile.scss";
 export default function UserProfile() {
   const { user, updateProfile } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (!user) {
+    return (
+      <div className="userprofile-page">
+        <SideBar active="Tài khoản" />
+        <main className="main-content">
+          <p>Đang tải dữ liệu người dùng...</p>
+        </main>
+      </div>
+    );
+  }
  
   const handleUpdateProfile = async (updateData) => {
     const result = await updateProfile(updateData);

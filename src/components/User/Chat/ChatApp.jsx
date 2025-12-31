@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
-import { FaArrowLeft } from "react-icons/fa"; // Import icon mũi tên
+import { FaArrowLeft } from "react-icons/fa";
 import "./ChatApp.scss";
 
 import { useAuth } from "../../../hooks/useAuth";
+import { useSocket } from "../../../contexts/SocketContext"; 
 import chatService from "../../../services/chatService";
 
 const ChatApp = () => {
   const { user, isAuthenticated, getFriend } = useAuth();
-  const navigate = useNavigate(); // Hook điều hướng
+  const { connected, onlineUsers } = useSocket(); // Lấy thông tin socket
+  const navigate = useNavigate();
 
   const [friends, setFriends] = useState([]);
   const [friendsLoading, setFriendsLoading] = useState(false);
@@ -18,7 +20,6 @@ const ChatApp = () => {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   
-  // Ref để lưu interval ID
   const pollingIntervalRef = useRef(null);
 
   const loadFriends = useCallback(async () => {
@@ -27,7 +28,12 @@ const ChatApp = () => {
       const result = await getFriend();
 
       if (result.success && Array.isArray(result.data)) {
-        setFriends(result.data);
+        //  Gắn trạng thái online cho từng friend
+        const friendsWithStatus = result.data.map(friend => ({
+          ...friend,
+          isOnline: onlineUsers.includes(friend.userId)
+        }));
+        setFriends(friendsWithStatus);
       } else {
         setFriends([]);
       }
@@ -37,14 +43,24 @@ const ChatApp = () => {
     } finally {
       setFriendsLoading(false);
     }
-  }, [getFriend]);
+  }, [getFriend, onlineUsers]);
+
+  //  Reload friends khi danh sách online thay đổi
+  useEffect(() => {
+    if (friends.length > 0) {
+      const updatedFriends = friends.map(friend => ({
+        ...friend,
+        isOnline: onlineUsers.includes(friend.userId)
+      }));
+      setFriends(updatedFriends);
+    }
+  }, [onlineUsers]);
 
   const loadChats = useCallback(async () => {
     try {
       const data = await chatService.getChats();
       setChats(Array.isArray(data) ? data : []);
       
-      // Cập nhật selectedChat nếu đang chọn friend
       if (selectedFriend) {
         const updatedChat = (Array.isArray(data) ? data : []).find(
           (c) =>
@@ -71,23 +87,19 @@ const ChatApp = () => {
     setSelectedChat(chat || null);
   };
 
-  // HÀM RELOAD CHAT SAU KHI GỬI
   const handleMessageSent = useCallback(async () => {
     await loadChats();
   }, [loadChats]);
 
-  // SETUP POLLING - Tự động reload chat mỗi 3 giây
   useEffect(() => {
     if (isAuthenticated) {
       loadFriends();
       loadChats();
 
-      // Bắt đầu polling
       pollingIntervalRef.current = setInterval(() => {
         loadChats();
-      }, 3000); // Reload mỗi 3 giây
+      }, 3000);
 
-      // Cleanup khi unmount
       return () => {
         if (pollingIntervalRef.current) {
           clearInterval(pollingIntervalRef.current);
@@ -96,7 +108,6 @@ const ChatApp = () => {
     }
   }, [isAuthenticated, loadFriends, loadChats]);
 
-  // Handle quay lại
   const handleGoBack = () => {
     navigate("/userprofile");
   };
@@ -104,11 +115,10 @@ const ChatApp = () => {
   if (!isAuthenticated) {
     return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#18191a' }}>
-        {/* Nút Back cho trường hợp chưa đăng nhập */}
         <div className="nav-header">
-            <button className="btn-back" onClick={handleGoBack}>
-                <FaArrowLeft className="icon" /> Quay lại hồ sơ
-            </button>
+          <button className="btn-back" onClick={handleGoBack}>
+            <FaArrowLeft className="icon" /> Quay lại hồ sơ
+          </button>
         </div>
         <div className="chat-empty" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
           Vui lòng đăng nhập để chat 💬
@@ -118,17 +128,19 @@ const ChatApp = () => {
   }
 
   return (
-    // Bọc trong container column
     <div className="chat-page-wrapper" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      
-      {/* Thay Header bằng thanh điều hướng chứa nút Back */}
       <div className="nav-header">
         <button className="btn-back" onClick={handleGoBack}>
-            <FaArrowLeft className="icon" /> Quay lại hồ sơ
+          <FaArrowLeft className="icon" /> Quay lại hồ sơ
         </button>
+        {/* ✅ Hiển thị trạng thái kết nối */}
+        {/* {connected && (
+          <span style={{ color: '#10b981', fontSize: '14px', marginLeft: '10px' }}>
+            ● Connected
+          </span>
+        )} */}
       </div>
 
-      {/* Phần ChatApp chiếm toàn bộ không gian còn lại */}
       <div className="chat-app" style={{ flex: 1, overflow: 'hidden' }}>
         <ChatList
           users={friends}
