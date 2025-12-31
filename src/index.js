@@ -31,6 +31,7 @@ import VocabularyPage from './components/User/VocabularyPage';
 import Vocab2 from './components/User/Vocab2';
 import Forum from './components/Forum/Forum';
 import ChatPage from './components/User/ChatPage';
+import QuizResult from './components/User/QuizResult';
 
 // Exam
 import ExamPage from './components/User/ExamPage';
@@ -121,6 +122,8 @@ root.render(
 
                   {/* EXAM */}
                   <Route path="/exams" element={<ExamPage />} />
+                  <Route path="/quiz-result/:id" element={<QuizResult />} />
+                  
                   <Route path="/test-part1/:id" element={<TakeExamPart1 />} />
                   <Route path="/test-part2/:id" element={<TakeExamPart2 />} />
                   <Route path="/test-part3/:id" element={<TakeExamPart3 />} />
@@ -159,6 +162,8 @@ root.render(
                     <Route path="manage-users" element={<ManageUser />} />
                     <Route path="manage-quiz" element={<ManageQuiz />} />
                     <Route path="manage-quiz/part/:partNumber" element={<QuizListByPart />} />
+                    
+                    {/* ==================== CREATE QUIZ ROUTES ==================== */}
                     <Route path="create-quiz-part1" element={<CreateQuizPart1 />} />
                     <Route path="create-quiz-part2" element={<CreateQuizPart2 />} />
                     <Route path="create-quiz-part3" element={<CreateQuizPart3 />} />
@@ -167,6 +172,17 @@ root.render(
                     <Route path="create-quiz-part6" element={<CreateQuizPart6 />} />
                     <Route path="create-quiz-part7" element={<CreateQuizPart7 />} />
                     <Route path="create-full-test" element={<CreateFullTest />} />
+                    
+                    {/* ==================== EDIT/UPDATE QUIZ ROUTES ==================== */}
+                    {/* THÊM CÁC ROUTE NÀY - QUAN TRỌNG! */}
+                    <Route path="update-quiz-part1/:id" element={<CreateQuizPart1 />} />
+                    <Route path="update-quiz-part2/:id" element={<CreateQuizPart2 />} />
+                    <Route path="update-quiz-part3/:id" element={<CreateQuizPart3 />} />
+                    <Route path="update-quiz-part4/:id" element={<CreateQuizPart4 />} />
+                    <Route path="update-quiz-part5/:id" element={<CreateQuizPart5 />} />
+                    <Route path="update-quiz-part6/:id" element={<CreateQuizPart6 />} />
+                    <Route path="update-quiz-part7/:id" element={<CreateQuizPart7 />} />
+                    <Route path="update-full-test/:id" element={<CreateFullTest />} />
                   </Route>
 
                 </Routes>

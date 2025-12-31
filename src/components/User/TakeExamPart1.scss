@@ -1,0 +1,55 @@
+.take-exam-part1 {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+  font-family: 'Inter', sans-serif;
+
+  .exam-header {
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    
+    .timer-box {
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      
+      &.bg-danger {
+        animation: pulse 1s infinite;
+      }
+    }
+  }
+
+  .question-card {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+    }
+
+    .card-header {
+      font-size: 1rem;
+    }
+
+    img {
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .btn {
+      &:hover {
+        transform: translateX(5px);
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
