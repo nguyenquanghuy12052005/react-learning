@@ -24,7 +24,7 @@ const CreateQuizPart2 = () => {
     const initQuestions = Array.from({ length: 25 }, (_, i) => ({
         questionText: ["Mark your answer on your answer sheet."], 
         questionImage: '', 
-        point: 1,
+        point: 5,
         correctAnswer: '', 
         explanation: '', 
         options: [

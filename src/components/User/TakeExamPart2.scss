@@ -1,27 +1,25 @@
 @import '~bootstrap/scss/bootstrap';
 
 // --- VARIABLES ---
-$bg-color: #f3f6f9;
+$bg-color: #f8f9fc;
 $card-bg: #ffffff;
 $primary-color: #4e73df;
-$success-color: #1cc88a; // Xanh lá
+$success-color: #1cc88a; // Xanh lá chuẩn theme
 $text-dark: #2e384d;
 $text-muted: #858796;
-$shadow-sm: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
 
 .take-exam-part2 {
   background-color: $bg-color;
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
-  padding-bottom: 50px;
+  padding-bottom: 80px;
 
-  // Header Styles
+  // 1. Header Styles
   .exam-header {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid #e3e6f0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    z-index: 100;
+    z-index: 1020;
 
     .timer-box {
       background-color: #e8f0fe;
@@ -30,6 +28,8 @@ $shadow-sm: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
       padding: 0.5rem 1rem;
       border-radius: 50px;
       font-variant-numeric: tabular-nums;
+      display: flex; align-items: center;
+      
       &.danger {
           background-color: #ffebee;
           color: #e74a3b;
@@ -41,75 +41,81 @@ $shadow-sm: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
         background-color: $primary-color;
         border: none;
         border-radius: 50px;
-        padding: 0.5rem 2rem;
-        font-weight: 600;
+        padding: 0.5rem 1.5rem;
         box-shadow: 0 4px 6px rgba(78, 115, 223, 0.3);
-        &:hover { transform: translateY(-1px); }
+        transition: transform 0.2s;
+        &:hover { transform: translateY(-2px); }
     }
   }
 
-  // Audio Card
+  // 2. Audio Card
   .audio-card {
-      box-shadow: $shadow-sm;
-      border-radius: 15px;
-      .audio-icon-box {
-          background-color: #eaecf4;
-          width: 50px; height: 50px;
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          color: $primary-color; font-size: 1.2rem;
+      background: white;
+      border-radius: 12px;
+      
+      // Nếu muốn thanh audio dính lên trên khi cuộn (tùy chọn)
+      &.sticky-audio {
+        position: sticky;
+        top: 70px; // Dưới header một chút
+        z-index: 900;
       }
-      .custom-audio { height: 40px; }
+
+      .audio-icon-box {
+          width: 45px; height: 45px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 1.1rem;
+      }
+      .custom-audio { height: 36px; }
   }
 
-  // Question Card
+  // 3. Question Grid Cards
   .question-card {
     background: $card-bg;
-    border-radius: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: all 0.3s ease;
-
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    // Hiệu ứng hover cho thẻ câu hỏi
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
     }
 
+    // Trạng thái đã làm xong
     &.answered {
-      border: 1px solid rgba($success-color, 0.3) !important;
-      background-color: rgba($success-color, 0.02);
+      border: 1px solid rgba($success-color, 0.4) !important;
+      background-color: rgba($success-color, 0.03);
     }
 
     .question-badge {
-        background-color: #f8f9fc;
-        color: $text-muted;
-        font-weight: 600;
-        padding: 0.3rem 0.8rem;
-        border-radius: 8px;
+        background-color: #f1f3f5;
+        color: $text-dark;
+        font-weight: 700;
         font-size: 0.85rem;
+        padding: 4px 10px;
+        border-radius: 6px;
     }
 
-    .animate-check { animation: popIn 0.3s ease-out; }
+    .animate-check { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-    // --- PHẦN QUAN TRỌNG: STYLE NÚT TRÒN ---
+    // --- BUTTON STYLES (TRÒN) ---
     .option-btn {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%; // Tròn
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
         font-size: 1.2rem;
         font-weight: 700;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0;
         transition: all 0.2s ease;
         
-        // --- 1. TRẠNG THÁI MẶC ĐỊNH (CHƯA CHỌN) ---
-        // Bắt buộc màu trắng, chữ xám
-        background-color: #ffffff !important; 
-        border: 2px solid #eaecf4 !important; 
+        // --- 1. Mặc định (Trắng viền xám) ---
+        background-color: #fff !important;
+        border: 2px solid #eaecf4 !important;
         color: #858796 !important;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 
-        // Hover vào
         &:hover {
             background-color: #f8f9fc !important;
             border-color: $primary-color !important;
@@ -117,30 +123,27 @@ $shadow-sm: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             transform: scale(1.05);
         }
 
-        // Tắt outline xấu khi click
-        &:focus, &:active {
-            box-shadow: none !important;
-            outline: none !important;
-        }
+        &:focus { box-shadow: none !important; }
 
-        // --- 2. TRẠNG THÁI ĐÃ CHỌN (XANH LÁ) ---
+        // --- 2. Đã chọn (Xanh lá - Success) ---
         &.selected {
-            background-color: $success-color !important; // Nền xanh lá
-            border-color: $success-color !important;     // Viền xanh lá
-            color: #ffffff !important;                   // Chữ trắng
-            box-shadow: 0 4px 12px rgba(28, 200, 138, 0.4); // Phát sáng nhẹ
+            background-color: $success-color !important;
+            border-color: $success-color !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 10px rgba(28, 200, 138, 0.4) !important;
             transform: scale(1.1);
         }
     }
   }
 }
 
-// Keyframes
+// Animations
 @keyframes popIn {
     0% { transform: scale(0); opacity: 0; }
     80% { transform: scale(1.2); }
     100% { transform: scale(1); opacity: 1; }
 }
+
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }

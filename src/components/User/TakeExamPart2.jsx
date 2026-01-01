@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Card } from 'react-bootstrap';
-import { FaClock, FaArrowLeft, FaCheckCircle, FaVolumeUp } from 'react-icons/fa';
+import { FaClock, FaArrowLeft, FaCheckCircle, FaVolumeUp, FaHeadphones } from 'react-icons/fa';
 import { getQuizById, postSubmitQuiz } from '../../services/quizService'; 
 import './TakeExamPart2.scss';
 
@@ -33,7 +33,7 @@ const TakeExamPart2 = () => {
                 const processedQuestions = rawQuestions.map((q, idx) => ({
                     _id: q._id,
                     questionNum: idx + 1,
-                    // Part 2 thường không có text câu hỏi, nhưng nếu có thì vẫn hiện
+                    // Part 2 thường không hiện text câu hỏi lúc thi, nhưng vẫn lưu để xử lý nếu cần
                     questionText: Array.isArray(q.questionText) ? q.questionText.join(" ") : (q.questionText || ""),
                     options: q.options || [],
                     correctAnswer: q.correctAnswer || ""
@@ -51,7 +51,6 @@ const TakeExamPart2 = () => {
 
     const handleSubmit = useCallback(async () => {
         const answeredCount = Object.keys(userAnswers).length;
-        // Chỉ confirm nếu người dùng tự bấm nộp, còn hết giờ thì không cần confirm
         if (timeLeft > 0 && answeredCount < questions.length) {
             if (!window.confirm(`Bạn mới trả lời ${answeredCount}/${questions.length} câu. Bạn có chắc chắn muốn nộp bài?`)) return;
         }
@@ -62,24 +61,20 @@ const TakeExamPart2 = () => {
                 questionId, selectedOption
             }));
             
-            // Tính thời gian đã làm: Tổng thời gian - Thời gian còn lại
             const totalTime = (quizData?.timeLimit || 30) * 60;
             const timeSpent = totalTime - timeLeft;
 
             const submitData = {
                 quizId: id,
                 answers: answers,
-                timeSpent: timeSpent > 0 ? timeSpent : totalTime // Fix trường hợp âm
+                timeSpent: timeSpent > 0 ? timeSpent : totalTime
             };
 
             const response = await postSubmitQuiz(submitData);
             
             if (response && (response.EC === 0 || response.status === 200 || response.data)) {
-                 // Lấy ID kết quả trả về từ backend
                 const resultData = response.DT || response.data; 
                 const resultId = resultData._id || resultData.id;
-                
-                // --- QUAN TRỌNG: Điều hướng đúng route đã khai báo trong index.js ---
                 navigate(`/quiz-result/${resultId}`);
             } else {
                 alert("Nộp bài không thành công: " + (response.EM || "Lỗi không xác định"));
@@ -98,7 +93,7 @@ const TakeExamPart2 = () => {
             setTimeLeft(prev => {
                 if (prev <= 1) { 
                     clearInterval(timerId);
-                    handleSubmit(); // Hết giờ tự nộp
+                    handleSubmit();
                     return 0; 
                 }
                 return prev - 1;
@@ -122,6 +117,7 @@ const TakeExamPart2 = () => {
     
     return (
         <div className="take-exam-part2">
+            {/* --- HEADER --- */}
             <div className="exam-header sticky-top bg-white shadow-sm">
                 <Container fluid="lg">
                     <div className="d-flex justify-content-between align-items-center py-2">
@@ -129,9 +125,12 @@ const TakeExamPart2 = () => {
                             <Button variant="light" className="btn-icon-text border" onClick={() => navigate(-1)}>
                                 <FaArrowLeft/> <span className="d-none d-sm-inline">Thoát</span>
                             </Button>
-                            <h5 className="m-0 fw-bold text-dark d-none d-md-block">
-                                {quizData?.title || "Part 2: Question-Response"}
-                            </h5>
+                            <div>
+                                <h5 className="m-0 fw-bold text-dark d-none d-md-block">
+                                    {quizData?.title || "Part 2: Question-Response"}
+                                </h5>
+                                <small className="text-muted d-none d-md-block">Listen and choose A, B, or C</small>
+                            </div>
                         </div>
 
                         <div className="d-flex align-items-center gap-3">
@@ -147,54 +146,63 @@ const TakeExamPart2 = () => {
             </div>
 
             <Container className="py-4 main-container">
+                {/* --- AUDIO PLAYER --- */}
                 {audioUrl && (
-                    <Card className="audio-card mb-4 border-0 shadow-sm">
-                        <Card.Body className="d-flex align-items-center gap-3 p-3 p-md-4">
-                            <div className="audio-icon-box bg-primary text-white rounded-circle p-3">
+                    <Card className="audio-card mb-4 border-0 shadow-sm sticky-audio">
+                        <Card.Body className="d-flex align-items-center gap-3 p-3">
+                            <div className="audio-icon-box bg-primary text-white rounded-circle p-3 flex-shrink-0">
                                 <FaVolumeUp size={24} />
                             </div>
                             <div className="w-100">
-                                <h6 className="fw-bold mb-2 text-primary">Audio Part 2</h6>
+                                <h6 className="fw-bold mb-1 text-primary">Audio Track</h6>
                                 <audio controls className="w-100 custom-audio"><source src={audioUrl} type="audio/mpeg" /></audio>
                             </div>
                         </Card.Body>
                     </Card>
                 )}
 
-                <Row className="g-4">
+                {/* --- QUESTION GRID --- */}
+                <Row className="g-3 g-md-4">
                     {questions.map((q) => {
                         const isAnswered = !!userAnswers[q._id];
                         return (
-                            <Col md={6} lg={4} key={q._id}>
+                            // Part 2 nhỏ gọn, dùng col-md-4 hoặc col-lg-3 để hiển thị dạng lưới nhiều ô
+                            <Col xs={12} md={6} lg={4} key={q._id}>
                                 <Card className={`question-card h-100 border-0 shadow-sm ${isAnswered ? 'answered' : ''}`}>
-                                    <Card.Body className="p-4 text-center d-flex flex-column justify-content-center">
-                                        <div className="d-flex justify-content-between align-items-center mb-3 w-100 position-absolute top-0 start-0 p-3">
-                                            <span className="badge bg-light text-dark border">Câu {q.questionNum}</span>
-                                            {isAnswered && <FaCheckCircle className="text-success fs-5 animate-check" />}
+                                    <Card.Body className="p-3 text-center d-flex flex-column align-items-center justify-content-center">
+                                        
+                                        {/* Số câu hỏi */}
+                                        <div className="d-flex justify-content-between w-100 mb-3 align-items-center">
+                                            <span className="question-badge">
+                                                Question {q.questionNum}
+                                            </span>
+                                            {isAnswered ? 
+                                                <FaCheckCircle className="text-success fs-5 animate-check" /> : 
+                                                <FaHeadphones className="text-muted opacity-25" />
+                                            }
                                         </div>
                                         
-                                        <div className="mt-4">
-                                            <p className="text-muted small mb-4 fst-italic">Listen and choose the best response</p>
-
-                                            <div className="d-flex justify-content-center gap-3 gap-md-4">
-                                                {/* Part 2 thường chỉ có 3 đáp án A, B, C */}
-                                                {['A', 'B', 'C'].map((label, idx) => {
-                                                    const isSelected = userAnswers[q._id] === label;
-                                                    
-                                                    return (
-                                                        <Button 
-                                                            key={idx} 
-                                                            variant={isSelected ? "primary" : "outline-secondary"}
-                                                            className={`option-btn rounded-circle p-0 d-flex align-items-center justify-content-center ${isSelected ? 'selected' : ''}`}
-                                                            style={{ width: '45px', height: '45px', fontWeight: 'bold' }}
-                                                            onClick={() => handleSelectAnswer(q._id, label)}
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    )
-                                                })}
-                                            </div>
+                                        {/* Các nút chọn A B C */}
+                                        <div className="d-flex justify-content-center gap-4 my-2 w-100">
+                                            {['A', 'B', 'C'].map((label, idx) => {
+                                                const isSelected = userAnswers[q._id] === label;
+                                                return (
+                                                    <Button 
+                                                        key={idx} 
+                                                        variant="outline-light" // Dùng variant dummy để SCSS override
+                                                        className={`option-btn ${isSelected ? 'selected' : ''}`}
+                                                        onClick={() => handleSelectAnswer(q._id, label)}
+                                                    >
+                                                        {label}
+                                                    </Button>
+                                                )
+                                            })}
                                         </div>
+                                        
+                                        <div className="mt-2 w-100 text-center">
+                                            <small className="text-muted opacity-50 fst-italic" style={{fontSize: '0.75rem'}}>Mark your answer</small>
+                                        </div>
+
                                     </Card.Body>
                                 </Card>
                             </Col>

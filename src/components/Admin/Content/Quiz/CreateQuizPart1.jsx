@@ -22,7 +22,7 @@ const CreateQuizPart1 = () => {
     const initQuestions = Array.from({ length: 6 }, () => ({
         questionText: ["Listen to the audio and choose the best description."], 
         questionImage: '', 
-        point: 1,
+        point: 5,
         correctAnswer: '', 
         explanation: '',
         options: [

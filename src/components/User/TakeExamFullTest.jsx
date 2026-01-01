@@ -94,7 +94,7 @@ const handleSubmit = useCallback(async () => {
         // Format answers với dấu ngoặc đơn như Part1
         const formattedAnswers = Object.entries(userAnswers).map(([qId, val]) => ({
             questionId: qId,
-            selectedOption: val.includes('(') ? val : `(${val})` // Thêm dấu ngoặc nếu chưa có
+            selectedOption: val.includes('') ? val : `${val}` // Thêm dấu ngoặc nếu chưa có
         }));
 
         const payload = {

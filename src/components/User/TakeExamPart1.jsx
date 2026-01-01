@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Card } from 'react-bootstrap';
-import { FaClock, FaArrowLeft, FaCheckCircle, FaVolumeUp } from 'react-icons/fa';
+import { FaClock, FaArrowLeft, FaCheckCircle, FaVolumeUp, FaImage } from 'react-icons/fa';
 import { getQuizById, postSubmitQuiz } from '../../services/quizService';
 import './TakeExamPart1.scss';
 
-// Hàm fix link Google Drive
+// Hàm fix link Google Drive (giữ nguyên logic của bạn)
 const getDirectAudioLink = (url) => {
     if (!url) return "";
     if (url.includes("drive.google.com")) {
@@ -41,13 +41,11 @@ const TakeExamPart1 = () => {
                 if (!data) throw new Error("Không tìm thấy dữ liệu");
 
                 setQuizData(data);
-                setTimeLeft((data.timeLimit || 10) * 60); // Set thời gian từ DB
+                setTimeLeft((data.timeLimit || 10) * 60);
 
-                // Xử lý Audio
                 const cleanLink = getDirectAudioLink(data.audio || "");
                 setMainAudioUrl(cleanLink); 
 
-                // Xử lý câu hỏi
                 const rawQuestions = data.questions || [];
                 const processedQuestions = rawQuestions.map((q, idx) => ({
                     _id: q._id,
@@ -76,7 +74,7 @@ const TakeExamPart1 = () => {
             setTimeLeft(prev => {
                 if (prev <= 1) {
                     clearInterval(timer);
-                    handleSubmit(); // Hết giờ tự nộp
+                    handleSubmit();
                     return 0;
                 }
                 return prev - 1;
@@ -88,14 +86,18 @@ const TakeExamPart1 = () => {
     // 3. Xử lý Nộp bài
     const handleSubmit = useCallback(async () => {
         if (submitting) return;
-        setSubmitting(true);
 
+        // Confirm nếu chưa làm hết (trừ khi hết giờ)
+        const answeredCount = Object.keys(userAnswers).length;
+        if (timeLeft > 0 && answeredCount < questions.length) {
+             if (!window.confirm(`Bạn mới trả lời ${answeredCount}/${questions.length} câu. Bạn có chắc chắn muốn nộp bài?`)) return;
+        }
+
+        setSubmitting(true);
         try {
-            // Tính thời gian làm bài
             const totalTime = (quizData?.timeLimit || 0) * 60;
             const timeSpent = totalTime - timeLeft;
 
-            // Format đáp án: "A" -> "(A)"
             const formattedAnswers = Object.entries(userAnswers).map(([qId, val]) => ({
                 questionId: qId,
                 selectedOption: `(${val})` 
@@ -107,16 +109,17 @@ const TakeExamPart1 = () => {
                 timeSpent: timeSpent > 0 ? timeSpent : 0
             };
 
-            console.log("Submitting:", payload);
             const res = await postSubmitQuiz(payload);
-            const resultData = res.data || res;
+            const resultData = res.data || res; // Xử lý tùy theo cấu trúc response của bạn (axios wrap hay custom)
+            
+            // Tìm ID kết quả để redirect
+            const resultId = resultData.DT?._id || resultData._id || resultData.data?._id;
 
-            if (resultData && resultData._id) {
-                // Chuyển sang trang kết quả
-                navigate(`/quiz-result/${resultData._id}`);
+            if (resultId) {
+                navigate(`/quiz-result/${resultId}`);
             } else {
-                alert("Nộp bài thành công nhưng không lấy được ID kết quả.");
-                navigate('/exams');
+                // Fallback nếu không tìm thấy ID
+                navigate('/exams'); 
             }
 
         } catch (error) {
@@ -137,74 +140,107 @@ const TakeExamPart1 = () => {
         setUserAnswers(prev => ({ ...prev, [qId]: opt })); 
     };
 
-    if (loading) return <div className="text-center mt-5"><Spinner animation="border"/></div>;
+    if (loading) return <div className="text-center mt-5"><Spinner animation="border" variant="primary"/></div>;
     if (error) return <Alert variant="danger" className="m-5">{error}</Alert>;
 
     return (
         <div className="take-exam-part1">
-            {/* Header */}
-            <div className="exam-header sticky-top bg-white shadow-sm px-4 py-3 border-bottom">
-                <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center gap-3">
-                        <Button variant="outline-secondary" size="sm" onClick={() => navigate(-1)}><FaArrowLeft/> Thoát</Button>
-                        <h5 className="m-0 fw-bold text-primary">📷 {quizData?.title}</h5>
-                    </div>
-                    <div className="d-flex align-items-center gap-3">
-                        <div className="timer-box fw-bold border px-3 py-2 rounded-pill text-danger">
-                            <FaClock className="me-2"/> {formatTime(timeLeft)}
+            {/* Header Sticky - Style Part 3 */}
+            <div className="exam-header sticky-top bg-white shadow-sm">
+                <Container fluid="lg">
+                    <div className="d-flex justify-content-between align-items-center py-2">
+                        <div className="d-flex align-items-center gap-3">
+                            <Button variant="light" className="btn-icon-text border" onClick={() => navigate(-1)}>
+                                <FaArrowLeft/> <span className="d-none d-sm-inline">Thoát</span>
+                            </Button>
+                            <h5 className="m-0 fw-bold text-dark d-none d-md-block">
+                                📷 {quizData?.title || "Part 1: Photographs"}
+                            </h5>
                         </div>
-                        <Button variant="success" onClick={handleSubmit} disabled={submitting}>
-                            {submitting ? <Spinner size="sm" animation="border"/> : "NỘP BÀI"}
-                        </Button>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className={`timer-box ${timeLeft < 300 ? 'danger' : ''}`}>
+                                <FaClock className="me-2"/> {formatTime(timeLeft)}
+                            </div>
+                            <Button variant="success" className="btn-submit fw-bold px-4" onClick={handleSubmit} disabled={submitting}>
+                                {submitting ? <Spinner size="sm" animation="border"/> : "NỘP BÀI"}
+                            </Button>
+                        </div>
                     </div>
-                </div>
+                </Container>
             </div>
 
-            <Container className="py-4">
-                {/* Audio Player */}
+            <Container className="py-4 main-container">
+                {/* Audio Player - Style Part 3 */}
                 {mainAudioUrl && (
-                    <Card className="mb-4 shadow-sm border-primary">
-                        <Card.Body className="p-4">
-                            <div className="d-flex align-items-center mb-2">
-                                <FaVolumeUp className="text-primary me-2" size={24}/>
-                                <h6 className="m-0 fw-bold">🎧 Audio Part 1</h6>
+                    <Card className="audio-card mb-4 border-0 shadow-sm sticky-audio">
+                        <Card.Body className="d-flex align-items-center gap-3 p-3">
+                            <div className="audio-icon-box bg-primary text-white rounded-circle p-3">
+                                <FaVolumeUp size={24} />
                             </div>
-                            <audio controls className="w-100" style={{height: '50px'}} key={mainAudioUrl}>
-                                <source src={mainAudioUrl} type="audio/mpeg" />
-                            </audio>
+                            <div className="w-100">
+                                <h6 className="fw-bold mb-1 text-primary">Audio Part 1</h6>
+                                <audio controls className="w-100 custom-audio" key={mainAudioUrl}>
+                                    <source src={mainAudioUrl} type="audio/mpeg" />
+                                </audio>
+                            </div>
                         </Card.Body>
                     </Card>
                 )}
 
-                {/* Danh sách câu hỏi */}
+                {/* Danh sách câu hỏi - Grid Layout nhưng style Part 3 */}
                 <Row className="g-4">
                     {questions.map((q) => {
                         const isAnswered = !!userAnswers[q._id];
                         return (
                             <Col md={6} lg={4} key={q._id}>
-                                <Card className={`h-100 shadow-sm border-2 ${isAnswered ? 'border-success' : 'border-secondary'}`}>
-                                    <Card.Header className="bg-primary text-white d-flex justify-content-between">
-                                        <span className="fw-bold">Question {q.questionNum}</span>
-                                        {isAnswered && <FaCheckCircle className="text-warning" />}
+                                <Card className={`h-100 shadow-sm border-0 question-card ${isAnswered ? 'answered-card' : ''}`}>
+                                    <Card.Header className="bg-white border-bottom pt-3 pb-2 d-flex justify-content-between align-items-center">
+                                        <span className={`fw-bold ${isAnswered ? 'text-success' : 'text-dark'}`}>
+                                            Question {q.questionNum}
+                                        </span>
+                                        {isAnswered && <FaCheckCircle className="text-success" />}
                                     </Card.Header>
+                                    
                                     <Card.Body className="p-3">
-                                        <div className="text-center mb-3 bg-dark rounded p-2">
+                                        {/* Hình ảnh */}
+                                        <div className="image-container mb-3 text-center border rounded bg-light p-2">
                                             {q.questionImage ? (
-                                                <img src={q.questionImage} className="img-fluid rounded" style={{maxHeight:'200px'}} alt="Q"/>
-                                            ) : <div className="text-white py-3">No Image</div>}
+                                                <img 
+                                                    src={q.questionImage} 
+                                                    className="img-fluid rounded" 
+                                                    style={{ maxHeight:'250px', objectFit: 'contain' }} 
+                                                    alt={`Question ${q.questionNum}`}
+                                                />
+                                            ) : (
+                                                <div className="text-muted py-5 d-flex flex-column align-items-center">
+                                                    <FaImage size={30} className="mb-2"/>
+                                                    <span>No Image Available</span>
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="d-grid gap-2">
+
+                                        {/* Text câu hỏi (nếu có) */}
+                                        {q.questionText && <p className="mb-3 fw-medium text-secondary">{q.questionText}</p>}
+
+                                        {/* Options - Style Part 3 */}
+                                        <div className="options-grid">
                                             {q.options.map((opt, idx) => {
                                                 const label = ['A', 'B', 'C', 'D'][idx];
+                                                const isSelected = userAnswers[q._id] === label;
+                                                
                                                 return (
-                                                    <Button 
+                                                    <div 
                                                         key={idx} 
-                                                        variant={userAnswers[q._id] === label ? 'success' : 'outline-secondary'}
-                                                        className="text-start"
+                                                        className={`option-item d-flex align-items-center py-2 px-3 rounded mb-2 ${isSelected ? 'selected' : ''}`}
                                                         onClick={() => handleSelectAnswer(q._id, label)}
                                                     >
-                                                        <span className="me-2 fw-bold">({label})</span> {opt.text}
-                                                    </Button>
+                                                        <div className={`option-radio me-3 ${isSelected ? 'checked' : ''}`}>
+                                                            {label}
+                                                        </div>
+                                                        <div className="option-text">
+                                                            {opt.text || `Option ${label}`}
+                                                        </div>
+                                                    </div>
                                                 )
                                             })}
                                         </div>
@@ -214,12 +250,6 @@ const TakeExamPart1 = () => {
                         )
                     })}
                 </Row>
-
-                <div className="text-center mt-5">
-                    <Button variant="success" size="lg" onClick={handleSubmit} disabled={submitting}>
-                        {submitting ? 'Đang nộp...' : 'NỘP BÀI NGAY'}
-                    </Button>
-                </div>
             </Container>
         </div>
     );

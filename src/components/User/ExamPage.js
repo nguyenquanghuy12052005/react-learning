@@ -1,68 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  BarChart2, Clock, BookOpen, Play, Loader, AlertCircle, ArrowLeft 
+  BarChart2, Clock, BookOpen, Play, Loader, AlertCircle, ArrowLeft,
+  History, Calendar, CheckCircle, XCircle
 } from 'lucide-react'; 
 import { useNavigate } from 'react-router-dom'; 
 import { motion, AnimatePresence } from "framer-motion"; 
 
 import './ExamPage.scss'; 
-import { getAllQuiz } from '../../services/quizService'; 
+import { getAllQuiz, getQuizHistory } from '../../services/quizService'; 
 
+// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 } 
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
-
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } }
+  visible: { y: 0, opacity: 1 }
 };
 
 const ExamPage = () => {
   const navigate = useNavigate();
 
+  // --- STATE ---
+  const [activeTab, setActiveTab] = useState('exams'); // 'exams' | 'history'
   const [exams, setExams] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
+  const [historyList, setHistoryList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedPart, setSelectedPart] = useState(null);
 
-  // === FETCH DATA ===
+  // --- FETCH DANH SÁCH ĐỀ THI ---
   useEffect(() => {
     const fetchExams = async () => {
       try {
         setLoading(true);
-        const response = await getAllQuiz();
-        
-        let realData = [];
-        if (response && response.DT) { 
-            realData = response.DT;
-        } else if (response && response.data) {
-            realData = response.data;
-        } else if (Array.isArray(response)) {
-            realData = response;
-        }
-
-        if (Array.isArray(realData)) {
-            setExams(realData);
-        } else {
-            setExams([]); 
-        }
-
+        const res = await getAllQuiz();
+        // Xử lý data trả về (cấu trúc thường là res.DT, res.data hoặc res)
+        let data = res?.DT || res?.data || res || [];
+        if (!Array.isArray(data)) data = [];
+        setExams(data);
       } catch (err) {
-        console.error("Lỗi tải danh sách đề thi:", err);
-        setError("Không thể kết nối đến máy chủ.");
+        console.error("Lỗi tải đề thi:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (activeTab === 'exams') fetchExams();
+  }, [activeTab]);
+
+  // --- FETCH LỊCH SỬ LÀM BÀI ---
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        setLoading(true);
+        const res = await getQuizHistory();
+        
+        let data = res?.DT || res?.data || res || [];
+        if (!Array.isArray(data)) data = [];
+
+        // Sắp xếp bài mới nhất lên đầu
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        setHistoryList(data);
+      } catch (err) {
+        console.error("Lỗi tải lịch sử:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchExams();
-  }, []);
+    if (activeTab === 'history') fetchHistory();
+  }, [activeTab]);
 
+  // --- HELPERS ---
   const partStats = [0, 1, 2, 3, 4, 5, 6, 7].map(partNum => ({
     part: partNum,
     count: exams.filter(exam => exam.part === partNum).length
@@ -72,181 +83,250 @@ const ExamPage = () => {
     ? exams 
     : exams.filter(exam => exam.part === selectedPart);
 
-  // === HÀM CHUYỂN TRANG ===
   const handleStartExam = (quiz) => {
       const quizId = quiz.id || quiz._id;
       const part = quiz.part || 0;
-
       if (!quizId) return;
-
-      switch(part) {
-          case 0: navigate(`/test-full/${quizId}`); break;
-          case 1: navigate(`/test-part1/${quizId}`); break;
-          case 2: navigate(`/test-part2/${quizId}`); break;
-          case 3: navigate(`/test-part3/${quizId}`); break;
-          case 4: navigate(`/test-part4/${quizId}`); break;
-          case 5: navigate(`/test-part5/${quizId}`); break;
-          case 6: navigate(`/test-part6/${quizId}`); break;
-          case 7: navigate(`/test-part7/${quizId}`); break;
-          default: alert(`Part ${part} chưa được hỗ trợ!`);
-      }
+      
+      // Chuyển hướng theo part
+      if (part === 0) navigate(`/test-full/${quizId}`);
+      else navigate(`/test-part${part}/${quizId}`);
   };
 
-  // === HÀM QUAY LẠI (Đã sửa) ===
-  const handleGoBack = () => {
-      navigate('/userprofile'); 
+  const formatDuration = (seconds) => {
+    if (!seconds) return "0s";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}p ${s}s`;
   };
+
+  const formatDate = (dateString) => {
+      if (!dateString) return "N/A";
+      return new Date(dateString).toLocaleString('vi-VN', {
+          day: '2-digit', month: '2-digit', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+      });
+  };
+
+  // --- RENDER COMPONENTS ---
 
   const renderExamCard = (exam, index) => {
-    const keyId = exam.id || exam._id || index;
-    const title = exam.name || exam.title || `Đề thi số ${index + 1}`;
-    const duration = exam.timeLimit || exam.duration || 120; 
-    const questionCount = exam.totalQuestions || (exam.questions ? exam.questions.length : "??");
-    const part = exam.part || 0;
-    
     const level = exam.level || (["Dễ", "Trung bình", "Khó"][index % 3]);
-    const isHot = index < 2;
-    const partLabel = part === 0 ? "Full Test" : `Part ${part}`;
-
+    const partLabel = exam.part === 0 ? "Full Test" : `Part ${exam.part}`;
+    
     return (
       <motion.div 
-        key={keyId} 
-        variants={itemVariants}
-        className="exam-card"
+        key={exam._id || index} variants={itemVariants} className="exam-card"
         whileHover={{ y: -5, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
-        layout
       >
         <div className="card-tags">
-           {isHot && <span className="tag red">Hot</span>}
+           {index < 2 && <span className="tag red">Hot</span>}
            <span className="tag blue">{partLabel}</span>
         </div>
-
         <div className="card-top">
-          <div className={`level-badge ${level === "Khó" || level === "Hard" ? "hard" : level === "Trung bình" || level === "Medium" ? "medium" : "easy"}`}>
-            <BarChart2 size={14} />
-            {level}
+          <div className={`level-badge ${level === "Khó" ? "hard" : level === "Trung bình" ? "medium" : "easy"}`}>
+            <BarChart2 size={14} /> {level}
           </div>
           <span className="participants">👥 {1200 + index * 45}</span>
         </div>
-
-        <h3 className="exam-title">{title}</h3>
-
+        <h3 className="exam-title">{exam.name || exam.title}</h3>
         <div className="exam-meta">
-          <div className="meta-item">
-            <Clock size={16} />
-            <span>{duration} phút</span>
-          </div>
-          <div className="meta-item">
-            <BookOpen size={16} />
-            <span>{questionCount} câu</span>
-          </div>
+          <div className="meta-item"><Clock size={16} /> {exam.timeLimit || 120} phút</div>
+          <div className="meta-item"><BookOpen size={16} /> {exam.questions?.length || "?"} câu</div>
         </div>
-
         <button className="start-btn" onClick={() => handleStartExam(exam)}>
             <span>Làm bài ngay</span>
-            <div className="icon-circle">
-                <Play size={14} fill="currentColor" />
-            </div>
+            <div className="icon-circle"><Play size={14} fill="currentColor" /></div>
         </button>
       </motion.div>
     );
   };
 
-  const renderPartButton = (partNum) => {
-    const stat = partStats.find(s => s.part === partNum);
-    const count = stat ? stat.count : 0;
-    const isActive = selectedPart === partNum;
-    const partLabel = partNum === 0 ? "Full Test" : `Part ${partNum}`;
+  const renderHistoryTable = () => {
+    if (historyList.length === 0) {
+        return (
+            <div className="empty-state text-center py-5">
+                <History size={64} className="text-muted mb-3 opacity-50"/>
+                <h5 className="text-muted">Bạn chưa làm bài thi nào</h5>
+                <button className="btn btn-primary mt-3 px-4 rounded-pill" onClick={() => setActiveTab('exams')}>
+                    Làm bài ngay
+                </button>
+            </div>
+        );
+    }
 
     return (
-      <button
-        key={partNum}
-        className={`part-btn ${isActive ? 'active' : ''}`}
-        onClick={() => setSelectedPart(partNum)}
-      >
-        <span className="part-label">{partLabel}</span>
-        <div className="part-stats">
-          <span className="badge-count">{count}</span>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="history-container">
+        <div className="table-responsive shadow-sm rounded bg-white border">
+            <table className="table table-hover mb-0 align-middle custom-table">
+                <thead className="bg-light">
+                    <tr>
+                        <th className="py-3 ps-4 text-secondary">Đề thi</th>
+                        <th className="text-secondary">Ngày làm</th>
+                        <th className="text-secondary">Thời gian</th>
+                        <th className="text-secondary text-center">Kết quả</th>
+                        <th className="text-secondary text-center">Điểm số</th>
+                        <th className="text-end pe-4 text-secondary">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {historyList.map((item, idx) => {
+                        // 1. Tên bài thi (xử lý populate quizId)
+                        const quizName = item.quizData?.title || item.quizId?.title || item.quizTitle || `Bài thi #${idx + 1}`;
+                        
+                        // 2. Tổng số câu hỏi
+                        const totalQ = item.answers?.length || item.totalQuestions || 0;
+                        
+                        // 3. Số câu ĐÚNG (Tự tính từ mảng answers trả về từ backend)
+                        const correctQ = item.answers 
+                            ? item.answers.filter(a => a.isCorrect === true).length 
+                            : (item.totalCorrect || 0);
+
+                        // 4. Logic Pass/Fail (Ví dụ > 50% là Đạt)
+                        const isPass = totalQ > 0 ? (correctQ / totalQ) >= 0.5 : false;
+
+                        return (
+                            <tr key={item._id || idx}>
+                                <td className="ps-4">
+                                    <div className="fw-bold text-dark">{quizName}</div>
+                                    <small className="text-muted">ID: {item._id?.substring(0,8)}...</small>
+                                </td>
+                                <td>
+                                    <div className="d-flex align-items-center gap-2 text-muted">
+                                        <Calendar size={14}/> {formatDate(item.createdAt)}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="d-flex align-items-center gap-2 text-primary">
+                                        <Clock size={14}/> {formatDuration(item.timeSpent)}
+                                    </div>
+                                </td>
+                                <td className="text-center">
+                                    {isPass ? 
+                                        <span className="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
+                                            <CheckCircle size={12} className="me-1 mb-1"/> Đạt
+                                        </span> : 
+                                        <span className="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-2">
+                                            <XCircle size={12} className="me-1 mb-1"/> Chưa đạt
+                                        </span>
+                                    }
+                                </td>
+                                <td className="text-center fw-bold fs-6">
+                                    <span className="text-primary">{correctQ}</span> / {totalQ}
+                                </td>
+                                <td className="text-end pe-4">
+                                    <button 
+                                        className="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                        onClick={() => navigate(`/quiz-result/${item._id}`)} 
+                                    >
+                                        Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
-      </button>
+      </motion.div>
     );
   };
 
   return (
     <div className="exam-page-container">
-      {/* SIDEBAR */}
-      <aside className="exam-sidebar">
-        <div className="sidebar-header">
-          <h3>DANH SÁCH PHẦN</h3>
-        </div>
-
-        <div className="sidebar-content">
-          <button
-            className={`part-btn all-btn ${selectedPart === null ? 'active' : ''}`}
-            onClick={() => setSelectedPart(null)}
-          >
-            <span className="part-label">🎯 Tất cả</span>
-            <span className="badge-count">{exams.length}</span>
-          </button>
-          {[0, 1, 2, 3, 4, 5, 6, 7].map(partNum => renderPartButton(partNum))}
-        </div>
-      </aside>
+      {/* SIDEBAR (Chỉ hiện khi ở tab Kho đề thi) */}
+      {activeTab === 'exams' && (
+        <aside className="exam-sidebar">
+            <div className="sidebar-header"><h3>DANH SÁCH PHẦN</h3></div>
+            <div className="sidebar-content">
+                <button className={`part-btn all-btn ${selectedPart === null ? 'active' : ''}`} onClick={() => setSelectedPart(null)}>
+                    <span className="part-label">🎯 Tất cả</span>
+                    <span className="badge-count">{exams.length}</span>
+                </button>
+                {[0, 1, 2, 3, 4, 5, 6, 7].map(num => {
+                    const count = partStats.find(s => s.part === num)?.count || 0;
+                    return (
+                        <button key={num} className={`part-btn ${selectedPart === num ? 'active' : ''}`} onClick={() => setSelectedPart(num)}>
+                            <span className="part-label">{num === 0 ? "Full Test" : `Part ${num}`}</span>
+                            <span className="badge-count">{count}</span>
+                        </button>
+                    )
+                })}
+            </div>
+        </aside>
+      )}
 
       {/* MAIN CONTENT */}
-      <main className="exam-main-content">
-        <div className="exam-header">
-          
-          {/* --- NÚT BACK --- */}
-          <button className="btn-back" onClick={handleGoBack}>
-            <ArrowLeft size={24} />
-          </button>
-          {/* ------------------- */}
+      <main className={`exam-main-content ${activeTab === 'history' ? 'w-100 px-lg-5' : ''}`}>
+        
+        {/* HEADER & TABS SWITCHER */}
+        <div className="exam-header d-block mb-4">
+            <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <button className="btn-back" onClick={() => navigate('/userprofile')}>
+                    <ArrowLeft size={24} />
+                </button>
+                
+                {/* TABS CONTROL */}
+                <div className="header-tabs d-flex bg-white p-1 rounded-pill shadow-sm border mx-auto mx-md-0">
+                    <button 
+                        className={`btn rounded-pill px-4 fw-bold transition-all ${activeTab === 'exams' ? 'btn-primary shadow-sm' : 'btn-light text-muted bg-transparent border-0'}`}
+                        onClick={() => setActiveTab('exams')}
+                    >
+                        Kho Đề Thi
+                    </button>
+                    <button 
+                        className={`btn rounded-pill px-4 fw-bold transition-all ${activeTab === 'history' ? 'btn-primary shadow-sm' : 'btn-light text-muted bg-transparent border-0'}`}
+                        onClick={() => setActiveTab('history')}
+                    >
+                        Lịch Sử
+                    </button>
+                </div>
+            </div>
 
-          <div className="header-info">
-            <h1>Thư viện đề thi TOEIC</h1>
-            <p>
-              {selectedPart === null 
-                ? `Tất cả bài thi (${exams.length})` 
-                : `${selectedPart === 0 ? 'Full Test' : `Part ${selectedPart}`} (${filteredExams.length} bài)`
-              }
-            </p>
-          </div>
+            <div className="header-info text-center text-md-start">
+                {activeTab === 'exams' ? (
+                    <>
+                        <h1 className="fw-bold text-primary">Thư viện đề thi TOEIC</h1>
+                        <p className="text-muted">Luyện tập mỗi ngày để nâng cao kỹ năng</p>
+                    </>
+                ) : (
+                    <>
+                        <h1 className="fw-bold text-primary">Lịch sử làm bài</h1>
+                        <p className="text-muted">Theo dõi quá trình tiến bộ của bạn</p>
+                    </>
+                )}
+            </div>
         </div>
 
+        {/* LOADING STATE */}
         {loading && (
-           <div className="state-container loading" style={{padding: 50, textAlign: 'center'}}>
-              <Loader className="animate-spin" size={32} /> 
-              <p>Đang tải dữ liệu...</p>
-           </div>
-        )}
-
-        {!loading && error && (
-            <div className="state-container error" style={{color: 'red', textAlign: 'center', padding: 50}}>
-                <AlertCircle size={32} />
-                <p>{error}</p>
+            <div className="text-center py-5 mt-5">
+                <Loader className="animate-spin mx-auto text-primary" size={40} />
+                <p className="mt-3 text-muted">Đang tải dữ liệu...</p>
             </div>
         )}
-
-        {!loading && !error && filteredExams.length === 0 && (
-            <div className="state-container" style={{textAlign: 'center', padding: 50}}>
-                <AlertCircle size={32} className="text-muted" />
-                <p className="text-muted mt-3">Chưa có bài thi nào cho phần này</p>
+        
+        {/* CONTENT AREA */}
+        {!loading && (
+            <div className="fade-in-up">
+                {activeTab === 'exams' ? (
+                    filteredExams.length > 0 ? (
+                        <AnimatePresence mode="wait">
+                            <motion.div key={selectedPart} className="exam-list" variants={containerVariants} initial="hidden" animate="visible">
+                                {filteredExams.map((exam, index) => renderExamCard(exam, index))}
+                            </motion.div>
+                        </AnimatePresence>
+                    ) : (
+                        <div className="text-center py-5">
+                            <AlertCircle size={48} className="text-muted mb-3 opacity-50"/>
+                            <p className="text-muted">Không tìm thấy đề thi nào.</p>
+                        </div>
+                    )
+                ) : (
+                    // RENDER HISTORY TAB
+                    renderHistoryTable()
+                )}
             </div>
-        )}
-
-        {!loading && !error && filteredExams.length > 0 && (
-            <AnimatePresence mode="wait">
-                <motion.div 
-                  key={selectedPart}
-                  className="exam-list"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0 }}
-                >
-                    {filteredExams.map((exam, index) => renderExamCard(exam, index))}
-                </motion.div>
-            </AnimatePresence>
         )}
       </main>
     </div>
