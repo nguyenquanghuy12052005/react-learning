@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Card } from 'react-bootstrap';
 import { FaClock, FaArrowLeft, FaCheckCircle, FaVolumeUp, FaLayerGroup } from 'react-icons/fa';
 import { getQuizById, postSubmitQuiz } from '../../services/quizService';
-import './TakeExamPart4.scss'; // Nhớ tạo file này
+import './TakeExamPart4.scss';
 
 const TakeExamPart4 = () => {
     const { id } = useParams();
@@ -37,6 +37,8 @@ const TakeExamPart4 = () => {
 
                 setQuizData(data);
                 setTimeLeft((data.timeLimit || 45) * 60);
+                
+                // Lấy trực tiếp URL từ Cloudinary
                 setAudioUrl(data.audio || "");
 
                 const rawQuestions = data.questions || [];
@@ -63,15 +65,18 @@ const TakeExamPart4 = () => {
     }, [id]);
 
     const handleSubmit = useCallback(async () => {
+        if (submitting) return;
+
         const answeredCount = Object.keys(userAnswers).length;
         if (timeLeft > 0 && answeredCount < questions.length) {
             if (!window.confirm(`Bạn mới trả lời ${answeredCount}/${questions.length} câu. Bạn có chắc chắn muốn nộp bài?`)) return;
         }
 
+        setSubmitting(true);
         try {
-            setSubmitting(true);
             const answers = Object.entries(userAnswers).map(([questionId, selectedOption]) => ({
-                questionId, selectedOption
+                questionId, 
+                selectedOption // GIỮ NGUYÊN: "A", "B", "C", "D"
             }));
             
             const totalTime = (quizData?.timeLimit || 45) * 60;
@@ -80,40 +85,43 @@ const TakeExamPart4 = () => {
             const submitData = {
                 quizId: id,
                 answers: answers,
-                timeSpent: timeSpent > 0 ? timeSpent : totalTime
+                timeSpent: timeSpent > 0 ? timeSpent : 0
             };
 
             const response = await postSubmitQuiz(submitData);
+            const resultData = response.data || response;
             
-            if (response && (response.EC === 0 || response.status === 200 || response.data)) {
-                const resultData = response.DT || response.data; 
-                const resultId = resultData._id || resultData.id;
+            // Tìm ID kết quả để redirect
+            const resultId = resultData.DT?._id || resultData._id || resultData.data?._id;
+
+            if (resultId) {
                 navigate(`/quiz-result/${resultId}`);
             } else {
-                alert("Nộp bài không thành công: " + (response.EM || "Lỗi không xác định"));
+                navigate('/exams');
             }
         } catch (err) {
-            console.error(err);
-            alert("Lỗi kết nối server: " + (err.response?.data?.message || err.message));
-        } finally {
+            console.error("Lỗi nộp bài:", err);
+            alert("Có lỗi xảy ra khi nộp bài!");
             setSubmitting(false);
         }
-    }, [questions, userAnswers, id, quizData, timeLeft, navigate]);
+    }, [questions, userAnswers, id, quizData, timeLeft, navigate, submitting]);
 
+    // --- TIMER FIX ---
     useEffect(() => {
-        if (!timeLeft || timeLeft <= 0) return;
-        const timerId = setInterval(() => {
+        if (timeLeft === 0) return;
+        const timer = setInterval(() => {
             setTimeLeft(prev => {
-                if (prev <= 1) { 
-                    clearInterval(timerId);
-                    handleSubmit(); 
-                    return 0; 
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    handleSubmit();
+                    return 0;
                 }
                 return prev - 1;
             });
         }, 1000);
-        return () => clearInterval(timerId);
-    }, [timeLeft, handleSubmit]);
+        return () => clearInterval(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [timeLeft]);
 
     const formatTime = (seconds) => {
         const min = Math.floor(seconds / 60);
@@ -122,6 +130,7 @@ const TakeExamPart4 = () => {
     };
 
     const handleSelectAnswer = (questionId, optionLabel) => {
+        if (submitting) return;
         setUserAnswers(prev => ({ ...prev, [questionId]: optionLabel }));
     };
 
@@ -146,7 +155,12 @@ const TakeExamPart4 = () => {
                             <div className={`timer-box ${timeLeft < 300 ? 'danger' : ''}`}>
                                 <FaClock className="me-2"/> {formatTime(timeLeft)}
                             </div>
-                            <Button variant="success" className="btn-submit fw-bold px-4" onClick={() => handleSubmit()} disabled={submitting}>
+                            <Button 
+                                variant="success" 
+                                className="btn-submit fw-bold px-4" 
+                                onClick={handleSubmit} 
+                                disabled={submitting}
+                            >
                                 {submitting ? <Spinner size="sm"/> : 'NỘP BÀI'}
                             </Button>
                         </div>
@@ -162,8 +176,17 @@ const TakeExamPart4 = () => {
                                 <FaVolumeUp size={24} />
                             </div>
                             <div className="w-100">
-                                <h6 className="fw-bold mb-1 text-success">Audio Part 4</h6>
-                                <audio controls className="w-100 custom-audio"><source src={audioUrl} type="audio/mpeg" /></audio>
+                                <h6 className="fw-bold mb-1 text-success">🎧 Audio Part 4</h6>
+                                <audio 
+                                    controls 
+                                    className="w-100 custom-audio"
+                                    preload="metadata"
+                                    controlsList="nodownload"
+                                >
+                                    <source src={audioUrl} type="audio/mpeg" />
+                                    <source src={audioUrl} type="audio/mp3" />
+                                    Trình duyệt của bạn không hỗ trợ audio player.
+                                </audio>
                             </div>
                         </Card.Body>
                     </Card>
@@ -193,7 +216,12 @@ const TakeExamPart4 = () => {
                                     <Card.Body className="p-4">
                                         {groupImage && (
                                             <div className="text-center mb-4">
-                                                <img src={groupImage} alt="Talk Graphic" className="img-fluid rounded border" style={{maxHeight:'300px'}} />
+                                                <img 
+                                                    src={groupImage} 
+                                                    alt={`Talk ${groupIndex + 1} Graphic`} 
+                                                    className="img-fluid rounded border" 
+                                                    style={{maxHeight:'300px', objectFit: 'contain'}} 
+                                                />
                                                 <p className="text-muted small mt-1 fst-italic">Look at the graphic</p>
                                             </div>
                                         )}
@@ -219,20 +247,21 @@ const TakeExamPart4 = () => {
                                                                 return (
                                                                     <div 
                                                                         key={idx} 
-                                                                        className={`option-item d-flex align-items-center py-1 px-2 rounded ${isSelected ? 'selected' : ''}`}
+                                                                        className={`option-item d-flex align-items-center py-2 px-3 rounded mb-2 ${isSelected ? 'selected' : ''}`}
                                                                         onClick={() => handleSelectAnswer(q._id, label)}
+                                                                        style={{ cursor: submitting ? 'not-allowed' : 'pointer' }}
                                                                     >
                                                                         <div className={`option-radio me-2 ${isSelected ? 'checked' : ''}`}>
                                                                             {label}
                                                                         </div>
-                                                                        <div className="option-text small-text">
+                                                                        <div className="option-text">
                                                                             {opt.text}
                                                                         </div>
                                                                     </div>
                                                                 )
                                                             })}
                                                         </div>
-                                                        <hr className="divider-dashed"/>
+                                                        {group.indexOf(q) < group.length - 1 && <hr className="divider-dashed"/>}
                                                     </div>
                                                 );
                                             })}

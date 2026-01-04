@@ -42,11 +42,20 @@ const postUploadFile = async (fileData) => {
     });
 }
 
-// 9. Lấy danh sách lịch sử làm bài (Sử dụng endpoint lấy danh sách submit)
+// 9. Lấy danh sách lịch sử làm bài
 const getQuizHistory = async () => {
-    // Gọi endpoint GET /quizzes/submit để lấy danh sách bài đã nộp của user hiện tại
     return axios.get('/quizzes/submit'); 
 }
+
+// 10. Hàm gọi AI (Gemini)
+const postAskAI = async (data) => {
+    // ✅ ĐÃ SỬA: Xóa chữ /api đi, chỉ để lại /gemini/explain
+    // Vì axios.config.js đã tự động thêm /api vào trước rồi
+    return axios.post('/gemini/explain', data);
+}
+
+// Alias
+const getAIExplanation = postAskAI;
 
 export { 
     postCreateNewQuiz, 
@@ -57,5 +66,7 @@ export {
     getQuizResultById,
     deleteQuiz,
     postUploadFile,
-    getQuizHistory 
+    getQuizHistory,
+    postAskAI,
+    getAIExplanation 
 };

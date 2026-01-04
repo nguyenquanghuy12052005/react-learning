@@ -300,6 +300,53 @@ $border-color: #333;
     }
   }
 }
+/* === CUSTOM TABS (Thay thế Bootstrap) === */
+.custom-tabs-wrapper {
+  display: flex;
+  background: #18181b; /* Màu nền tối trùng với sidebar hoặc card */
+  padding: 6px;
+  border-radius: 50px;
+  border: 1px solid #333; /* Viền mỏng tinh tế */
+  position: relative;
+  gap: 5px;
+
+  /* Responsive: Trên mobile thì full width, trên PC thì auto */
+  width: 100%;
+  max-width: 320px; 
+  margin: 0 auto; 
+
+  @media (min-width: 768px) {
+    margin: 0; /* PC căn trái */
+  }
+
+  .tab-item {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 40px;
+    border: none;
+    background: transparent;
+    color: #888; /* Màu chữ khi chưa active */
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+
+    &:hover:not(.active) {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      background: $accent-color; /* Màu xanh chủ đạo */
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); /* Đổ bóng nhẹ cho nút active */
+      
+      /* Hiệu ứng gradient nhẹ nếu muốn đẹp hơn */
+      background: linear-gradient(135deg, $accent-color 0%, #2563eb 100%);
+    }
+  }
+}
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
@@ -318,5 +365,148 @@ $border-color: #333;
 
   .exam-page-container {
     flex-direction: column;
+  }
+}
+/* === HISTORY TABLE (Dark Mode) === */
+
+.history-container {
+  margin-top: 1rem;
+}
+
+.history-table-wrapper {
+  background: #1a1a1a; /* Nền tối giống card */
+  border: 1px solid #333; /* Viền tối */
+  border-radius: 16px;
+  overflow: hidden; /* Bo tròn góc bảng */
+  overflow-x: auto; /* Scroll ngang trên mobile */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.custom-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Đảm bảo bảng không bị vỡ trên màn hình nhỏ */
+
+  /* Header Styles */
+  thead {
+    background: #202025;
+    border-bottom: 1px solid #333;
+
+    th {
+      padding: 1.2rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #888; /* Màu chữ tiêu đề xám nhạt */
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &.text-center { text-align: center; }
+      &.text-right { text-align: right; }
+      &.pl-4 { padding-left: 1.5rem; }
+      &.pr-4 { padding-right: 1.5rem; }
+    }
+  }
+
+  /* Body Styles */
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.2s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.03); /* Hover sáng nhẹ */
+      }
+    }
+
+    td {
+      padding: 1rem;
+      vertical-align: middle;
+      color: #ddd;
+      font-size: 0.95rem;
+
+      &.text-center { text-align: center; }
+      &.text-right { text-align: right; }
+      &.pl-4 { padding-left: 1.5rem; }
+      &.pr-4 { padding-right: 1.5rem; }
+    }
+  }
+
+  /* Nội dung trong ô */
+  .quiz-name {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+
+  .quiz-id {
+    font-size: 0.75rem;
+    color: #666;
+  }
+
+  .cell-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaa;
+
+    &.highlight {
+      color: $accent-color; /* Màu xanh cho thời gian */
+    }
+  }
+
+  /* Badges (Đạt / Chưa đạt) */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+
+    &.pass {
+      background: rgba(16, 185, 129, 0.15); /* Xanh lá nhạt */
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    &.fail {
+      background: rgba(239, 68, 68, 0.15); /* Đỏ nhạt */
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+  }
+
+  /* Điểm số */
+  .score-cell {
+    font-weight: 600;
+    .score-highlight {
+      color: #fff;
+      font-size: 1.1rem;
+    }
+  }
+
+  /* Nút hành động */
+  .action-btn {
+    padding: 6px 16px;
+    background: transparent;
+    border: 1px solid #444;
+    border-radius: 20px;
+    color: #ccc;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $accent-color;
+      color: $accent-color;
+      background: rgba(59, 130, 246, 0.1);
+    }
   }
 }

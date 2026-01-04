@@ -142,7 +142,7 @@ const ExamPage = () => {
     );
   };
 
-  const renderHistoryTable = () => {
+ const renderHistoryTable = () => {
     if (historyList.length === 0) {
         return (
             <div className="empty-state text-center py-5">
@@ -157,66 +157,56 @@ const ExamPage = () => {
 
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="history-container">
-        <div className="table-responsive shadow-sm rounded bg-white border">
-            <table className="table table-hover mb-0 align-middle custom-table">
-                <thead className="bg-light">
+        {/* Wrapper để tạo border và background tối */}
+        <div className="history-table-wrapper">
+            <table className="custom-history-table">
+                <thead>
                     <tr>
-                        <th className="py-3 ps-4 text-secondary">Đề thi</th>
-                        <th className="text-secondary">Ngày làm</th>
-                        <th className="text-secondary">Thời gian</th>
-                        <th className="text-secondary text-center">Kết quả</th>
-                        <th className="text-secondary text-center">Điểm số</th>
-                        <th className="text-end pe-4 text-secondary">Hành động</th>
+                        <th className="text-left pl-4">Đề thi</th>
+                        <th>Ngày làm</th>
+                        <th>Thời gian</th>
+                        <th className="text-center">Kết quả</th>
+                        <th className="text-center">Điểm số</th>
+                        <th className="text-right pr-4">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     {historyList.map((item, idx) => {
-                        // 1. Tên bài thi (xử lý populate quizId)
                         const quizName = item.quizData?.title || item.quizId?.title || item.quizTitle || `Bài thi #${idx + 1}`;
-                        
-                        // 2. Tổng số câu hỏi
                         const totalQ = item.answers?.length || item.totalQuestions || 0;
-                        
-                        // 3. Số câu ĐÚNG (Tự tính từ mảng answers trả về từ backend)
                         const correctQ = item.answers 
                             ? item.answers.filter(a => a.isCorrect === true).length 
                             : (item.totalCorrect || 0);
-
-                        // 4. Logic Pass/Fail (Ví dụ > 50% là Đạt)
                         const isPass = totalQ > 0 ? (correctQ / totalQ) >= 0.5 : false;
 
                         return (
                             <tr key={item._id || idx}>
-                                <td className="ps-4">
-                                    <div className="fw-bold text-dark">{quizName}</div>
-                                    <small className="text-muted">ID: {item._id?.substring(0,8)}...</small>
+                                <td className="pl-4">
+                                    <div className="quiz-name">{quizName}</div>
+                                    <small className="quiz-id">ID: {item._id?.substring(0,8)}...</small>
                                 </td>
                                 <td>
-                                    <div className="d-flex align-items-center gap-2 text-muted">
+                                    <div className="cell-content">
                                         <Calendar size={14}/> {formatDate(item.createdAt)}
                                     </div>
                                 </td>
                                 <td>
-                                    <div className="d-flex align-items-center gap-2 text-primary">
+                                    <div className="cell-content highlight">
                                         <Clock size={14}/> {formatDuration(item.timeSpent)}
                                     </div>
                                 </td>
                                 <td className="text-center">
-                                    {isPass ? 
-                                        <span className="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
-                                            <CheckCircle size={12} className="me-1 mb-1"/> Đạt
-                                        </span> : 
-                                        <span className="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-2">
-                                            <XCircle size={12} className="me-1 mb-1"/> Chưa đạt
-                                        </span>
-                                    }
+                                    <span className={`status-badge ${isPass ? 'pass' : 'fail'}`}>
+                                        {isPass ? <CheckCircle size={12}/> : <XCircle size={12}/>}
+                                        {isPass ? 'Đạt' : 'Chưa đạt'}
+                                    </span>
                                 </td>
-                                <td className="text-center fw-bold fs-6">
-                                    <span className="text-primary">{correctQ}</span> / {totalQ}
+                                <td className="text-center score-cell">
+                                    <span className="score-highlight">{correctQ}</span> / {totalQ}
                                 </td>
-                                <td className="text-end pe-4">
+                                <td className="text-right pr-4">
                                     <button 
-                                        className="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                        className="action-btn"
                                         onClick={() => navigate(`/quiz-result/${item._id}`)} 
                                     >
                                         Xem chi tiết
@@ -230,8 +220,7 @@ const ExamPage = () => {
         </div>
       </motion.div>
     );
-  };
-
+};
   return (
     <div className="exam-page-container">
       {/* SIDEBAR (Chỉ hiện khi ở tab Kho đề thi) */}
@@ -267,20 +256,20 @@ const ExamPage = () => {
                 </button>
                 
                 {/* TABS CONTROL */}
-                <div className="header-tabs d-flex bg-white p-1 rounded-pill shadow-sm border mx-auto mx-md-0">
-                    <button 
-                        className={`btn rounded-pill px-4 fw-bold transition-all ${activeTab === 'exams' ? 'btn-primary shadow-sm' : 'btn-light text-muted bg-transparent border-0'}`}
-                        onClick={() => setActiveTab('exams')}
-                    >
-                        Kho Đề Thi
-                    </button>
-                    <button 
-                        className={`btn rounded-pill px-4 fw-bold transition-all ${activeTab === 'history' ? 'btn-primary shadow-sm' : 'btn-light text-muted bg-transparent border-0'}`}
-                        onClick={() => setActiveTab('history')}
-                    >
-                        Lịch Sử
-                    </button>
-                </div>
+               <div className="custom-tabs-wrapper">
+    <button 
+        className={`tab-item ${activeTab === 'exams' ? 'active' : ''}`}
+        onClick={() => setActiveTab('exams')}
+    >
+        Kho Đề Thi
+    </button>
+    <button 
+        className={`tab-item ${activeTab === 'history' ? 'active' : ''}`}
+        onClick={() => setActiveTab('history')}
+    >
+        Lịch Sử
+    </button>
+</div>
             </div>
 
             <div className="header-info text-center text-md-start">

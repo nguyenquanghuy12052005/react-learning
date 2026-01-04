@@ -5,18 +5,6 @@ import { FaClock, FaArrowLeft, FaCheckCircle, FaVolumeUp, FaImage } from 'react-
 import { getQuizById, postSubmitQuiz } from '../../services/quizService';
 import './TakeExamPart1.scss';
 
-// Hàm fix link Google Drive (giữ nguyên logic của bạn)
-const getDirectAudioLink = (url) => {
-    if (!url) return "";
-    if (url.includes("drive.google.com")) {
-        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (match && match[1]) {
-            return `https://drive.google.com/uc?export=download&id=${match[1]}`;
-        }
-    }
-    return url;
-};
-
 const TakeExamPart1 = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -43,8 +31,9 @@ const TakeExamPart1 = () => {
                 setQuizData(data);
                 setTimeLeft((data.timeLimit || 10) * 60);
 
-                const cleanLink = getDirectAudioLink(data.audio || "");
-                setMainAudioUrl(cleanLink); 
+                // Lấy trực tiếp URL audio từ Cloudinary
+                const audioUrl = data.audio || "";
+                setMainAudioUrl(audioUrl); 
 
                 const rawQuestions = data.questions || [];
                 const processedQuestions = rawQuestions.map((q, idx) => ({
@@ -81,6 +70,7 @@ const TakeExamPart1 = () => {
             });
         }, 1000);
         return () => clearInterval(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [timeLeft]);
 
     // 3. Xử lý Nộp bài
@@ -110,7 +100,7 @@ const TakeExamPart1 = () => {
             };
 
             const res = await postSubmitQuiz(payload);
-            const resultData = res.data || res; // Xử lý tùy theo cấu trúc response của bạn (axios wrap hay custom)
+            const resultData = res.data || res;
             
             // Tìm ID kết quả để redirect
             const resultId = resultData.DT?._id || resultData._id || resultData.data?._id;
@@ -118,7 +108,6 @@ const TakeExamPart1 = () => {
             if (resultId) {
                 navigate(`/quiz-result/${resultId}`);
             } else {
-                // Fallback nếu không tìm thấy ID
                 navigate('/exams'); 
             }
 
@@ -178,9 +167,16 @@ const TakeExamPart1 = () => {
                                 <FaVolumeUp size={24} />
                             </div>
                             <div className="w-100">
-                                <h6 className="fw-bold mb-1 text-primary">Audio Part 1</h6>
-                                <audio controls className="w-100 custom-audio" key={mainAudioUrl}>
+                                <h6 className="fw-bold mb-1 text-primary">🎧 Audio Part 1</h6>
+                                <audio 
+                                    controls 
+                                    className="w-100 custom-audio" 
+                                    preload="metadata"
+                                    controlsList="nodownload"
+                                >
                                     <source src={mainAudioUrl} type="audio/mpeg" />
+                                    <source src={mainAudioUrl} type="audio/mp3" />
+                                    Trình duyệt của bạn không hỗ trợ audio player.
                                 </audio>
                             </div>
                         </Card.Body>
@@ -233,6 +229,7 @@ const TakeExamPart1 = () => {
                                                         key={idx} 
                                                         className={`option-item d-flex align-items-center py-2 px-3 rounded mb-2 ${isSelected ? 'selected' : ''}`}
                                                         onClick={() => handleSelectAnswer(q._id, label)}
+                                                        style={{ cursor: 'pointer' }}
                                                     >
                                                         <div className={`option-radio me-3 ${isSelected ? 'checked' : ''}`}>
                                                             {label}
