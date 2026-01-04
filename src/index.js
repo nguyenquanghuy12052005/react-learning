@@ -86,6 +86,10 @@ import CreateQuizPart6 from './components/Admin/Content/Quiz/CreateQuizPart6';
 import CreateQuizPart7 from './components/Admin/Content/Quiz/CreateQuizPart7';
 import CreateFullTest from './components/Admin/Content/Quiz/CreateFullTest';
 import { SocketProvider } from './contexts/SocketContext';
+import { PaymentProvider } from './contexts/PaymentContext';
+import PaymentCallback from './components/payment/PaymentCallback';
+
+// SỬA LẠI INDEX.JS NHƯ SAU:
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -96,6 +100,7 @@ root.render(
         <VocProvider>
           <ChatProvider>
             <SocketProvider>
+              <PaymentProvider>
             <React.StrictMode>
               <BrowserRouter>
                 <Routes>
@@ -135,6 +140,9 @@ root.render(
                   <Route path="/test-part7/:id" element={<TakeExamPart7 />} />
                   <Route path="/test-full/:id" element={<TakeExamFullTest />} />
 
+                  {/* PAYMENT - THÊM Ở ĐÂY, NGOÀI ADMIN */}
+                  <Route path="/payment-callback" element={<Authentication><PaymentCallback /></Authentication>} />
+
                   {/* TOEIC */}
                   <Route path="/toeic-prep" element={<ToeicPage />} />
                   <Route path="/test-full" element={<TestFullPage />} />
@@ -165,7 +173,7 @@ root.render(
                     <Route path="manage-quiz" element={<ManageQuiz />} />
                     <Route path="manage-quiz/part/:partNumber" element={<QuizListByPart />} />
                     
-                    {/* ==================== CREATE QUIZ ROUTES ==================== */}
+                    {/* CREATE QUIZ ROUTES */}
                     <Route path="create-quiz-part1" element={<CreateQuizPart1 />} />
                     <Route path="create-quiz-part2" element={<CreateQuizPart2 />} />
                     <Route path="create-quiz-part3" element={<CreateQuizPart3 />} />
@@ -175,8 +183,9 @@ root.render(
                     <Route path="create-quiz-part7" element={<CreateQuizPart7 />} />
                     <Route path="create-full-test" element={<CreateFullTest />} />
                     
-                    {/* ==================== EDIT/UPDATE QUIZ ROUTES ==================== */}
-                    {/* THÊM CÁC ROUTE NÀY - QUAN TRỌNG! */}
+                   
+                    
+                    {/* EDIT/UPDATE QUIZ ROUTES */}
                     <Route path="update-quiz-part1/:id" element={<CreateQuizPart1 />} />
                     <Route path="update-quiz-part2/:id" element={<CreateQuizPart2 />} />
                     <Route path="update-quiz-part3/:id" element={<CreateQuizPart3 />} />
@@ -192,6 +201,7 @@ root.render(
 
               <ToastContainer position="top-right" autoClose={3000} />
             </React.StrictMode>
+            </PaymentProvider>
             </SocketProvider>
           </ChatProvider>
         </VocProvider>

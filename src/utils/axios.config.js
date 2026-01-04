@@ -14,7 +14,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('x-auth-token');
     if (token) {
-     config.headers['X-auth-token'] = token;
+     config.headers['x-auth-token'] = token;
     }
     return config;
   },
