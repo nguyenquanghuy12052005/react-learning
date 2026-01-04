@@ -361,3 +361,34 @@ $color-purple: #8b5cf6;
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* --- Hiệu ứng xoay cho icon Loading --- */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-icon {
+  animation: spin 1s linear infinite; /* Xoay vô tận, đều đặn */
+  margin-right: 8px; /* Cách chữ ra một chút cho đẹp */
+}
+
+/* --- Style cho nút bấm khi đang Loading --- */
+.btn-ask-ai {
+  /* Các style cũ của bạn giữ nguyên, thêm đoạn dưới */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+
+  /* Khi nút bị disable (đang loading) */
+  &:disabled {
+    background-color: #ccc !important; /* Màu xám */
+    color: #666 !important;
+    border-color: #bbb !important;
+    cursor: not-allowed; /* Con trỏ chuột hiện dấu cấm */
+    opacity: 0.8;
+    transform: none; /* Không cho nút nảy lên khi hover */
+    box-shadow: none;
+  }
+}

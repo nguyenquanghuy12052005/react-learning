@@ -1,7 +1,10 @@
 // src/components/User/Vocab2.scss
+// src/components/User/Vocab2.scss
+
 .vocab2-page {
   display: flex;
-  min-height: 100vh;
+  height: 100vh; /* SỬA: Đổi min-height thành height cố định */
+  overflow: hidden; /* THÊM: Không cho body của trình duyệt cuộn */
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   color: white;
   font-family: "Inter", sans-serif;
@@ -10,11 +13,23 @@
 .main-content {
   flex: 1;
   padding: 2rem 3rem;
-  overflow-y: auto;
+  overflow-y: auto; /* Giữ nguyên: Cho phép cuộn nội dung bên trong khu vực này */
+  height: 100%;     /* THÊM: Đảm bảo nó chiếm hết chiều cao còn lại */
   max-width: 100%;
   box-sizing: border-box;
-}
 
+  /* Tùy chỉnh thanh cuộn cho đẹp hơn (Optional) */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+}
 /* === HEADER SECTION === */
 .common-section {
   .section-header {

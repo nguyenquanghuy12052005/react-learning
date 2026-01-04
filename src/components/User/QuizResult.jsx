@@ -41,16 +41,15 @@ const QuizResult = () => {
     };
 
     // --- HÀM XỬ LÝ GỌI AI (ĐÃ FIX LỖI) ---
+// --- HÀM XỬ LÝ GỌI AI (ĐÃ NÂNG CẤP LÀM SẠCH TEXT) ---
     const handleAskAI = async (answerData, questionInfo) => {
         const qId = answerData.questionId;
         
-        // Nếu đã có giải thích trong state rồi thì không gọi API nữa (tiết kiệm)
         if (explanations[qId]) return;
 
         setExplainingId(qId);
 
         try {
-            // Chuẩn bị dữ liệu gửi lên server
             const payload = {
                 questionText: questionInfo.questionText?.[0] || "Câu hỏi hình ảnh/âm thanh",
                 options: questionInfo.options || [],
@@ -59,29 +58,30 @@ const QuizResult = () => {
             };
 
             const res = await postAskAI(payload);
-            
-            // 🔴 FIX QUAN TRỌNG: Lấy đúng trường explanation từ response
-            // Axios thường trả về dạng: { data: { explanation: "..." } } hoặc trực tiếp { explanation: "..." }
             const dataFromServer = res.data || res;
-            const textExplanation = dataFromServer.explanation;
+            let textExplanation = dataFromServer.explanation;
 
-            console.log("🤖 AI Response:", textExplanation); // Log để debug
-
+            // 🧹 LÀM SẠCH TEXT: Xóa ###, **, và các khoảng trắng thừa
             if (textExplanation) {
+                textExplanation = textExplanation
+                    .replace(/###/g, '')   // Xóa dấu Heading
+                    .replace(/\*\*/g, '')  // Xóa dấu in đậm
+                    .replace(/\*/g, '•')   // Thay dấu * thành dấu chấm tròn cho đẹp
+                    .trim();               // Cắt khoảng trắng đầu đuôi
+                
                 setExplanations(prev => ({
                     ...prev,
                     [qId]: textExplanation
                 }));
             } else {
-                alert("AI không trả về nội dung giải thích. Vui lòng thử lại!");
+                alert("AI không trả về nội dung. Thử lại sau!");
             }
         } catch (error) {
             console.error("Lỗi AI:", error);
-            // Xử lý thông báo lỗi cụ thể
             if (error.response && error.response.status === 429) {
-                alert("Hệ thống AI đang quá tải (Lỗi 429). Vui lòng đợi 1 phút rồi thử lại.");
+                alert("AI đang bận (429). Đợi 1 phút nhé.");
             } else {
-                alert("Có lỗi khi kết nối với AI. Vui lòng thử lại sau!");
+                alert("Lỗi kết nối AI.");
             }
         } finally {
             setExplainingId(null);
