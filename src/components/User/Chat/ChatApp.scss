@@ -118,6 +118,7 @@
       flex: 1; // Chiếm hết khoảng trống còn lại
       overflow-y: auto; // Chỉ cuộn phần danh sách
       padding-bottom: 10px;
+        margin-top: -50px;
 
       &::-webkit-scrollbar {
         width: 5px;
