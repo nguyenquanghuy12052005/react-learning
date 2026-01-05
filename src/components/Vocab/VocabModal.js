@@ -1,99 +1,139 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import logo from '../../assets/logo5.png';
 
 const VocabModal = ({ word, onClose }) => {
+  const audioRef = useRef(null);
   if (!word) return null;
 
-  const { word: term, phonetic, meanings } = word;
+  const term = word.word;
+  const image = word.image;
+  const meanings = word.meanings || [];
 
 
+  const usText =
+    word.phonetic?.us ||
+    word.phonetic ||
+    word.phonetics?.[0]?.text;
 
-
-
-
+  const ukText = word.phonetic?.uk || usText;
 
   
+ const getAudioUrl = (accent) => {
+ 
+  const audioKey = accent === 'us' ? 'audio-us' : 'audio-uk';
+  const audioFromDb = word.phonetic?.[audioKey];
+
+  if (audioFromDb && audioFromDb.startsWith('http')) {
+    return audioFromDb;
+  }
+
+ 
+  if (Array.isArray(word.phonetics)) {
+    const found = word.phonetics.find(p =>
+      p.audio?.includes(`-${accent}`)
+    );
+    if (found?.audio) return found.audio;
+  }
+
+
+  return `https://api.dictionaryapi.dev/media/pronunciations/en/${word.word}-${accent}.mp3`;
+};
+
+
+  const playAudio = (accent) => {
+    const url = getAudioUrl(accent);
+    if (!url) return;
+
+    if (audioRef.current) audioRef.current.pause();
+    audioRef.current = new Audio(url);
+    audioRef.current.play().catch(() => {
+      console.log('Audio not available:', url);
+    });
+  };
 
   return (
-    <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
-      <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div
+      className="modal fade show d-block"
+      style={{ background: 'rgba(0,0,0,0.5)' }}
+      onClick={onClose}
+    >
+      <div
+        className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-content rounded-4">
+
+          {/* HEADER */}
           <div className="modal-header bg-primary text-white">
             <h3 className="modal-title fw-bold">{term}</h3>
-            <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
+            <button className="btn-close btn-close-white" onClick={onClose} />
           </div>
 
+          {/* BODY */}
           <div className="modal-body p-4">
-            <div className="d-flex gap-3 mb-4 flex-wrap">
-              <span className="badge bg-success fs-6 px-3 py-2">US {phonetic.us}</span>
-              <span className="badge bg-info fs-6 px-3 py-2">UK {phonetic.uk}</span>
+
+            {/* PRONUNCIATION */}
+            <div className="d-flex gap-3 mb-4">
+              {usText && (
+                <span
+                  className="badge bg-success fs-6 px-3 py-2"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => playAudio('us')}
+                >
+                  🔊 US {usText}
+                </span>
+              )}
+              {ukText && (
+                <span
+                  className="badge bg-info fs-6 px-3 py-2"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => playAudio('uk')}
+                >
+                  🔊 UK {ukText}
+                </span>
+              )}
             </div>
-{/* 
-            <div className="text-center mb-4">
-              <div className="bg-light border border-dashed rounded-3 d-inline-block p-5">
-                <em className="text-muted">"{term}" {"https://www.bing.com/ck/a?!&&p=dcb39c989c5d0d2c22c0e0005412382fa4e1826507fb36e859e7425099ffe5abJmltdHM9MTc2MTY5NjAwMA&ptn=3&ver=2&hsh=4&fclid=2c6cd504-730b-6622-1cf6-c0e472a167c0&u=a1L2ltYWdlcy9zZWFyY2g_cT0lZTElYmElYTNuaCZpZD04RUYwQ0ExNzJEMjQzQzZEQzYwQ0ZGNThEODYzQjFGNkU3Njg1QkUyJkZPUk09SVFGUkJB"}</em>
-              </div>
-            </div> */}
+
+            {/* IMAGE */}
+            {image && (
               <div className="text-center mb-4">
-              <div className="bg-light border rounded-3 p-3">
-          {word.image && (
-  <div className="text-center mb-3">
-    <img
-      src={word.image === "logo" ? logo : word.image}
-      alt={term}
-      className="img-fluid rounded shadow"
-      style={{ maxHeight: "200px", objectFit: "contain" }}
-    />
-  </div>
-)}
-
-                <div className="text-muted mt-2">
-                  <small>Ảnh minh họa cho "{term}"</small>
-                </div>
+                <img
+                  src={image === 'logo' ? logo : image}
+                  alt={term}
+                  className="img-fluid rounded"
+                  style={{ maxHeight: 200 }}
+                />
               </div>
-            </div>
+            )}
 
-            {meanings.map((m, idx) => (
-              <div key={idx} className="mb-5">
-                <h5 className="text-primary fw-bold text-capitalize">{m.partOfSpeech}</h5>
-                <ol className="ps-4 mb-3">
-                  {m.meaning_vi.split(', ').map((vi, i) => (
-                    <li key={i} className="mb-2"><strong>{vi}</strong></li>
-                  ))}
-                </ol>
-                <p className="text-muted fst-italic mb-3">{m.definition_en}</p>
+            {/* MEANINGS */}
+            {meanings.map((m, i) => (
+              <div key={i} className="mb-4">
+                <h5 className="text-primary">{m.partOfSpeech}</h5>
+                <p><strong>{m.meaning_vi}</strong></p>
+                <p className="fst-italic text-muted">{m.definition_en}</p>
 
-                {m.examples && m.examples.length > 0 && (
-                  <div className="bg-light rounded p-3 mb-3">
-                    <strong className="text-success">Ví dụ:</strong>
-                    {m.examples.map((ex, i) => (
-                      <div key={i} className="mt-2">
-                        <p className="mb-1">• <strong>{ex.en}</strong></p>
-                        <p className="mb-0 text-secondary fst-italic">{ex.vi}</p>
-                      </div>
-                    ))}
+                {m.examples?.map((ex, j) => (
+                  <div key={j} className="ms-3">
+                    • <strong>{ex.en}</strong>
+                    <div className="text-muted fst-italic">{ex.vi}</div>
                   </div>
-                )}
-
-                {m.synonyms && m.synonyms.length > 0 && (
-                  <p>
-                    <strong className="text-warning">Từ đồng nghĩa:</strong>{' '}
-                    <span className="text-muted">{m.synonyms.join(', ')}</span>
-                  </p>
-                )}
+                ))}
               </div>
             ))}
           </div>
 
+          {/* FOOTER */}
           <div className="modal-footer">
-            <button type="button" className="btn btn-outline-secondary" onClick={onClose}>
+            <button className="btn btn-outline-secondary" onClick={onClose}>
               Đóng
             </button>
           </div>
+
         </div>
       </div>
     </div>
   );
 };
 
-export default VocabModal; // PHẢI CÓ
+export default VocabModal;

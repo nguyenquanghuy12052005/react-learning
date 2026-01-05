@@ -3,9 +3,11 @@
     "word": "agreement",
     "phonetic": {
       "us": "/əˈɡriː.mənt/",
-      "uk": "/əˈɡriː.mənt/"
+      "uk": "/əˈɡriː.mənt/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/agreement-us.mp3",
+      "audio-uk": ""
     },
-    "image": "logo",
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622422/t%E1%BA%A3i_xu%E1%BB%91ng_x1itz5.jpg",
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -34,8 +36,11 @@
     "word": "apply",
     "phonetic": {
       "us": "/əˈplaɪ/",
-      "uk": "/əˈplaɪ/"
+      "uk": "/əˈplaɪ/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/apply-1-us.mp3",
+      "audio-uk": ""
     },
+     "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622422/t%E1%BA%A3i_xu%E1%BB%91ng_npknip.png",
     "meanings": [
       {
         "partOfSpeech": "verb",
@@ -64,8 +69,11 @@
     "word": "budget",
     "phonetic": {
       "us": "/ˈbʌdʒ.ɪt/",
-      "uk": "/ˈbʌdʒ.ɪt/"
+      "uk": "/ˈbʌdʒ.ɪt/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/budget-us.mp3",
+      "audio-uk": ""
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622421/t%E1%BA%A3i_xu%E1%BB%91ng_1_cnoeua.jpg",
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -94,8 +102,12 @@
     "word": "candidate",
     "phonetic": {
       "us": "/ˈkæn.dɪ.deɪt/",
-      "uk": "/ˈkæn.dɪ.dət/"
+      "uk": "/ˈkæn.dɪ.dət/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/candidate-us.mp3",
+      "audio-uk": ""
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622421/t%E1%BA%A3i_xu%E1%BB%91ng_2_eyzizc.jpg",
+  
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -124,8 +136,11 @@
     "word": "conference",
     "phonetic": {
       "us": "/ˈkɑːn.fɚ.əns/",
-      "uk": "/ˈkɒn.fər.əns/"
+      "uk": "/ˈkɒn.fər.əns/",
+      "audio-us": "",
+      "audio-uk": "https://api.dictionaryapi.dev/media/pronunciations/en/conference-uk.mp3"
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622421/t%E1%BA%A3i_xu%E1%BB%91ng_3_sv2rj2.jpg",
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -154,8 +169,12 @@
     "word": "deadline",
     "phonetic": {
       "us": "/ˈded.laɪn/",
-      "uk": "/ˈded.laɪn/"
+      "uk": "/ˈded.laɪn/",
+      "audio-us": "",
+      "audio-uk": "https://api.dictionaryapi.dev/media/pronunciations/en/deadline-uk.mp3"
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622422/t%E1%BA%A3i_xu%E1%BB%91ng_4_slbcrd.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -184,8 +203,12 @@
     "word": "department",
     "phonetic": {
       "us": "/dɪˈpɑːrt.mənt/",
-      "uk": "/dɪˈpɑːt.mənt/"
+      "uk": "/dɪˈpɑːt.mənt/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/agreement-us.mp3",
+      "audio-uk": ""
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622421/t%E1%BA%A3i_xu%E1%BB%91ng_5_jgzlmt.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -214,8 +237,12 @@
     "word": "employee",
     "phonetic": {
       "us": "/ɪmˈplɔɪ.iː/",
-      "uk": "/ɪmˈplɔɪ.iː/"
+      "uk": "/ɪmˈplɔɪ.iː/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/agreement-us.mp3",
+      "audio-uk": ""
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622421/t%E1%BA%A3i_xu%E1%BB%91ng_6_ttx1b9.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -244,8 +271,12 @@
     "word": "interview",
     "phonetic": {
       "us": "/ˈɪn.t̬ɚ.vjuː/",
-      "uk": "/ˈɪn.tə.vjuː/"
+      "uk": "/ˈɪn.tə.vjuː/",
+      "audio-us": "https://api.dictionaryapi.dev/media/pronunciations/en/agreement-us.mp3",
+      "audio-uk": ""
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622422/t%E1%BA%A3i_xu%E1%BB%91ng_7_wugk2v.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -265,6 +296,7 @@
           "meeting",
           "evaluation",
           "screening"
+          
         ]
       }
     ],
@@ -276,6 +308,8 @@
       "us": "/prəˈmoʊ.ʃən/",
       "uk": "/prəˈməʊ.ʃən/"
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622422/t%E1%BA%A3i_xu%E1%BB%91ng_8_gguoey.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -306,6 +340,8 @@
       "us": "/rɪˈsiːt/",
       "uk": "/rɪˈsiːt/"
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622422/t%E1%BA%A3i_xu%E1%BB%91ng_9_hruxfr.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",
@@ -336,6 +372,8 @@
       "us": "/ˈrev.ə.nuː/",
       "uk": "/ˈrev.ən.juː/"
     },
+    "image": "https://res.cloudinary.com/dyalhwoyy/image/upload/v1767622420/t%E1%BA%A3i_xu%E1%BB%91ng_10_ybft21.jpg",
+
     "meanings": [
       {
         "partOfSpeech": "noun",

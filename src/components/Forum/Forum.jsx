@@ -478,11 +478,11 @@ const Forum = () => {
         <div className="forum-content">
           
           {/* Hero Section */}
-          <div className="forum-hero" style={{ padding: '30px 0', minHeight: 'auto' }}>
+          <div className="forum-hero" style={{ padding: '8px 0', minHeight: 'auto' }}>
             <div className="hero-overlay"></div>
             <div className="hero-content container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div className="text-content">
-                <h1 className="hero-title">Cộng đồng TOEIC Việt Nam</h1>
+                <h1 className="">Cộng đồng TOEIC Việt Nam</h1>
                 <p className="hero-subtitle">
                   Nơi chia sẻ kiến thức, kinh nghiệm và cùng nhau chinh phục mục tiêu 990+.
                 </p>
@@ -493,7 +493,7 @@ const Forum = () => {
                   <button 
                     className="btn-hero-create"
                     onClick={handleToggleCreateForm}
-                    style={{ margin: 0, whiteSpace: 'nowrap' }}
+                    style={{ marginRight: 100, whiteSpace: 'nowrap' }}
                   >
                     <i className="fa-solid fa-pen-nib"></i> Viết bài mới
                   </button>
