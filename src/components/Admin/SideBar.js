@@ -68,9 +68,9 @@ const SideBar = (props) => {
                         {!collapsed && <span>Quản lý Bài Quiz</span>}
                     </Link>
                     
-                    <Link to="/admin/manage-questions" className="nav-item">
+                    <Link to="/admin/manage-pay" className="nav-item">
                         <FaQuestionCircle className="nav-icon" />
-                        {!collapsed && <span>Quản lý Câu Hỏi</span>}
+                        {!collapsed && <span>Lịch sử thanh toán</span>}
                     </Link>
                 </nav>
             </div>

@@ -88,6 +88,7 @@ import CreateFullTest from './components/Admin/Content/Quiz/CreateFullTest';
 import { SocketProvider } from './contexts/SocketContext';
 import { PaymentProvider } from './contexts/PaymentContext';
 import PaymentCallback from './components/payment/PaymentCallback';
+import ManagePay from './components/Admin/adminPay/ManagePay';
 
 // SỬA LẠI INDEX.JS NHƯ SAU:
 
@@ -171,6 +172,7 @@ root.render(
                     <Route index element={<Dashboard />} />
                     <Route path="manage-users" element={<ManageUser />} />
                     <Route path="manage-quiz" element={<ManageQuiz />} />
+                    <Route path="manage-pay" element={<ManagePay />} />
                     <Route path="manage-quiz/part/:partNumber" element={<QuizListByPart />} />
                     
                     {/* CREATE QUIZ ROUTES */}
