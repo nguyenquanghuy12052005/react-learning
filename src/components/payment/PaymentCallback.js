@@ -32,9 +32,9 @@ const PaymentCallback = () => {
         setTimeout(() => {
           const quizId = paramsObject.quizId || localStorage.getItem('pendingQuizId');
           if (quizId) {
-            navigate(`/exams`); // ✅ SỬA: /exams thay vì /exam
+            navigate(`/exams`); 
           } else {
-            navigate('/exams'); // ✅ SỬA: /exams thay vì /exam
+            navigate('/exams');
           }
         }, 2000);
       } else {
@@ -42,7 +42,7 @@ const PaymentCallback = () => {
         
         // Quay lại trang exam sau 3 giây
         setTimeout(() => {
-          navigate('/exams'); // ✅ SỬA: /exams thay vì /exam
+          navigate('/exams');
         }, 3000);
       }
     };

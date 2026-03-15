@@ -98,7 +98,7 @@ const ChatApp = () => {
 
       pollingIntervalRef.current = setInterval(() => {
         loadChats();
-      }, 3000);
+      }, 2000);
 
       return () => {
         if (pollingIntervalRef.current) {
